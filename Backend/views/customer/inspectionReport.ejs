@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="images/fav-promo.png">
+    <title>Flynovate-Post Inspection Report</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
+    <link href="css/report.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        btn14 {
+            border: 2px;
+            background-color: blue;
+            width: 100%;
+            /* color: black; */
+            /* padding: 8px 8px; */
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-toggleable-md navbar-light bg-white fixed-top mediumnavigation">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="images/logo3.png" alt="logo">
+            </a>
+            <div class="navbar-brand" id="navbarsExampleDefault">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="mainheading">
+            <h1 class="sitetitle">POST INSPECTION REPORT</h1>
+            <p class="lead">
+                Detailed result of Thermal inspection and solar panel cleaning
+            </p>
+        </div>
+        <!-- <div class="section-title">
+			<h2 class="card-title"><embed src="Report_Demo.pdf" width="330" height="250">
+			</h2>
+		</div> -->
+        <section class="recent-posts">
+            <div class="section-title">
+                <h2><span>All Reports</span></h2>
+            </div>
+            <!-- <div class="card-columns listrecent">
+				<div class="card">
+					<% for (var i=0; i<dirLen; i++) { %>
+						<div class="card-block">
+							<h2 class="card-title"><embed src="/docs/report-<%=i+1%>.pdf" width="330" height="250">Report-<%=i+1%></h2>
+							<h4 class="card-text">This is an inspection report</h4>
+						</div>
+						<%}%>
+				</div>
+			</div> -->
+
+            <div style="width: 100%; display: table;">
+                <% var count=0%>
+                    <% for (var i=0; i<dirLen; i++) { %>
+
+                        <div style="display: table-row;">
+
+                            <% for (var j=0; j<3; j++) { %>
+                                <% if(count < dirLen) {%>
+                                    <div style="width: 10%; display:table-cell; padding: 10px 10px;">
+                                        <!-- <h2 class="card-title"><embed src="/docs/report-<%=count+1%>.pdf" width="330"
+												height="250">Report-<%=count+1%>
+										</h2> -->
+                                        <h2 class="card-title">
+                                            <source src="<%=fileLink[count]%>" width="330" height="250">Report-
+                                            <%=count+1%>
+                                        </h2>
+                                        <button type="submit" class="btn14"><a class="dropdown-item"
+                                                href="<%=fileLink[count]%>">
+                                                Download</a>
+                                        </button>
+                                        <%}%>
+                                            <!-- <h4 class="card-text">This is an inspection report</h4> -->
+
+                                    </div>
+                                    <% count++ %>
+                                        <%}%>
+
+
+                                            <!-- <div style="display: table-cell;"> Right </div> -->
+                        </div>
+
+                        <%}%>
+
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>
+
+<!-- Keep this comment -->
+<!-- <div class="metafooter">
+		<div class="wrapfooter">
+			<span class="meta-footer-thumb">
+				<a href="author.html"><img class="author-thumb" src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x" alt="Sal"></a>
+			</span>
+				<span class="author-meta">
+				<span class="post-name"><a href="author.html">Sal</a></span><br/>
+				<span class="post-date">22 July 2017</span><span class="dot"></span><span class="post-read">6 min read</span>
+			</span>
+				<span class="post-read-more"><a href="post.html" title="Read Story"><svg class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z" fill-rule="evenodd"></path></svg></a></span>
+		</div>
+	</div> -->

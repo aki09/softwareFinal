@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Fynovate</title>
+    <link rel="stylesheet" href="vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="vendors/simple-line-icons/css/simple-line-icons.css">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="shortcut icon" href="images/fav-promo.png" />
+</head>
+<style>
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+</style>
+
+<body>
+    <div class="container-scroller">
+        <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+                <div class="me-3"></div>
+                <div>
+                    <a class="" href="#">
+                        <img src="images/logo3.png" alt="logo" height="50" width="160">
+                    </a>
+                </div>
+            </div>
+            <div class="navbar-menu-wrapper d-flex align-items-top">
+                <ul class="navbar-nav">
+                    <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
+                        <h1 class="welcome-text">Greetings, <span id="companyName" class="text-blue fw-bold">
+                                <%= companyName %>
+                            </span></h1>
+                        <h3 class="welcome-sub-text">Your performance summary </h3>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown d-none d-lg-block">
+                    </li>
+                    <li class="nav-item d-none d-lg-block">
+                        <div id="datepicker-popup" class="input-group date datepicker navbar-date-picker">
+                            <span class="input-group-addon input-group-prepend border-right">
+                                <span class="icon-calendar input-group-text calendar-icon"></span>
+                            </span>
+                            <input type="text" class="form-control">
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown d-none d-lg-block user-dropdown">
+                        <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-user" aria-hidden="true" style="font-size:36px"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+                            <div class="dropdown-header text-center">
+                                <i class="fa fa-user" aria-hidden="true" style="font-size:36px"></i>
+                                <p class="mb-1 mt-3 font-weight-semibold">
+                                    <%= companyName %>
+                                </p>
+                            </div>
+                            <button class="btn11"><a class="dropdown-item" href="../inspectionReport"><i
+                                        class="dropdown-item-icon mdi mdi-message-text-outline text-primary me-2"></i>
+                                    Inspection Reports</a></button>
+                            <form action="/generate" method="post">
+                                <button class="btn11"><a class="dropdown-item"><i
+                                            class="dropdown-item-icon mdi mdi-message-text-outline text-primary me-2"></i>
+                                        Latest Inspection Report</a></button>
+                            </form>
+                            <form action="/logout" method="post">
+                                <button type="submit" class="btn11"><a class="dropdown-item"><i
+                                            class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>
+                                        Sign Out</a>
+                                </button>
+                            </form>
+                            <!-- <button type="submit" class="btn11"><a class="dropdown-item" onclick="removeVideo()"><i
+                                        class="dropdown-item-icon mdi mdi-camcorder-off text-primary me-2"></i>
+                                    Disable Video Feed</a>
+                            </button> -->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container-fluid page-body-wrapper">
+            <div class="wrapper"><br><br>
+                <% for (var i=0; i<drones.length; i++) { %>
+                    <div class="courses-container">
+                        <div class="course">
+                            <div class="course-info">
+                                <div class="progress-container">
+                                    <i class="fa fa-battery-full" aria-hidden="true"></i>
+                                    <div class="drone_battery">
+                                        <%= drones[i].battery %>%
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li class="droneItem" style="font-size:25px;">
+                                        <h5 style="color: #2A265F;">Drone <%= i + 1 %>
+                                        </h5>
+                                    </li>
+                                </ul>
+                                <form id="takeoffForm" action="/form" method="GET">
+                                    <input type="hidden" name="drone_id" id="drone_id" value="<%= drones[i]._id %>">
+                                    <input type="hidden" name="action" id="action"
+                                        value="<%= drones[i].takeOffStatus ? 'land' : 'takeoff' %>">
+                                    <button type="submit" class="btn5" id="takeoff">
+                                        <%= drones[i].takeOffStatus ? 'Land' : 'Takeoff' %>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <%}%>
+            </div>
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="home-tab">
+                                <div class="d-sm-flex align-items-center justify-content-between border-bottom"></div>
+                                <div class="tab-content tab-content-basic"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="thing">
+                                <% for (var i=0; i<drones.length; i++) { %>
+                                    <div class="col-lg-4 d-flex flex-column">
+                                        <div class="row flex-grow">
+                                            <div class="col-12 col-lg-6 col-lg-11 grid-margin stretch-card">
+                                                <div class="card card-rounded">
+                                                    <div class="card-body">
+                                                        <div
+                                                            class="d-sm-flex justify-content-between align-items-start">
+                                                            <div>
+                                                                <h4 class="card-title card-title-dash">VIDEO FEED: DRONE
+                                                                    <%= i + 1 %>
+                                                                </h4>
+                                                                <h6 class="card-subtitle card-subtitle-dash">
+                                                                </h6>
+                                                                <div id="showVideo">
+                                                                    <button class="btn10"
+                                                                        onclick="showVideo('<%= drones[i].serial%>')">Show
+                                                                        Live Feed</button>
+                                                                </div>
+                                                            </div>
+                                                            <!-- <video id="videoPlayer" width="650" controls muted="muted" autoplay>
+                                                                <source src="/video" type="video/mp4" />
+                                                            </video> -->
+                                                            <div id=""></div>
+                                                        </div>
+                                                        <!-- <div class=""><canvas id=""></canvas></div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <%}%>
+                            </div><br><br>
+                            <% if(drones.length>0){%>
+                                <div class="col-lg-13 d-flex flex-column">
+                                    <div class="row flex-grow">
+                                        <div class="col-12 col-lg-6 col-lg-11 grid-margin stretch-card">
+                                            <div class="card card-rounded">
+                                                <div class="card-body">
+                                                    <div class="d-sm-flex justify-content-between align-items-start">
+                                                        <div>
+                                                            <h4 class="card-title card-title-dash">VIDEO APPEARS HERE:
+                                                            </h4>
+                                                            <h6 class="card-subtitle card-subtitle-dash">
+                                                                <iframe id="videoFeed" width="1100" height="450"
+                                                                    src="http://<%=drones[0].serverIP%>:<%drones[0].serverPORT%>/video/<%=drones[0].serial%>"
+                                                                    id="videoStream" title="Drone View" frameborder="0"
+                                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                    allowfullscreen>
+                                                                </iframe>
+                                                            </h6>
+                                                        </div>
+
+                                                        <!-- <video id="videoPlayer" width="650" controls muted="muted" autoplay>
+                                                                <source src="/video" type="video/mp4" />
+                                                            </video> -->
+                                                        <div id=""></div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }%>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 d-flex flex-column">
+                                <div class="row flex-grow">
+                                    <div class="col-11 grid-margin stretch-card">
+                                        <div class="card card-rounded">
+                                            <div class="card-body">
+                                                <div class="d-sm-flex justify-content-between align-items-start">
+                                                    <div>
+                                                        <% if(drones.length>0){%>
+                                                            <h4 class="card-title card-title-dash">LIVE MAP</h4>
+                                                            <p class="card-subtitle card-subtitle-dash">Location of all
+                                                                drones appears here in real time</p>
+                                                            <%} else{%>
+                                                                <h4 class="card-title card-title-dash">Flynovate</h4>
+                                                                <p class="card-subtitle card-subtitle-dash">Please
+                                                                    contact FLYNOVATE team for your DRONE requirements</p>
+                                                                <% }%>
+                                                    </div>
+                                                </div>
+                                                <div class="">
+                                                    <div id="map"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>&nbsp;&nbsp;
+                            </div>
+
+                            <% if(drones.length>0){%>
+                                <div class="col-md-6 col-lg-4 grid-margin stretch-card">
+                                    <div class="row flex-grow">
+                                        <div class="col-11 grid-margin stretch-card">
+                                            <div class="card card-rounded">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                                        <h4 class="card-title card-title-dash">ERROR LIST</h4>
+                                                        <p class="mb-0" id="errorNum">NO ERROR FOUND</p>
+                                                    </div>
+                                                    <ul class="bullet-line-list" id="list">
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <%}%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        locations = []
+        alert(drones.length);
+    </script>
+    <% for (var i=0; i<drones.length; i++) { %>locations[0][1]
+        <script>
+            lat = '<%-drones[i].location.lat%>';
+            lng = '<%-drones[i].location.lon%>';
+            id = '<%-drones[i]._id%>';
+            loc = { lat: parseFloat(lat), lng: parseFloat(lng) };
+
+            locations.push([id, parseFloat(lat),parseFloat(lng)]);
+        </script>
+        <%}%>
+    
+
+            <% if (drones.length > 0) { %>
+                <script>
+                    // if (Number('<%-drones.length%>') <= 0) {
+                    //     console.log('BRUHHHHH THISN IS STRESSSSSS')
+                    // }
+                    colorList = {
+                        0: ['green', 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'],
+                        1: ['pink', 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png'],
+                        2: ['yellow', 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'],
+                        3: ['purple', 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png'],
+                        4: ['blue', 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'],
+                        5: ['red', 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'],
+                    }
+                    function initMap() {
+                        console.log("called");
+                        var location = { lat: 30.3564, lng: 76.3647 };
+                        var lat = '<%-drones[0].location.lat%>';
+                        var lng = '<%-drones[0].location.lon%>';
+                        var loc = { lat: parseFloat(lat), lng: parseFloat(lng) };
+                        map = new google.maps.Map(document.getElementById("map"), {
+                            zoom: 18,
+                            center: loc,
+                            mapTypeId: 'satellite'
+                        });
+                        for (let i = 0; i < locations.length; i++) {
+                            console.log(locations[i][1]);
+                            console.log(locations[i][2]);
+                            const marker = new google.maps.Marker({
+                                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                                map: map,
+                                icon: { url: colorList[i][1] },
+                            });
+                            document.getElementsByClassName("droneItem")[i].style.color = colorList[i][0];
+                            const contentString =
+                                '<h3> DRONE ' + (i + 1) +
+                                '<h4>Co-ordinates: </h4>' +
+                                "<p><b>Latitude: " + locations[i][1] + ' , ' + "Longitude: " + locations[i][2]
+                            const infowindow = new google.maps.InfoWindow({
+                                content: contentString,
+                            });
+                            marker.addListener("mouseover", () => {
+                                infowindow.open({
+                                    anchor: marker,
+                                    map,
+                                    shouldFocus: false,
+                                });
+                            });
+                            marker.addListener('mouseout', function () {
+                                infowindow.close();
+                            });
+                        }
+                    
+                    }
+                </script>
+                <%}%>
+                    <script>
+                        const val = document.getElementsByName("drone_id")[0].value;
+                        var socket = io();
+                        socket.on("takeoff", function (data) {
+                        })
+
+                        socket.on("battery", function (data) {
+                            console.log(data.battery)
+                            for (let i = 0; i < parseInt('<%-drones.length%>'); i++) {
+                                let id_val = document.getElementsByName("drone_id")[i].value;
+                                if (data.id === id_val) {
+                                    document.getElementsByClassName("drone_battery")[i].innerHTML = data.battery;
+                                    document.getElementsByClassName("drone_battery")[i].innerHTML += '%';
+                                    break;
+                                }
+                            }
+                        })
+
+                        socket.on("location", function (data) {
+                            console.log(data.location.lat);
+                            console.log(data.location.lon);
+                            for (let i = 0; i < parseInt('<%-drones.length%>'); i++) {
+                                if (locations[i][0] == data.id) {
+                                    locations[i][1] = data.location.lat;
+                                    locations[i][2] = data.location.lon;
+                                    break;
+                                }
+                            }
+                            console.log("------------------------------")
+                            initMap();
+                        })
+                    </script>
+
+                    <script async defer
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh7msMVHVzGIGudLom3v5p1U4vLWxaH50&callback=initMap"></script>
+
+
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $('.thing').slick({
+                                dots: false,
+                                arrows: false,
+                                slidesToShow: 3,
+                                slidesToScroll: 1,
+                                autoplay: true,
+                                autoplaySpeed: 800,
+                                responsive: [{
+                                    breakpoint: 1024,
+                                    settings: {
+                                        slidesToShow: 2,
+                                        slidesToScroll: 1,
+                                        infinite: true,
+                                        dots: false
+                                    }
+                                },
+                                {
+                                    breakpoint: 600,
+                                    settings: {
+                                        slidesToShow: 2,
+                                        slidesToScroll: 1
+                                    }
+                                },
+                                {
+                                    breakpoint: 480,
+                                    settings: {
+                                        slidesToShow: 1,
+                                        slidesToScroll: 1
+                                    }
+                                }
+                                ]
+                            });
+                        });
+                    </script>
+
+                    <script>
+                        function showVideo(serialID) {
+
+
+                            var div = document.getElementById('videoFeed');
+                            srcBase = '<%=process.env.DroneVideoURL%>'
+                            srcNew = srcBase + '/' + serialID;
+                            alert(srcNew)
+                            div.src = srcNew
+                        }
+
+                    </script>
+
+                    <script>
+                        var socketio = io();
+                        var droneNum = 0;
+                        socketio.on("errorlist", function (data) {
+                            for (let i = 0; i < parseInt('<%-drones.length%>'); i++) {
+                                var id_val = document.getElementsByName("drone_id")[i].value;
+                                console.log("here " + i)
+                                if (data.error.droneId == id_val) {
+                                    droneNum = i;
+                                    break;
+                                }
+                            }
+                            tstamp = new Date(data.error.timestamps).getSeconds()
+                            var a = document.getElementById("list");
+                            var li = document.createElement("li");
+                            var div = document.createElement("div");
+                            var div2 = document.createElement("div");
+                            var span = document.createElement("span");
+                            var p = document.createElement("p");
+                            div.setAttribute('class', "d-flex justify-content-between");
+                            span.setAttribute('class', "text-light-green");
+                            li.setAttribute('id', data.error._id);
+                            p.appendChild(document.createTextNode('Drone ' + (droneNum + 1) + ' spotted a ' + data.error.title))
+                            div.appendChild(p);
+                            span.appendChild(document.createTextNode(tstamp + "s Ago"));
+                            div2.appendChild(span);
+                            div.appendChild(div2);
+                            li.appendChild(div);
+                            a.appendChild(li);
+
+
+                            var a = document.getElementById("list");
+                            var item = document.getElementById("list").firstElementChild;
+                            var num = document.getElementById("list").getElementsByTagName("li").length
+                            document.getElementById("errorNum").innerHTML = num + " ERROR(S) FOUND";
+                            if (num > 11) {
+                                a.removeChild(item);
+                            }
+                        })
+
+                    </script>
+                    <!-- <script>
+                function removeVideo() {
+                    var video = document.getElementById("v").style.visibility = "hidden";
+                    // video.remove()
+                }
+            </script> -->
+
+                    <script src="vendors/js/vendor.bundle.base.js"></script>
+                    <script src="vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+                    <script src="vendors/progressbar.js/progressbar.min.js"></script>
+
+
+                    <script src="js/off-canvas.js"></script>
+                    <script src="js/hoverable-collapse.js"></script>
+                    <script src="js/template.js"></script>
+                    <script src="js/settings.js"></script>
+                    <script src="js/todolist.js"></script>
+
+
+                    <script src="js/dashboard.js"></script>
+                    <script src="js/Chart.roundedBarCharts.js"></script>
+                    <script src="js/slick.js" type="text/javascript"></script>
+</body>
+
+</html>
