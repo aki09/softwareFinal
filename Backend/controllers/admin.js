@@ -1,7 +1,8 @@
 const Admin = require('../models/admin');
 const bcrypt = require("bcrypt");
+const User = require("../models/user");
+const Drone = require('../models/drone');
 const createTokens  = require("../middleware/auth3");
-const validateToken  = require("../middleware/auth4");
 
 exports.getLogin = (req, res, next) => {
     const token = req.cookies["access-token"];
@@ -11,8 +12,9 @@ exports.getLogin = (req, res, next) => {
     console.log("admin login");
 };
 
-exports.getHome = (req, res, next) => {
-    console.log("admin home");
+exports.getHome = async(req, res, next) => {
+    let drones=await Drone.find();
+    console.log(drones)
 };
 
 exports.postLogin = (req, res, next) => {

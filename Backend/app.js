@@ -31,7 +31,7 @@ app.use(session({
 app.use(cookieParser());
 app.use(user);
 app.use(admin);
-//app.use(errorController.get404);
+app.use(errorController.get404);
 
 app.listen(PORT, (req, res) => {
     console.log(`Server Started at PORT ${PORT}`);

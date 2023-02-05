@@ -14,4 +14,6 @@ router.post('/adminlogout', adminController.postLogout);
 
 router.get('/adminhome', validateToken, adminController.getHome);
 
+
+
 module.exports = router;

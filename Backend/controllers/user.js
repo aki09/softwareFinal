@@ -203,7 +203,7 @@ exports.postSignup = (req, res, next) => {
     const company = req.body.company;
     const confirmPassword = req.body.confirmPassword;
     if (password == confirmPassword) {
-        User.findOne({ userName: userName,email:email })
+        User.findOne({ userName: userName })
             .then((userDoc) => {
                 if (userDoc) {
                     return res.redirect("/signup");
@@ -263,7 +263,7 @@ exports.generatePDF = async (req, res, next) => {
     const data = jlol.verify(token, "jwtsecretplschange");
     uid=data.id;
     let user = await User.findOne({_id:uid});
-    var reportUser =user.company
+    var reportUser =user.userName;
     var returnedData = await firebase.getImg(reportUser)
     var imgLinks = returnedData[0]
     var imageFiles = returnedData[1]
