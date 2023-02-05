@@ -11,6 +11,8 @@ dotenv.config();
 InitiateMongoServer();
 const app = express();
 const PORT = process.env.PORT || 3000;
+const cookieParser = require("cookie-parser");
+const firebase = require('./firebase').initialize()
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -26,7 +28,7 @@ app.use(session({
   app.get("/", (req, res) => {
     res.json({ message: "Welcome" });
   });
-
+app.use(cookieParser());
 app.use(user);
 app.use(admin);
 //app.use(errorController.get404);

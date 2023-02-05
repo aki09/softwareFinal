@@ -12,16 +12,18 @@ router.post('/login', userController.postLogin);
 
 router.post('/signup', userController.postSignup);
 
-router.get('/home', userController.dashboard);
+router.post('/logout', userController.postLogout);
 
-// router.get('/inspectionReport', userController.inspectionReport);
+router.get('/home',isAuth, userController.dashboard);
 
-// router.get('/form', userController.takeoffForm);
+router.get('/inspectionReport', isAuth,userController.inspectionReport);
 
-// router.post('/form', userController.takeoffAndLand);
+router.get('/form',isAuth, userController.takeoffForm);
 
-// router.post('/generate', userController.generatePDF);
+router.post('/form',isAuth, userController.takeoffAndLand);
 
-// router.post('/grid', userController.grid);
+router.post('/generate',isAuth, userController.generatePDF);
+
+router.post('/grid',isAuth, userController.grid);
 
 module.exports = router;
