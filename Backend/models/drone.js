@@ -15,6 +15,10 @@ const droneSchema = new Schema({
         type: Object,
         require: true
     },
+    type:{
+        type: String,
+        required: true
+    },
     takeOffStatus: {
         type: Boolean,
         required: true

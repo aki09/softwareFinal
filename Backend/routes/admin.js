@@ -1,18 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const validateToken  = require("../middleware/auth4");
+const validateToken  = require("../middleware/adminverify");
 
 const adminController = require("../controllers/admin");
 
-router.get('/adminlogin', adminController.getLogin);
+router.post('/login', adminController.postLogin);
 
-router.post('/adminlogin', adminController.postLogin);
+router.post('/signup', adminController.postSignup);
 
-router.post('/adminsignup', adminController.postSignup);
+router.post('/logout', adminController.postLogout);
 
-router.post('/adminlogout', adminController.postLogout);
-
-router.get('/adminhome', validateToken, adminController.getHome);
+router.get('/home', validateToken, adminController.getHome);
 
 
 

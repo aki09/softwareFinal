@@ -2,15 +2,8 @@ const Admin = require('../models/admin');
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const Drone = require('../models/drone');
-const createTokens  = require("../middleware/auth3");
+const createTokens  = require("../middleware/admincreatetoken");
 
-exports.getLogin = (req, res, next) => {
-    const token = req.cookies["access-token"];
-    if (token) {
-        console.log("token exists")
-    }
-    console.log("admin login");
-};
 
 exports.getHome = async(req, res, next) => {
     let drones=await Drone.find();
@@ -23,7 +16,7 @@ exports.postLogin = (req, res, next) => {
     Admin.findOne({ userName: userName })
         .then((admin) => {
             if (!admin) {
-                return res.redirect("/adminlogin");
+                console.log("No admin found")
             }
             bcrypt
                 .compare(password, admin.password)
@@ -36,7 +29,7 @@ exports.postLogin = (req, res, next) => {
                         });
                         console.log(accessToken)
                     }
-                    res.redirect("/adminlogin");
+                    res.send({admin:admin})
                 })
                 .catch((err) => {
                     res.redirect("/adminlogin");

@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const isAuth  = require("../middleware/auth2");
+const isAuth  = require("../middleware/userverify");
 
-const userController = require("../controllers/user");
+const userController = require("../controllers/userauth");
+const userinspection=require("../controllers/userinspection");
+const userdashboard=require("../controllers/userdash");
 
 router.get('/login', userController.getLogin);
 
@@ -14,16 +16,16 @@ router.post('/signup', userController.postSignup);
 
 router.post('/logout', userController.postLogout);
 
-router.get('/home',isAuth, userController.dashboard);
+router.post('/generate',isAuth, userinspection.generatePDF);
 
-router.get('/inspectionReport', isAuth,userController.inspectionReport);
+router.get('/inspectionReport', isAuth,userinspection.inspectionReport);
 
-router.get('/form',isAuth, userController.takeoffForm);
+router.get('/form',isAuth, userdashboard.takeoffForm);
 
-router.post('/form',isAuth, userController.takeoffAndLand);
+router.post('/form',isAuth, userdashboard.takeoffAndLand);
 
-router.post('/generate',isAuth, userController.generatePDF);
+router.post('/grid',isAuth, userdashboard.grid);
 
-router.post('/grid',isAuth, userController.grid);
+router.get('/home',isAuth, userdashboard.dashboard);
 
 module.exports = router;

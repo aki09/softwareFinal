@@ -4,6 +4,7 @@ const path = require('path');
 const InitiateMongoServer = require("./config/db");
 const user = require("./routes/user");
 const admin=require("./routes/admin")
+const cors = require('cors');
 const session=require('express-session')
 const errorController = require('./controllers/error');
 const dotenv = require('dotenv');
@@ -13,12 +14,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const cookieParser = require("cookie-parser");
 const firebase = require('./firebase').initialize()
-
-app.set('view engine', 'ejs');
-app.set('views', 'views');
+app.use(express.json())
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/public')));
-
+app.use(cors());
 app.use(session({
     secret:process.env.SECRET_KEY,
     cookie:{maxAge:60000},
@@ -30,7 +30,7 @@ app.use(session({
   });
 app.use(cookieParser());
 app.use(user);
-app.use(admin);
+app.use('/admin',admin);
 app.use(errorController.get404);
 
 app.listen(PORT, (req, res) => {
