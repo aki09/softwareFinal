@@ -67,19 +67,19 @@ const Sidebar = ({ drones }) => {
     <>
       <div
         style={{ ...styles.mainContent, marginTop: `${navbarHeight}px` }}
-        className="d-flex justify-content-center sidebar"
+        className="d-flex justify-content-center sidebar pt-2"
       >
         <div className="bg-light " style={{ height: "100vh", width:"40vw" }}>
-          <h3
+          {/* <h3
             style={{ color: "#333" }}
             className="d-flex justify-content-center"
           >
             DRONES
-          </h3>
-          <div className="d-flex justify-content-center">
+          </h3> */}
+          <div className="d-flex justify-content-center mt-2">
             <BootstrapSwitchButton
               checked={true}
-              onlabel={<FaCamera />}
+              onlabel={<FaCamera fontSize={20} />}
               offlabel={<FaBroom />}
               onChange={handleType}
               onstyle="outline-info"

@@ -20,7 +20,7 @@ export const drones = [
   {
     id: 2,
     type: "inspection",
-    battery: 75,
+    battery: 15,
     takeoffStatus: true,
     serial: "D002",
     location: {
