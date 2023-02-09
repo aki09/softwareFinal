@@ -34,14 +34,14 @@ const Topbar = ({ user }) => {
             className="justify-content-end"
           >
             <Nav className="mr-auto">
-              <ButtonGroup>
-                <Button variant="outline-secondary" size="md">
+              {/* <ButtonGroup> */}
+                <Button variant="outline-secondary" size="md" className="me-1">
                   Inspection Reports
                 </Button>
                 <Button variant="outline-secondary" size="md">
                   Sign Out
                 </Button>
-              </ButtonGroup>
+              {/* </ButtonGroup> */}
               <Nav.Link>
                 <RiAdminFill
                   style={{ fontSize: "36px" }}
