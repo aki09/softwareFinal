@@ -10,12 +10,7 @@ const errorController = require('./controllers/error');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const http = require('http');
-const socketio = require('socket.io');
-
 const app = express();
-const server = http.createServer(app)
-const io = socketio(server, { cors: { origin: '*' } })
 
 const PORT = process.env.PORT || 3000;
 const cookieParser = require("cookie-parser");
@@ -38,15 +33,11 @@ app.use(session({
 app.use(cookieParser());
 app.use(user);
 app.use('/admin',admin);
-app.use(errorController.get404);
+//app.use(errorController.get404);
+app.set('view engine', 'ejs');
 
 
-
-app.listen(PORT, (req, res) => {
-    console.log(`Server Started at PORT ${PORT}`);
-});
-
-
+// MongoDb Server
 const MONGOURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@flynovate-website.bqwpz.mongodb.net/database?retryWrites=true&w=majority`;
 mongoose.set("strictQuery", false);
 mongoose
@@ -55,9 +46,55 @@ mongoose
       useUnifiedTopology: true,
     })
     .then((result) => {
-      console.log("Db Connected")
+      console.log("Database Connected")
     })
     .catch(err => {
         console.log('Error')
     });
 const db=mongoose.connection;
+
+// Socket and Connection
+db.once('open', () => {
+  app.listen(PORT, (req, res) => {
+    console.log(`Server Started at PORT ${PORT}`);
+  });
+  const server = require('http').createServer(app)
+  const io = require('socket.io')(server, { cors: { origin: '*' } })
+
+  io.on('connection', (socket) => {
+    console.log('a user connected');
+  });
+  const collection = db.collection('drones');
+  const changeStream = collection.watch();
+
+  const errorCollection = db.collection('errorlists');
+  const newStream = errorCollection.watch();
+
+  changeStream.on('change', (change) => {
+    const update = change.updateDescription.updatedFields;
+    const id = change.documentKey._id;
+    const droneId = String(id);
+    if (update.takeOffStatus != undefined) {
+      io.emit("takeoff", { takeoff: update.takeOffStatus, id: droneId })
+    }
+
+    if (update.battery != undefined) {
+      io.emit("battery", { battery: update.battery, id: droneId })
+      console.log("battery ran")
+    }
+
+    if (update.location != undefined) {
+      io.emit("location", { location: update.location, id: droneId })
+    }
+
+    if (update.error != undefined) {
+    io.emit("error", { error: update.error, id: droneId })
+    }
+  })
+
+  newStream.on('change', (change) => {
+  console.log("HERE IS THE DATA")
+  io.emit("errorlist", { error: change.fullDocument})
+  console.log(change.fullDocument)
+  })
+})
