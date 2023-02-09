@@ -35,10 +35,10 @@ const Topbar = ({ user }) => {
           >
             <Nav className="mr-auto">
               <ButtonGroup>
-                <Button variant="outline-primary" size="md">
+                <Button variant="outline-secondary" size="md">
                   Inspection Reports
                 </Button>
-                <Button variant="outline-primary" size="md">
+                <Button variant="outline-secondary" size="md">
                   Sign Out
                 </Button>
               </ButtonGroup>
