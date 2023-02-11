@@ -6,9 +6,6 @@ const userController = require("../controllers/userauth");
 const userinspection=require("../controllers/userinspection");
 const userdashboard=require("../controllers/userdash");
 
-router.get('/login', userController.getLogin);
-
-router.get('/signup', userController.getSignup);
 
 router.post('/login', userController.postLogin);
 

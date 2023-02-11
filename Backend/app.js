@@ -20,7 +20,10 @@ app.use(express.json())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:8000',
+  optionsSuccessStatus: 200
+}));
 app.use(session({
     secret:process.env.SECRET_KEY,
     cookie:{maxAge:60000},

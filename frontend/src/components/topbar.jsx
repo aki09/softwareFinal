@@ -21,7 +21,7 @@ const Topbar = ({ user }) => {
             <div className="ms-4">
               <h1>
                 Greetings,{" "}
-                <span style={{ color: "#2a265f" }}>{user.companyName}</span>
+                <span style={{ color: "#2a265f" }}>{user.company}</span>
               </h1>
               <h6>Your Performance Report</h6>
             </div>

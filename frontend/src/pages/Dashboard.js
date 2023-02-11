@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 
 import { Container, Row, Col } from "react-bootstrap";
 
@@ -7,9 +8,12 @@ import LiveMap from "../components/livemap";
 import Sidebar from "../components/sidebar";
 import Topbar from "../components/topbar";
 
-import { user, drones } from "../components/dummydata";
+import { drones } from "../components/dummydata";
 
 const Dashboard = () => {
+  const location = useLocation();
+  const user = location.state.user;
+  console.log(user)
   return drones.length ? (
     <div>
       <Container fluid className="bg-light">
@@ -17,9 +21,9 @@ const Dashboard = () => {
           <Topbar user={user} />
         </Row>
         <Row>
-          <Col md={3} className="justify-content-center">
+          {/* <Col md={3} className="justify-content-center">
             <Sidebar drones={drones} />
-          </Col>
+          </Col> */}
           <Col md={5}>
             <LiveMap />
           </Col>

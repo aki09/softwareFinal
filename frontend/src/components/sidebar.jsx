@@ -50,18 +50,18 @@ const Sidebar = ({ drones }) => {
     );
   };
 
-  const showVideoFeed = (id) => {
-    setDroneList((prevDroneList) =>
-      prevDroneList.map((drone) => {
-        if (drone.id === id) {
-          return {
-            ...drone,
-            videoStreamStatus: !drone.videoStreamStatus,
-          };
-        }
-      })
-    );
-  };
+  // const showVideoFeed = (id) => {
+  //   setDroneList((prevDroneList) =>
+  //     prevDroneList.map((drone) => {
+  //       if (drone.id === id) {
+  //         return {
+  //           ...drone,
+  //           videoStreamStatus: !drone.videoStreamStatus,
+  //         };
+  //       }
+  //     })
+  //   );
+  // };
 
   return (
     <>
@@ -117,7 +117,7 @@ const Sidebar = ({ drones }) => {
                     >
                       {drone.takeoffStatus ? "Takeoff" : "Land"}
                     </Button>
-                    <Button variant="dark" size="sm" className="mt-1 mb-0" onClick={() => showVideoFeed(drone.id)} style={{width:"90%"}} >
+                    <Button variant="dark" size="sm" className="mt-1 mb-0" style={{width:"90%"}} >
                       Show Live Feed
                     </Button>
                     </div>

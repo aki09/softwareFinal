@@ -7,31 +7,15 @@ const dotenv = require('dotenv');
 const fs = require('fs');
 dotenv.config();
 
-exports.getLogin = (req, res, next) => {
-    const token = req.cookies["access-token"];
-    if (token) {
-        console.log("token exists")
-    }
-    console.log("user login");
-};
-
-exports.getSignup = (req, res, next) => {
-    const token = req.cookies["access-token"];
-    if (token) {
-        console.log("token exists")
-    }
-    console.log("user register");
-};
-
 
 exports.postLogin = (req, res, next) => {
     const userName = req.body.username;
     const password = req.body.password;
     User.findOne({ userName: userName })
         .then((user) => {
-            if (!user) {
-                return res.redirect("/login");
-            }
+            // if (!user) {
+            //     return res.redirect("/login");
+            // }
             bcrypt
                 .compare(password, user.password)
                 .then((doMatch) => {
@@ -42,8 +26,8 @@ exports.postLogin = (req, res, next) => {
                             httpOnly: true,
                         });
                         console.log(accessToken)
+                        res.status(200).send({ user: user,access:accessToken, message: "logged in successfully" });
                     }
-                    res.redirect("/home");
                 })
                 .catch((err) => {
                     console.log(err);
@@ -93,8 +77,7 @@ exports.postSignup = (req, res, next) => {
                         }
                     
                         transporter.sendMail(mailOptions)
-                        console.log()
-                        res.redirect("/login");
+                        res.status(200).send({ message: "logged in successfully" });
                     })
                     .catch(err => {
                         console.log(err);
