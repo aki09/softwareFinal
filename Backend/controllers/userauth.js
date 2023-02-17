@@ -24,8 +24,7 @@ exports.postLogin = (req, res, next) => {
                         res.cookie("access-token", accessToken, {
                             maxAge: 60 * 60 * 24 * 30 * 1000,
                             httpOnly: true,
-                        });
-                        console.log(accessToken)
+                        })
                         res.status(200).send({ user: user,access:accessToken, message: "logged in successfully" });
                     }
                 })

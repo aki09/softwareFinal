@@ -73,31 +73,31 @@ db.once('open', () => {
   const errorCollection = db.collection('errorlists');
   const newStream = errorCollection.watch();
 
-  changeStream.on('change', (change) => {
-    const update = change.updateDescription.updatedFields;
-    const id = change.documentKey._id;
-    const droneId = String(id);
-    if (update.takeOffStatus != undefined) {
-      io.emit("takeoff", { takeoff: update.takeOffStatus, id: droneId })
-    }
+  // changeStream.on('change', (change) => {
+  //   const update = change.updateDescription.updatedFields;
+  //   const id = change.documentKey._id;
+  //   const droneId = String(id);
+  //   if (update.takeOffStatus != undefined) {
+  //     io.emit("takeoff", { takeoff: update.takeOffStatus, id: droneId })
+  //   }
 
-    if (update.battery != undefined) {
-      io.emit("battery", { battery: update.battery, id: droneId })
-      console.log("battery ran")
-    }
+  //   if (update.battery != undefined) {
+  //     io.emit("battery", { battery: update.battery, id: droneId })
+  //     console.log("battery ran")
+  //   }
 
-    if (update.location != undefined) {
-      io.emit("location", { location: update.location, id: droneId })
-    }
+  //   if (update.location != undefined) {
+  //     io.emit("location", { location: update.location, id: droneId })
+  //   }
 
-    if (update.error != undefined) {
-    io.emit("error", { error: update.error, id: droneId })
-    }
-  })
+  //   if (update.error != undefined) {
+  //   io.emit("error", { error: update.error, id: droneId })
+  //   }
+  // })
 
-  newStream.on('change', (change) => {
-  console.log("HERE IS THE DATA")
-  io.emit("errorlist", { error: change.fullDocument})
-  console.log(change.fullDocument)
-  })
+  // newStream.on('change', (change) => {
+  // console.log("HERE IS THE DATA")
+  // io.emit("errorlist", { error: change.fullDocument})
+  // console.log(change.fullDocument)
+  // })
 })

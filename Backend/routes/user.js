@@ -23,6 +23,6 @@ router.post('/form',isAuth, userdashboard.takeoffAndLand);
 
 router.post('/grid',isAuth, userdashboard.grid);
 
-router.get('/home',isAuth, userdashboard.dashboard);
+router.get('/home', userdashboard.dashboard);
 
 module.exports = router;

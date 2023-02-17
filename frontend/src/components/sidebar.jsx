@@ -99,10 +99,10 @@ const Sidebar = ({ drones }) => {
                   <Card.Body>
                     <Card.Subtitle
                       className="d-flex justify-content-start"
-                      style={{ color: "#2a265f" }}
+                      style={{ color: "black" }}
                     >
-                      <BsCircleFill className="me-2 mt-1" fontSize="11px" />
-                      Drone {index + 1}
+                      <BsCircleFill className="me-2 mt-1" fontSize="11px" style={{ color: drone.color }}/>
+                      {drone.name}
                     </Card.Subtitle>
                     <Card.Text className="battery-gauge d-flex justify-content-end">
                       <BatteryGauge value={drone.battery} size={45} />

@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+import React,{ useState } from 'react';
 import './App.css';
 import Dashboard from './pages/Dashboard';
 import InspectionReport from './pages/InspectionReport';
@@ -15,6 +15,7 @@ function App() {
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/signup" element={<Register/>} />
         <Route exact path="/home" element={<Dashboard/>} />
+
       </Routes>
     </BrowserRouter>
   );

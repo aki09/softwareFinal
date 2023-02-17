@@ -6,12 +6,13 @@ const fs = require('fs');
 dotenv.config();
 
 exports.dashboard = async(req, res, next) => {
-    const token = req.cookies["access-token"];
+    const token = req.query.cookieValue;
+    //const token = req.cookies["access-token"];
     const data = jlol.verify(token, "jwtsecretplschange");
     uid=data.id;
     let user = await User.findOne({_id:uid});
     let drones=await Drone.find({ userId: uid })
-    console.log(drones)
+    res.status(200).send({ user:user,drones:drones });
 }
 
 exports.takeoffForm = (req, res, next) => {

@@ -19,7 +19,7 @@ const Login = () => {
 			const res = await axios.post(url, user);
       const cookie=res.data.access;
       setCookieValue(cookie);
-		  navigate("/home",{state:{user:res.data.user,cookieValue:cookieValue}});
+		  navigate("/home",{state:{user:res.data.user,cookieValue:res.data.access}});
 		} catch (error) {
 			if (
 				error.response &&
