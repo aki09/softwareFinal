@@ -52,13 +52,8 @@ const Dashboard = () => {
             c++;
           }
         }
-<<<<<<< HEAD
-        
-        setUser(response.data.user)
-=======
         console.log(response.data.drones);
         setUser(response.data.user);
->>>>>>> 235eb43d1816455ece99d4921b920a960e8a85e8
         setDrones(response.data.drones);
         setIsLoading(false);
       } catch (err) {
@@ -80,13 +75,8 @@ const Dashboard = () => {
             <Sidebar drones={drones} />
           </Col>
           <Col md={5}>
-<<<<<<< HEAD
-            {/* <Mapset drones={drones}/> */}
-            <Maap1 drones={drones}/>
-=======
             {/* <LiveMap drones={ drones }/> */}
             <Maap1 drones={drones} />
->>>>>>> 235eb43d1816455ece99d4921b920a960e8a85e8
           </Col>
           <Col md={4}>
             <ErrorList drones={drones} />
