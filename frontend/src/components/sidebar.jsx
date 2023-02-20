@@ -4,6 +4,7 @@ import { FaBroom, FaCamera } from "react-icons/fa";
 import { BsCircleFill } from "react-icons/bs";
 import { Button, ListGroup, Card } from "react-bootstrap";
 import BatteryGauge from "react-battery-gauge";
+import io from 'socket.io-client';
 
 const styles = {
   mainContent: {
@@ -18,6 +19,38 @@ const Sidebar = ({ drones }) => {
   const [showInspection, setShowInspection] = useState(true);
 
   useEffect(() => {
+    const socket = io('http://localhost:3000', { transports: ['websocket', 'polling', 'flashsocket'] });
+    
+    socket.on('battery', data => {
+      const { id, battery } = data;
+      console.log(id)
+      const batteryIndex = drones.findIndex(drone => drone._id === id);
+      if (batteryIndex === -1) return;
+      
+    });
+
+    socket.on('location', data => {
+      const { id, location } = data;
+
+      const locationIndex = drones.findIndex(drone => drone._id === id);
+      if (locationIndex === -1) return;
+
+    });
+
+    socket.on('error', data => {
+      const { id,error } = data;
+
+      const locationIndex = drones.findIndex(drone => drone._id === id);
+      if (locationIndex === -1) return;
+
+    });
+
+    socket.on('errorlist', data => {
+      const { error } = data;
+
+    });
+
+
     const navbar = document.querySelector(".navbar");
     setNavbarHeight(navbar.offsetHeight);
   }, []);
@@ -89,12 +122,13 @@ const Sidebar = ({ drones }) => {
           </div>
 
           <div className="pt-3">
-            {filteredDrones.map((drone, index) => (
+            {filteredDrones.map((drone, i) => (
               <ListGroup>
                 <Card
                   className="m-2 pt-3 pb-3"
                   style={{ boxShadow: "0 0 10px #ccc" }}
                   variant="light"
+                  key={i}
                 >
                   <Card.Body>
                     <Card.Subtitle
@@ -105,7 +139,7 @@ const Sidebar = ({ drones }) => {
                       {drone.name}
                     </Card.Subtitle>
                     <Card.Text className="battery-gauge d-flex justify-content-end">
-                      <BatteryGauge value={drone.battery} size={45} />
+                      <BatteryGauge value={filteredDrones[i].battery} size={45} />
                     </Card.Text>
                     <div className="m-auto">
                     <Button

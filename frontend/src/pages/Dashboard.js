@@ -7,6 +7,7 @@ import ErrorList from "../components/errorlist";
 import Maap1 from "../components/map1";
 import Sidebar from "../components/sidebar";
 import Topbar from "../components/topbar";
+import Mapset from "../components/mapset";
 
 const Dashboard = () => {
   const [user,setUser] = useState([]);
@@ -48,7 +49,7 @@ const Dashboard = () => {
             c++;
           }
         }
-        console.log(response.data.drones)
+        
         setUser(response.data.user)
         setDrones(response.data.drones);
         setIsLoading(false);
@@ -73,7 +74,7 @@ const Dashboard = () => {
             <Sidebar drones={drones} />
           </Col>
           <Col md={5}>
-            {/* <LiveMap drones={ drones }/> */}
+            {/* <Mapset drones={drones}/> */}
             <Maap1 drones={drones}/>
           </Col>
           <Col md={4}>

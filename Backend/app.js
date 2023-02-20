@@ -20,10 +20,21 @@ app.use(express.json())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(cors({
-  origin: 'http://localhost:8000',
-  optionsSuccessStatus: 200
-}));
+
+const allowedOrigins = ['http://localhost:8000'];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+
+// Enable CORS for a specific origin
+app.use(cors(corsOptions));
+
 app.use(session({
     secret:process.env.SECRET_KEY,
     cookie:{maxAge:60000},
@@ -43,61 +54,67 @@ app.set('view engine', 'ejs');
 // MongoDb Server
 const MONGOURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@flynovate-website.bqwpz.mongodb.net/database?retryWrites=true&w=majority`;
 mongoose.set("strictQuery", false);
-mongoose
-    .connect(MONGOURI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
-    .then((result) => {
-      console.log("Database Connected")
-    })
-    .catch(err => {
-        console.log('Error')
-    });
-const db=mongoose.connection;
 
-// Socket and Connection
-db.once('open', () => {
-  app.listen(PORT, (req, res) => {
-    console.log(`Server Started at PORT ${PORT}`);
-  });
-  const server = require('http').createServer(app)
-  const io = require('socket.io')(server, { cors: { origin: '*' } })
+const server = require('http').createServer(app)
+const io = require('socket.io')(server)
+
+// // Socket and Connection
+
+mongoose.connect(MONGOURI, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+  if (err) throw err;
+
+  console.log('Connected to MongoDB');
 
   io.on('connection', (socket) => {
-    console.log('a user connected');
-  });
-  const collection = db.collection('drones');
-  const changeStream = collection.watch();
+    socket.handshake.headers.origin = 'http://localhost:8000';
+    socket.emit('connected', { message: 'Connected to server' });
+    console.log('A user connected');
 
-  const errorCollection = db.collection('errorlists');
+  
+
+    // Listen for socket disconnections
+    socket.on('disconnect', () => {
+      console.log('A user disconnected');
+    });
+  });
+  io.on('error', (err) => {
+    console.log('socket.io error:', err);
+  });
+  const droneCollection = mongoose.connection.collection('drones');
+  const ChangeStream = droneCollection.watch();
+
+  const errorCollection = mongoose.connection.collection('errorlists');
   const newStream = errorCollection.watch();
 
-  // changeStream.on('change', (change) => {
-  //   const update = change.updateDescription.updatedFields;
-  //   const id = change.documentKey._id;
-  //   const droneId = String(id);
-  //   if (update.takeOffStatus != undefined) {
-  //     io.emit("takeoff", { takeoff: update.takeOffStatus, id: droneId })
-  //   }
+    ChangeStream.on('change', (change) => {
+    const update = change.updateDescription.updatedFields;
+    const id = change.documentKey._id;
+    const droneId = String(id);
+    if (update.takeOffStatus != undefined) {
+      io.emit("takeoff", { takeoff: update.takeOffStatus, id: droneId })
+    }
 
-  //   if (update.battery != undefined) {
-  //     io.emit("battery", { battery: update.battery, id: droneId })
-  //     console.log("battery ran")
-  //   }
+    if (update.battery != undefined) {
+      io.emit("battery", { battery: update.battery, id: droneId })
+    }
 
-  //   if (update.location != undefined) {
-  //     io.emit("location", { location: update.location, id: droneId })
-  //   }
+    if (update.location != undefined) {
+      io.emit("location", { location: update.location, id: droneId })
+    }
 
-  //   if (update.error != undefined) {
-  //   io.emit("error", { error: update.error, id: droneId })
-  //   }
-  // })
+    if (update.error != undefined) {
+    io.emit("error", { error: update.error, id: droneId })
+    }
+  })
+  newStream.on('change', (change) => {
+    console.log("HERE IS THE DATA")
+    io.emit("errorlist", { error: change.fullDocument})
+    console.log(change.fullDocument)
+  })
 
-  // newStream.on('change', (change) => {
-  // console.log("HERE IS THE DATA")
-  // io.emit("errorlist", { error: change.fullDocument})
-  // console.log(change.fullDocument)
-  // })
-})
+
+  // Start the server
+  server.listen(3000, () => {
+    console.log('Server listening on port 3000');
+  });
+});
