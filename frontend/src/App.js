@@ -3,7 +3,7 @@ import React,{ useState } from 'react';
 import './App.css';
 import Dashboard from './pages/Dashboard';
 import InspectionReport from './pages/InspectionReport';
-import { Routes, Switch, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Login from './pages/userlogin';
 import Register from './pages/useregister';
 
