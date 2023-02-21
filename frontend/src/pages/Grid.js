@@ -12,6 +12,7 @@ const FormMap = () => {
   const mapRef = useRef(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [markerObjs, setMarkerObjs] = useState([]);
 
   const handleMapClick = (event) => {
     if (markers.length < 4) {
@@ -25,18 +26,26 @@ const FormMap = () => {
     event.preventDefault();
     const newMarkers = [...markers];
     const deletedMarker = newMarkers.splice(index, 1)[0];
-    console.log(newMarkers)
     setMarkers(newMarkers);
+    removeMarkers();
     renderMarkers(newMarkers);
   };
 
   const renderMarkers = (markers) => {
-    markers.forEach((marker) => {
-      const newMarker = new window.google.maps.Marker({
+    const newMarkerObjs = markers.map((marker) => {
+      return new window.google.maps.Marker({
         position: { lat: marker.lat, lng: marker.lng },
         map: mapRef.current,
       });
     });
+    setMarkerObjs([...markerObjs, ...newMarkerObjs]);
+  };
+
+  const removeMarkers = () => {
+    markerObjs.forEach((marker) => {
+      marker.setMap(null);
+    });
+    setMarkerObjs([]);
   };
 
   const fetchlocation = () => {
