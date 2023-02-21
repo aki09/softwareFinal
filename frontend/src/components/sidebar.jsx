@@ -4,7 +4,8 @@ import { FaBroom, FaCamera } from "react-icons/fa";
 import { BsCircleFill } from "react-icons/bs";
 import { Button, ListGroup, Card } from "react-bootstrap";
 import BatteryGauge from "react-battery-gauge";
-import io from 'socket.io-client';
+import io from "socket.io-client";
+import { Link } from "react-router-dom";
 
 const styles = {
   mainContent: {
@@ -17,15 +18,17 @@ const Sidebar = ({ drones }) => {
   const [droneList, setDroneList] = useState(drones);
   const [showCleaning, setShowCleaning] = useState(false);
   const [showInspection, setShowInspection] = useState(true);
-  
+
   useEffect(() => {
-    const socket = io('http://localhost:3000', { transports: ['websocket', 'polling', 'flashsocket'] });
-    
-    socket.on('battery', data => {
+    const socket = io("http://localhost:3000", {
+      transports: ["websocket", "polling", "flashsocket"],
+    });
+
+    socket.on("battery", (data) => {
       const { id, battery } = data;
-      const batteryIndex = drones.findIndex(drone => drone._id === id);
+      const batteryIndex = drones.findIndex((drone) => drone._id === id);
       if (batteryIndex === -1) return;
-      handleBattery(id,battery)
+      handleBattery(id, battery);
     });
 
     const navbar = document.querySelector(".navbar");
@@ -60,7 +63,7 @@ const Sidebar = ({ drones }) => {
     );
   };
 
-  const handleBattery = (id,battery) => {
+  const handleBattery = (id, battery) => {
     setDroneList((prevDroneList) =>
       prevDroneList.map((drone) => {
         if (drone._id === id) {
@@ -93,7 +96,7 @@ const Sidebar = ({ drones }) => {
         style={{ ...styles.mainContent, marginTop: `${navbarHeight}px` }}
         className="d-flex justify-content-center sidebar pt-2"
       >
-        <div className="bg-light " style={{ height: "100vh", width:"40vw" }}>
+        <div className="bg-light " style={{ height: "100vh", width: "40vw" }}>
           {/* <h3
             style={{ color: "#333" }}
             className="d-flex justify-content-center"
@@ -126,27 +129,53 @@ const Sidebar = ({ drones }) => {
                       className="d-flex justify-content-start"
                       style={{ color: "black" }}
                     >
-                      <BsCircleFill className="me-2 mt-1" fontSize="11px" style={{ color: drone.color }}/>
+                      <BsCircleFill
+                        className="me-2 mt-1"
+                        fontSize="11px"
+                        style={{ color: drone.color }}
+                      />
                       {drone.name}
                     </Card.Subtitle>
                     <Card.Text className="battery-gauge d-flex justify-content-end">
-                      <BatteryGauge value={filteredDrones[i].battery} size={45} />
+                      <BatteryGauge
+                        value={filteredDrones[i].battery}
+                        size={45}
+                      />
                     </Card.Text>
                     <div className="m-auto">
-                    <Button
-                      variant="outline-dark"
-                      size="sm"
-                      className="me-1 mb-0"
-                      onClick={() => handleTakeoffStatus(drone._id)}
-                      style={{width:"90%"}}
-                    >
-                      {drone.takeoffStatus ? "Takeoff" : "Land"}
-                    </Button>
-                    <Button variant="dark" size="sm" className="mt-1 mb-0" style={{width:"90%"}} >
-                      Show Live Feed
-                    </Button>
+                      {drone.takeoffStatus ? (
+                        <Link to="/grid" state={{ id: drone._id }}>
+                          <Button
+                            variant="outline-dark"
+                            size="sm"
+                            className="me-1 mb-0"
+                            onClick={() => handleTakeoffStatus(drone._id)}
+                            style={{ width: "90%" }}
+                          >
+                            TakeOff
+                          </Button>
+                        </Link>
+                      ) : (
+                        <Button
+                          variant="outline-dark"
+                          size="sm"
+                          className="me-1 mb-0"
+                          onClick={() => handleTakeoffStatus(drone._id)}
+                          style={{ width: "90%" }}
+                        >
+                          Land
+                        </Button>
+                      )}
+
+                      <Button
+                        variant="dark"
+                        size="sm"
+                        className="mt-1 mb-0"
+                        style={{ width: "90%" }}
+                      >
+                        Show Live Feed
+                      </Button>
                     </div>
-                    
                   </Card.Body>
                 </Card>
               </ListGroup>
