@@ -6,7 +6,6 @@ const FormMap = () => {
   const [currentLocation,setCurrentLocation]=useState({})
   const [markers, setMarkers] = useState([]);
   const mapRef = useRef(null);
-  const markerRefs = useRef([]);
 
   const handleMapClick = (event) => {
     if (markers.length < 4) {
@@ -16,13 +15,28 @@ const FormMap = () => {
     }
   };
   
+  // const handleMarkerDelete = (index, event) => {
+  //   event.preventDefault();
+  //   const newMarkers = [...markers];
+  //   newMarkers.splice(index, 1);
+  //   setMarkers(newMarkers);
+  //   markers[index].setMap(null);
+  //   renderMarkers(newMarkers);
+  // };
+  const handleMarkerDelete = (index, event) => {
+    event.preventDefault();
+    const newMarkers = [...markers];
+    const deletedMarker = newMarkers.splice(index, 1)[0];
+    setMarkers(newMarkers);
+    renderMarkers(newMarkers);
+  };
+  
   const renderMarkers = (markers) => {
     markers.forEach((marker) => {
       const newMarker = new window.google.maps.Marker({
         position: { lat: marker.lat, lng: marker.lng },
         map: mapRef.current,
       });
-      markerRefs.current.push(newMarker);
     });
   };
   
@@ -79,11 +93,14 @@ const FormMap = () => {
             </div>
             <div className="form-row form-row-1">
                 <label>Latitude</label>
-                <input type="text" name="lat_1" id="lat_1" className="input-text" value={markers.length > 0 ? markers[0].lat : ""} readonly />
+                <input type="text" name="lat_1" id="lat_1" className="input-text" value={markers.length > 0 ? markers[0].lat : ""} readOnly />
             </div>
             <div className="form-row form-row-1">
                 <label>Longitude</label>
-                <input type="text" name="lon_1" id="lon_1" className="input-text" value={markers.length > 0 ? markers[0].lng : ""} readonly />
+                <input type="text" name="lon_1" id="lon_1" className="input-text" value={markers.length > 0 ? markers[0].lng : ""} readOnly />
+            </div>
+            <div>
+              <button style={{color: "red",marginTop:"55%"} } onClick={(event) => handleMarkerDelete(0,event)}>Delete</button>
             </div>
           </div>
           <div className="form-group">
@@ -92,12 +109,13 @@ const FormMap = () => {
             </div>
             <div className="form-row form-row-1">
                 <label>Latitude</label>
-                <input type="text" name="lat_2" id="lat_2" className="input-text" value={markers.length > 1 ? markers[1].lat : ""} readonly />
+                <input type="text" name="lat_2" id="lat_2" className="input-text" value={markers.length > 1 ? markers[1].lat : ""} readOnly />
             </div>
             <div className="form-row form-row-1">
                 <label>Longitude</label>
-                <input type="text" name="lon_2" id="lon_2" className="input-text"  value={markers.length > 1 ? markers[1].lng : ""} readonly />
+                <input type="text" name="lon_2" id="lon_2" className="input-text"  value={markers.length > 1 ? markers[1].lng : ""} readOnly />
             </div>
+            <button style={{color: "red",margin:"4%"}} onClick={(event) => handleMarkerDelete(1,event)} >Delete</button>
           </div>
           <div className="form-group">
             <div className="hello">
@@ -105,12 +123,13 @@ const FormMap = () => {
             </div>
             <div className="form-row form-row-1">
                 <label>Latitude</label>
-                <input type="text" name="lat_3" id="lat_3" className="input-text"  value={markers.length > 2 ? markers[2].lat : ""} readonly />
+                <input type="text" name="lat_3" id="lat_3" className="input-text"  value={markers.length > 2 ? markers[2].lat : ""} readOnly />
             </div>
             <div className="form-row form-row-1">
                 <label>Longitude</label>
-                <input type="text" name="lon_3" id="lon_3" className="input-text"  value={markers.length > 2 ? markers[2].lng : ""} readonly />
+                <input type="text" name="lon_3" id="lon_3" className="input-text"  value={markers.length > 2 ? markers[2].lng : ""} readOnly />
             </div>
+            <button style={{color: "red",margin:"4%"}} onClick={(event) => handleMarkerDelete(2,event)}>Delete</button>
           </div>
           <div className="form-group">
             <div className="hello">
@@ -118,12 +137,13 @@ const FormMap = () => {
             </div>
             <div className="form-row form-row-1">
                 <label>Latitude</label>
-                <input type="text" name="lat_4" id="lat_4" className="input-text"  value={markers.length > 3 ? markers[3].lat : ""} readonly />
+                <input type="text" name="lat_4" id="lat_4" className="input-text"  value={markers.length > 3 ? markers[3].lat : ""} readOnly />
             </div>
             <div className="form-row form-row-1">
                 <label>Longitude</label>
-                <input type="text" name="lon_4" id="lon_4" className="input-text"  value={markers.length > 3 ? markers[3].lat : ""} readonly />
+                <input type="text" name="lon_4" id="lon_4" className="input-text"  value={markers.length > 3 ? markers[3].lat : ""} readOnly />
             </div>
+            <button style={{color: "red",margin:"4%"}} onClick={(event) => handleMarkerDelete(3,event)} >Delete</button>
           </div>
           <div className="form-row-last">
             <button className="btn btn-outline-dark btn-md">Proceed</button>
