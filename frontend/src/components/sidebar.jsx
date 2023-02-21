@@ -17,39 +17,16 @@ const Sidebar = ({ drones }) => {
   const [droneList, setDroneList] = useState(drones);
   const [showCleaning, setShowCleaning] = useState(false);
   const [showInspection, setShowInspection] = useState(true);
-
+  
   useEffect(() => {
     const socket = io('http://localhost:3000', { transports: ['websocket', 'polling', 'flashsocket'] });
     
     socket.on('battery', data => {
       const { id, battery } = data;
-      console.log(id)
       const batteryIndex = drones.findIndex(drone => drone._id === id);
       if (batteryIndex === -1) return;
-      
+      handleBattery(id,battery)
     });
-
-    socket.on('location', data => {
-      const { id, location } = data;
-
-      const locationIndex = drones.findIndex(drone => drone._id === id);
-      if (locationIndex === -1) return;
-
-    });
-
-    socket.on('error', data => {
-      const { id,error } = data;
-
-      const locationIndex = drones.findIndex(drone => drone._id === id);
-      if (locationIndex === -1) return;
-
-    });
-
-    socket.on('errorlist', data => {
-      const { error } = data;
-
-    });
-
 
     const navbar = document.querySelector(".navbar");
     setNavbarHeight(navbar.offsetHeight);
@@ -72,10 +49,24 @@ const Sidebar = ({ drones }) => {
   const handleTakeoffStatus = (id) => {
     setDroneList((prevDroneList) =>
       prevDroneList.map((drone) => {
-        if (drone.id === id) {
+        if (drone._id === id) {
           return {
             ...drone,
             takeoffStatus: !drone.takeoffStatus,
+          };
+        }
+        return drone;
+      })
+    );
+  };
+
+  const handleBattery = (id,battery) => {
+    setDroneList((prevDroneList) =>
+      prevDroneList.map((drone) => {
+        if (drone._id === id) {
+          return {
+            ...drone,
+            battery: battery,
           };
         }
         return drone;
@@ -146,7 +137,7 @@ const Sidebar = ({ drones }) => {
                       variant="outline-dark"
                       size="sm"
                       className="me-1 mb-0"
-                      onClick={() => handleTakeoffStatus(drone.id)}
+                      onClick={() => handleTakeoffStatus(drone._id)}
                       style={{width:"90%"}}
                     >
                       {drone.takeoffStatus ? "Takeoff" : "Land"}

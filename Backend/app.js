@@ -46,7 +46,7 @@ app.use(session({
   });
 app.use(cookieParser());
 app.use(user);
-app.use('/admin',admin);
+app.use('/adm',admin);
 //app.use(errorController.get404);
 app.set('view engine', 'ejs');
 
@@ -98,8 +98,14 @@ mongoose.connect(MONGOURI, { useNewUrlParser: true, useUnifiedTopology: true }, 
       io.emit("battery", { battery: update.battery, id: droneId })
     }
 
-    if (update.location != undefined) {
-      io.emit("location", { location: update.location, id: droneId })
+    if (update['location.lat'] != undefined) {
+      const lat = update['location.lat'];
+      io.emit("locationlat", { location: lat, id: droneId })
+    }
+
+    if (update['location.lon'] != undefined) {
+      const lon = update['location.lon'];
+      io.emit("locationlon", { location: lon, id: droneId })
     }
 
     if (update.error != undefined) {

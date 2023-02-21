@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const isAuth  = require("../middleware/userverify");
 
 const userController = require("../controllers/userauth");
 const userinspection=require("../controllers/userinspection");
@@ -13,15 +12,15 @@ router.post('/signup', userController.postSignup);
 
 router.post('/logout', userController.postLogout);
 
-router.post('/generate',isAuth, userinspection.generatePDF);
+router.post('/generate', userinspection.generatePDF);
 
-router.get('/inspectionReport', isAuth,userinspection.inspectionReport);
+router.get('/inspectionReport',userinspection.inspectionReport);
 
-router.get('/form',isAuth, userdashboard.takeoffForm);
+router.get('/form', userdashboard.takeoffForm);
 
-router.post('/form',isAuth, userdashboard.takeoffAndLand);
+router.post('/form', userdashboard.takeoffAndLand);
 
-router.post('/grid',isAuth, userdashboard.grid);
+router.post('/grid', userdashboard.grid);
 
 router.get('/home', userdashboard.dashboard);
 

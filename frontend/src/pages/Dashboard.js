@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
-
 import ErrorList from "../components/errorlist";
 import Maap1 from "../components/map1";
 import Sidebar from "../components/sidebar";
 import Topbar from "../components/topbar";
-import Mapset from "../components/mapset";
 
 const Dashboard = () => {
   const [user, setUser] = useState([]);
@@ -52,7 +50,6 @@ const Dashboard = () => {
             c++;
           }
         }
-        console.log(response.data.drones);
         setUser(response.data.user);
         setDrones(response.data.drones);
         setIsLoading(false);

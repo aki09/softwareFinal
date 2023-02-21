@@ -15,9 +15,9 @@ exports.postLogin = (req, res, next) => {
     const password = req.body.password;
     Admin.findOne({ userName: userName })
         .then((admin) => {
-            if (!admin) {
-                console.log("No admin found")
-            }
+            // if (!admin) {
+            //     console.log("No admin found")
+            // }
             bcrypt
                 .compare(password, admin.password)
                 .then((doMatch) => {
@@ -27,9 +27,8 @@ exports.postLogin = (req, res, next) => {
                             maxAge: 60 * 60 * 24 * 30 * 1000,
                             httpOnly: true,
                         });
-                        console.log(accessToken)
+                        res.status(200).send({ admin: admin,access:accessToken, message: "admin logged in successfully" });
                     }
-                    res.send({admin:admin})
                 })
                 .catch((err) => {
                     res.redirect("/adminlogin");
