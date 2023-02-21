@@ -15,6 +15,16 @@ exports.dashboard = async(req, res, next) => {
     res.status(200).send({ user:user,drones:drones });
 }
 
+exports.settakeoff=async(req,res,next)=>{
+    const drone_id=req.query.droneid;
+    Drone.findById(drone_id).then((drone) => {
+        drone.takeOffStatus = false;
+        drone.save().then((result) => {
+        });
+    })
+    res.status(200).send({ message: "Landed Successful" });
+}
+
 exports.takeoffForm = (req, res, next) => {
     const drone_id = req.query.droneid;
     const token = req.query.cookieValue;
@@ -23,7 +33,6 @@ exports.takeoffForm = (req, res, next) => {
     if(uid)
     {
         Drone.findById(drone_id).then((drone) => {
-            console.log(drone.takeOffStatus);
                     drone.takeOffStatus = true;
                     drone.save().then((result) => {
                     });

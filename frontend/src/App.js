@@ -8,6 +8,7 @@ import Login from './pages/userlogin';
 import Register from './pages/useregister';
 import FormMap from './pages/Grid';
 import Adminlogin from './pages/adminlogin'
+import AdminHome from './pages/adminhome'
 
 function App() {
   const [ user, setLoginUser] = useState({})
@@ -19,6 +20,8 @@ function App() {
         <Route exact path="/home" element={<Dashboard/>} />
         <Route exact path="/grid" element={<FormMap/>} />
         <Route exact path="/pchia" element={<Adminlogin/>} />
+        <Route exact path="/pchiahome" element={<AdminHome/>} />
+        <Route exact path="/report" element={<InspectionReport/>} />
       </Routes>
     </BrowserRouter>
   );

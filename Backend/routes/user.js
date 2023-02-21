@@ -24,4 +24,6 @@ router.post('/grid', userdashboard.grid);
 
 router.get('/home', userdashboard.dashboard);
 
+router.get('/settakeoff', userdashboard.settakeoff);
+
 module.exports = router;

@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
-import { Container, Navbar, Card } from "react-bootstrap";
+import { Container, Navbar, Card ,Row, Col, Button} from "react-bootstrap";
 
 const styles = {
   mainContent: {
     marginTop: "",
   },
 };
+
+const cardData = [
+  { date: '2023-02-21', href: 'https://www.africau.edu/images/default/sample.pdf' },
+  { date: '2023-02-22', href: 'https://www.africau.edu/images/default/sample.pdf' },
+  { date: '2023-02-23', href: 'https://www.africau.edu/images/default/sample.pdf' },
+  { date: '2023-02-24', href: 'https://www.africau.edu/images/default/sample.pdf' },
+  { date: '2023-02-25', href: 'https://www.africau.edu/images/default/sample.pdf' },
+];
 
 const InspectionReport = () => {
   const [navbarHeight, setNavbarHeight] = useState(0);
@@ -41,7 +49,7 @@ const InspectionReport = () => {
                   fontSize: "20px",
                 }}
               >
-                Home
+                Dashboard
               </a>
             </Navbar.Text>
           </Navbar.Collapse>
@@ -66,10 +74,32 @@ const InspectionReport = () => {
               </h5>
             </div>
             <div className="ms-5">
-              <h2 className="ms-2 mt-5 me-5" style={{ borderBottom: "1px solid #ccc" }}>
+              <h2
+                className="ms-2 mt-5 me-5"
+                style={{ borderBottom: "1px solid #ccc" }}
+              >
                 All Reports
               </h2>
             </div>
+            <Container>
+              <Row>
+                {cardData.map((card, index) => (
+                  <Col md={3} key={index} className="mt-4">
+                    <Card variant="light">
+                      <Card.Body>
+                        <Card.Title>Report-{index + 1}</Card.Title>
+                        <Button variant="outline-secondary">
+                          Download PDF
+                        </Button>
+                      </Card.Body>
+                      <Card.Footer>
+                        <small className="text-muted">{card.date}</small>
+                      </Card.Footer>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </Container>
           </div>
         </div>
       </Container>

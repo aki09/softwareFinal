@@ -23,7 +23,7 @@ const Adminlogin = () => {
       const cookie = res.data.access;
       setCookieValue(cookie);
       navigate("/pchiahome", {
-        state: { admin: res.data.admin, cookieValue: res.data.access },
+        state: { cookieValue: res.data.access },
       });
     } catch (error) {
       if (
@@ -140,7 +140,12 @@ const Adminlogin = () => {
           },
         }}
       />
-      <div className="container fluid">
+      <div
+        style={{
+          background: "linear-gradient(#141e30, #243b55)",
+          height: "100vh",
+        }}
+      >
         <div className="heading d-flex align-item-center text-light p-5">
           <img src={logo} width="50" />
           <h3 className="fly m-2">

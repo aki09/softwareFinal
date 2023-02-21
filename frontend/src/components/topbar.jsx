@@ -7,6 +7,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import { RiAdminFill } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 const Topbar = ({ user }) => {
   return (
@@ -35,9 +36,11 @@ const Topbar = ({ user }) => {
           >
             <Nav className="mr-auto">
               {/* <ButtonGroup> */}
-                <Button variant="outline-secondary" size="md" className="me-1">
+              <Link to="/report">
+                <Button variant="outline-secondary" size="md" className="me-1" >
                   Inspection Reports
                 </Button>
+              </Link>
                 <Button variant="outline-secondary" size="md">
                   Sign Out
                 </Button>

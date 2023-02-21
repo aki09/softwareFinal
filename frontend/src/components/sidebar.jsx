@@ -6,6 +6,7 @@ import { Button, ListGroup, Card } from "react-bootstrap";
 import BatteryGauge from "react-battery-gauge";
 import io from "socket.io-client";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const styles = {
   mainContent: {
@@ -48,18 +49,25 @@ const Sidebar = ({ drones}) => {
     setShowInspection((prevShowInspection) => !prevShowInspection);
   };
 
-  const handleTakeoffStatus = (id) => {
-    setDroneList((prevDroneList) =>
+  const handleTakeoffStatus = async(id) => {
+    const url = "http://localhost:3000/settakeoff";
+    const res = await axios.get(url, {
+      params: {droneid:id},
+    });
+    if(res)
+    {
+      setDroneList((prevDroneList) =>
       prevDroneList.map((drone) => {
         if (drone._id === id) {
           return {
             ...drone,
-            takeoffStatus: !drone.takeoffStatus,
+            takeOffStatus: !drone.takeOffStatus,
           };
         }
         return drone;
       })
     );
+    }
   };
 
   const handleBattery = (id, battery) => {
@@ -142,7 +150,7 @@ const Sidebar = ({ drones}) => {
                       />
                     </Card.Text>
                     <div className="m-auto">
-                      {drone.takeoffStatus ? (
+                      {drone.takeOffStatus ? (
                           <Button
                           variant="outline-dark"
                           size="sm"
@@ -159,7 +167,6 @@ const Sidebar = ({ drones}) => {
                             variant="outline-dark"
                             size="sm"
                             className="me-1 mb-0"
-                            onClick={() => handleTakeoffStatus(drone._id)}
                             style={{ width: "90%" }}
                           >
                             TakeOff

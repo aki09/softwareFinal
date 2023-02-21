@@ -3,11 +3,16 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const Drone = require('../models/drone');
 const createTokens  = require("../middleware/admincreatetoken");
+const jlol = require("jsonwebtoken");
 
 
 exports.getHome = async(req, res, next) => {
+    const token = req.query.cookieValue;
+    const data = jlol.verify(token, "jwtsecretpls");
+    uid=data.id;
+    let admin = await Admin.findOne({_id:uid});
     let drones=await Drone.find();
-    console.log(drones)
+    res.status(200).send({ admin:admin,drones:drones, message:"success" });
 };
 
 exports.postLogin = (req, res, next) => {

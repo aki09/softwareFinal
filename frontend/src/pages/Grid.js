@@ -21,23 +21,11 @@ const FormMap = () => {
     }
   };
 
-  const cookieValue = document.cookie
-  .split("; ")
-  .find((row) => row.startsWith("access_token="))
-  ?.split("=")[1];
-
-  // const handleMarkerDelete = (index, event) => {
-  //   event.preventDefault();
-  //   const newMarkers = [...markers];
-  //   newMarkers.splice(index, 1);
-  //   setMarkers(newMarkers);
-  //   markers[index].setMap(null);
-  //   renderMarkers(newMarkers);
-  // };
   const handleMarkerDelete = (index, event) => {
     event.preventDefault();
     const newMarkers = [...markers];
     const deletedMarker = newMarkers.splice(index, 1)[0];
+    console.log(newMarkers)
     setMarkers(newMarkers);
     renderMarkers(newMarkers);
   };
@@ -65,6 +53,12 @@ const FormMap = () => {
       }
     );
   };
+
+  const cookieValue = document.cookie
+  .split("; ")
+  .find((row) => row.startsWith("access_token="))
+  ?.split("=")[1];
+
 
   useEffect(() => {
     const fetchData = async () => {
