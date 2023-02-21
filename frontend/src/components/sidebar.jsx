@@ -13,17 +13,16 @@ const styles = {
   },
 };
 
-const Sidebar = ({ drones }) => {
+const Sidebar = ({ drones}) => {
   const [navbarHeight, setNavbarHeight] = useState(0);
   const [droneList, setDroneList] = useState(drones);
   const [showCleaning, setShowCleaning] = useState(false);
   const [showInspection, setShowInspection] = useState(true);
-
   useEffect(() => {
     const socket = io("http://localhost:3000", {
       transports: ["websocket", "polling", "flashsocket"],
     });
-
+    
     socket.on("battery", (data) => {
       const { id, battery } = data;
       const batteryIndex = drones.findIndex((drone) => drone._id === id);
@@ -144,6 +143,17 @@ const Sidebar = ({ drones }) => {
                     </Card.Text>
                     <div className="m-auto">
                       {drone.takeoffStatus ? (
+                          <Button
+                          variant="outline-dark"
+                          size="sm"
+                          className="me-1 mb-0"
+                          onClick={() => handleTakeoffStatus(drone._id)}
+                          style={{ width: "90%" }}
+                        >
+                          Land
+                        </Button>
+                  
+                      ) : (
                         <Link to="/grid" state={{ id: drone._id }}>
                           <Button
                             variant="outline-dark"
@@ -155,16 +165,6 @@ const Sidebar = ({ drones }) => {
                             TakeOff
                           </Button>
                         </Link>
-                      ) : (
-                        <Button
-                          variant="outline-dark"
-                          size="sm"
-                          className="me-1 mb-0"
-                          onClick={() => handleTakeoffStatus(drone._id)}
-                          style={{ width: "90%" }}
-                        >
-                          Land
-                        </Button>
                       )}
 
                       <Button

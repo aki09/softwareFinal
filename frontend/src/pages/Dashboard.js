@@ -22,6 +22,7 @@ const Dashboard = () => {
         const response = await axios.get("http://localhost:3000/home", {
           params: { cookieValue: cookieValue },
         });
+        document.cookie = `access_token=${cookieValue}`;
         let c = 1;
         let col1 = ["red", "blue", "green", "orange", "pink"];
         let col2 = [
@@ -72,8 +73,7 @@ const Dashboard = () => {
             <Sidebar drones={drones} />
           </Col>
           <Col md={5}>
-            {/* <LiveMap drones={ drones }/> */}
-            <Maap1 drones={drones} />
+            <Maap1 drones={drones} cookieValue={cookieValue} />
           </Col>
           <Col md={4}>
             <ErrorList drones={drones} />

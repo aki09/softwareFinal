@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import GoogleMapReact from "google-map-react";
 import "../styles/Form/Form.css";
+import axios from "axios";
 import { useLocation } from "react-router-dom";
 
 const FormMap = () => {
   const location = useLocation();
   const { id } = location.state;
-
   const [currentLocation, setCurrentLocation] = useState({});
   const [markers, setMarkers] = useState([]);
   const mapRef = useRef(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleMapClick = (event) => {
     if (markers.length < 4) {
@@ -18,6 +20,11 @@ const FormMap = () => {
       renderMarkers([...markers, newMarker]);
     }
   };
+
+  const cookieValue = document.cookie
+  .split("; ")
+  .find((row) => row.startsWith("access_token="))
+  ?.split("=")[1];
 
   // const handleMarkerDelete = (index, event) => {
   //   event.preventDefault();
@@ -60,7 +67,21 @@ const FormMap = () => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get("http://localhost:3000/form", {
+          params: { cookieValue: cookieValue,droneid:id},
+        });
+        console.log(response.data)
+        setIsLoading(false);
+      } catch (err) {
+        setError(err);
+        setIsLoading(false);
+      }
+    };
     fetchlocation();
+    fetchData();
   }, []);
 
   return (

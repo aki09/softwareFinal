@@ -16,18 +16,22 @@ exports.dashboard = async(req, res, next) => {
 }
 
 exports.takeoffForm = (req, res, next) => {
-    const drone_id = req.query.drone_id;
-    var action = req.query.action;
-    if (action === 'land') {
+    const drone_id = req.query.droneid;
+    const token = req.query.cookieValue;
+    const data = jlol.verify(token, "jwtsecretplschange");
+    uid=data.id;
+    if(uid)
+    {
         Drone.findById(drone_id).then((drone) => {
-            drone.takeOffStatus = false;
-            drone.save().then((result) => {
-            });
-        })
-        res.redirect('/');
-    } else if (action === 'takeoff') {
-        console.log(drone_id)
+            console.log(drone.takeOffStatus);
+                    drone.takeOffStatus = true;
+                    drone.save().then((result) => {
+                    });
+                })
+        res.status(200).send({ message: "Takeoff Successful" });
+    
     }
+    
 }
 
 exports.takeoffAndLand = (req, res, next) => {
