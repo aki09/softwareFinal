@@ -12,8 +12,43 @@ exports.getHome = async(req, res, next) => {
     uid=data.id;
     let admin = await Admin.findOne({_id:uid});
     let drones=await Drone.find();
-    res.status(200).send({ admin:admin,drones:drones, message:"success" });
+    let users=await User.find();
+    res.status(200).send({ admin:admin,drones:drones,users:users, message:"success" });
 };
+
+exports.removeuser=async(req, res, next) => {
+    const drone_id=req.query.droneid;
+    Drone.findById(drone_id).then((drone) => {
+        drone.userId = null;
+        drone.save().then((result) => {
+        });
+    })
+    res.status(200).send({ message: "Deallocated Successful" });
+}
+
+
+exports.adduser=async(req, res, next) => {
+    const token = req.query.cookieValue;
+    const drone_id=req.query.droneid;
+    const data = jlol.verify(token, "jwtsecretpls");
+    uid=data.id;
+    let admin = await Admin.findOne({_id:uid});
+    let drone=await Drone.findById(drone_id);
+    let users=await User.find();
+    res.status(200).send({ drone:drone,users:users, message:"success" });
+}
+
+exports.allotdrone=async(req, res, next) => {
+    const userid=req.query.userid;
+    const drone_id=req.query.droneid;
+    Drone.findById(drone_id).then((drone) => {
+        drone.userId = userid;
+        drone.save().then((result) => {
+        });
+    })
+    res.status(200).send({ message:"success" });
+}
+
 
 exports.postLogin = (req, res, next) => {
     const userName = req.body.username;

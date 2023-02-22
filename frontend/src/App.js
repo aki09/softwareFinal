@@ -9,6 +9,7 @@ import Register from './pages/useregister';
 import FormMap from './pages/Grid';
 import Adminlogin from './pages/adminlogin'
 import AdminHome from './pages/adminhome'
+import Allocation from './pages/Allocation';
 
 function App() {
   const [ user, setLoginUser] = useState({})
@@ -22,6 +23,7 @@ function App() {
         <Route exact path="/pchia" element={<Adminlogin/>} />
         <Route exact path="/pchiahome" element={<AdminHome/>} />
         <Route exact path="/report" element={<InspectionReport/>} />
+        <Route exact path="/pchiaallocation" element={<Allocation/>} />
       </Routes>
     </BrowserRouter>
   );

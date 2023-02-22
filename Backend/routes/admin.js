@@ -11,6 +11,12 @@ router.post('/logout', adminController.postLogout);
 
 router.get('/home', adminController.getHome);
 
+router.get('/adduser', adminController.adduser);
+
+router.get('/removeuser', adminController.removeuser);
+
+router.get('/allotdrone', adminController.allotdrone);
+
 
 
 module.exports = router;

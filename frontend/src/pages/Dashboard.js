@@ -82,6 +82,14 @@ const Dashboard = () => {
       </Container>
     </div>
   ) : (
+    <>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
     <Container fluid className="bg-light">
       <Row>
         <Topbar user={user} />
@@ -93,6 +101,8 @@ const Dashboard = () => {
         </p>
       </Row>
     </Container>
+    </>
+    
   );
 };
 
