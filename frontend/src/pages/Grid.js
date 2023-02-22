@@ -220,7 +220,7 @@ const FormMap = () => {
               <div className="d-flex justify-content-center align-items-center">
                 <button
                   style={{ borderRadius: "50%" }}
-                  onClick={(event) => handleMarkerDelete(0, event)}
+                  onClick={(event) => handleMarkerDelete(1, event)}
                   className="m-2 btn btn-outline-danger"
                 >
                   <AiFillDelete fontSize={20} />
@@ -256,7 +256,7 @@ const FormMap = () => {
               <div className="d-flex justify-content-center align-items-center">
                 <button
                   style={{ borderRadius: "50%" }}
-                  onClick={(event) => handleMarkerDelete(0, event)}
+                  onClick={(event) => handleMarkerDelete(2, event)}
                   className="m-2 btn btn-outline-danger"
                 >
                   <AiFillDelete fontSize={20} />
@@ -292,7 +292,7 @@ const FormMap = () => {
               <div className="d-flex justify-content-center align-items-center">
                 <button
                   style={{ borderRadius: "50%" }}
-                  onClick={(event) => handleMarkerDelete(0, event)}
+                  onClick={(event) => handleMarkerDelete(3, event)}
                   className="m-2 btn btn-outline-danger"
                 >
                   <AiFillDelete fontSize={20} />
