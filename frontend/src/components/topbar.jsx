@@ -37,13 +37,16 @@ const Topbar = ({ user }) => {
             <Nav className="mr-auto">
               {/* <ButtonGroup> */}
               <Link to="/report">
-                <Button variant="outline-secondary" size="md" className="me-1" >
+                <Button variant="outline-secondary" size="md" className="me-1">
                   Inspection Reports
                 </Button>
               </Link>
+              <Link>
                 <Button variant="outline-secondary" size="md">
                   Sign Out
                 </Button>
+              </Link>
+
               {/* </ButtonGroup> */}
               <Nav.Link>
                 <RiAdminFill
