@@ -113,9 +113,8 @@ mongoose.connect(MONGOURI, { useNewUrlParser: true, useUnifiedTopology: true }, 
     }
   })
   newStream.on('change', (change) => {
-    console.log("HERE IS THE DATA")
     io.emit("errorlist", { error: change.fullDocument})
-    console.log(change.fullDocument)
+    
   })
 
 

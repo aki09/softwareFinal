@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect,useRef } from 'react'
 import GoogleMapReact from 'google-map-react';
 import { Card } from "react-bootstrap";
 import io from 'socket.io-client';
@@ -7,13 +7,14 @@ function Maap1({drones}) {
     const [currentLocation,setCurrentLocation]=useState({})
     const [markers, setMarkers] = useState([]);
     const [droneList, setDroneList] = useState(drones);
+    const mapRef = useRef(null);
 
-    const renderMarkers = (map, maps,locationTemp) => {
+    const renderMarkers = (locationTemp) => {
       for(let i=0;i<drones.length;i++)
       {
-          let marker = new maps.Marker({
+          let marker = new window.google.maps.Marker({
               position: { lat: locationTemp[i].location.lat, lng: locationTemp[i].location.lon },
-              map,
+              map: mapRef.current,
               title: locationTemp[i].name,
               icon:{url:`http://maps.google.com/mapfiles/ms/icons/${locationTemp[i].colormap}.png`}
               });
@@ -47,13 +48,13 @@ function Maap1({drones}) {
 
     socket.on('locationlon', data => {
       const { id, location } = data;
-      console.log(id)
       const LocationIndex = drones.findIndex(drone => drone._id === id);
       if (LocationIndex === -1) return;
       handleLocationLon(id,location)
     });
     fetchlocation();
     }, [])
+
     const handleLocationLat = (id,location) => {
       setDroneList((prevDroneList) =>
         prevDroneList.map((drone) => {
@@ -66,6 +67,7 @@ function Maap1({drones}) {
           return drone;
         })
       );
+      renderMarkers(droneList);
     };
 
     const handleLocationLon = (id,location) => {
@@ -74,7 +76,8 @@ function Maap1({drones}) {
           if (drone._id === id) {
             return {
               ...drone,
-              location: location,
+              location: {lat:drone.location.lat,lon:location},
+              
             };
           }
           return drone;
@@ -94,14 +97,17 @@ function Maap1({drones}) {
           </Card.Body>
         </Card> 
         <GoogleMapReact
-        bootstrapURLKeys={{ key: process.env.react_google_maps_api }}
+        bootstrapURLKeys={{ key: process.env.react_google_maps_api ,libraries: ["places", "geometry"]}}
         center={{lat: currentLocation.lat, lng: currentLocation.lng}}
         defaultZoom={18}
         options={{
             mapTypeId: 'satellite',
         }}
         yesIWantToUseGoogleMapApiInternals
-        onGoogleApiLoaded={({ map, maps }) => renderMarkers(map, maps,droneList)}
+        onGoogleApiLoaded={({ map, maps }) => {
+          mapRef.current = map;
+          renderMarkers(droneList);
+        }}
         >
         </GoogleMapReact>
       </div>   

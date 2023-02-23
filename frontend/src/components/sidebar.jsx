@@ -31,6 +31,13 @@ const Sidebar = ({ drones}) => {
       handleBattery(id, battery);
     });
 
+    socket.on("takeoff", (data) => {
+      const { id, takeoff } = data;
+      const batteryIndex = drones.findIndex((drone) => drone._id === id);
+      if (batteryIndex === -1) return;
+      handletakeoff(id,takeoff);
+    });
+
     const navbar = document.querySelector(".navbar");
     setNavbarHeight(navbar.offsetHeight);
   }, []);
@@ -54,20 +61,6 @@ const Sidebar = ({ drones}) => {
     const res = await axios.get(url, {
       params: {droneid:id},
     });
-    if(res)
-    {
-      setDroneList((prevDroneList) =>
-      prevDroneList.map((drone) => {
-        if (drone._id === id) {
-          return {
-            ...drone,
-            takeOffStatus: !drone.takeOffStatus,
-          };
-        }
-        return drone;
-      })
-    );
-    }
   };
 
   const handleBattery = (id, battery) => {
@@ -77,6 +70,19 @@ const Sidebar = ({ drones}) => {
           return {
             ...drone,
             battery: battery,
+          };
+        }
+        return drone;
+      })
+    );
+  };
+  const handletakeoff = (id, takeoff) => {
+    setDroneList((prevDroneList) =>
+      prevDroneList.map((drone) => {
+        if (drone._id === id) {
+          return {
+            ...drone,
+            takeOffStatus: takeoff,
           };
         }
         return drone;

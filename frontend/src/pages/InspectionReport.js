@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
 import { Container, Navbar, Card ,Row, Col, Button} from "react-bootstrap";
+import axios from "axios";
 
 const styles = {
   mainContent: {
@@ -8,21 +9,35 @@ const styles = {
   },
 };
 
-const cardData = [
-  { date: '2023-02-21', href: 'https://www.africau.edu/images/default/sample.pdf' },
-  { date: '2023-02-22', href: 'https://www.africau.edu/images/default/sample.pdf' },
-  { date: '2023-02-23', href: 'https://www.africau.edu/images/default/sample.pdf' },
-  { date: '2023-02-24', href: 'https://www.africau.edu/images/default/sample.pdf' },
-  { date: '2023-02-25', href: 'https://www.africau.edu/images/default/sample.pdf' },
-];
 
 const InspectionReport = () => {
   const [navbarHeight, setNavbarHeight] = useState(0);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+   const[files,setFiles]=useState([])
 
   useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get("http://localhost:3000/inspectionReport", {
+          params: { cookieValue: cookieValue},
+        });
+        setFiles(response.data.report);
+        setIsLoading(false);
+      } catch (err) {
+        setError(err);
+        setIsLoading(false);
+      }
+    };
+    fetchData();
     const navbar = document.querySelector(".navbar");
     setNavbarHeight(navbar.offsetHeight);
   }, []);
+  const cookieValue = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("access_token="))
+    ?.split("=")[1];
 
   return (
     <>
@@ -83,17 +98,16 @@ const InspectionReport = () => {
             </div>
             <Container>
               <Row>
-                {cardData.map((card, index) => (
+                {files.map((file, index) => (
                   <Col md={3} key={index} className="mt-4">
                     <Card variant="light">
                       <Card.Body>
-                        <Card.Title>Report-{index + 1}</Card.Title>
-                        <Button variant="outline-secondary">
+                        <Button variant="outline-secondary" href={file}>
                           Download PDF
                         </Button>
                       </Card.Body>
                       <Card.Footer>
-                        <small className="text-muted">{card.date}</small>
+                        <small className="text-muted">Report-{index + 1}</small>
                       </Card.Footer>
                     </Card>
                   </Col>

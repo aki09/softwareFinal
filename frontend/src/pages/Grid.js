@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import GoogleMapReact from "google-map-react";
 import "../styles/Form/Form.css";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Container, Navbar, Nav, Button } from "react-bootstrap";
 import logo from "../assets/logo.png";
 import { AiFillDelete } from "react-icons/ai";
@@ -14,6 +14,7 @@ const styles = {
 };
 
 const FormMap = () => {
+  const navigate = useNavigate();
   const [navbarHeight, setNavbarHeight] = useState(0);
   const location = useLocation();
   const { id } = location.state;
@@ -77,6 +78,20 @@ const FormMap = () => {
       }
     );
   };
+  const handlemarkerset=(id,event)=>{
+    event.preventDefault();
+    if(markers.length==4)
+    {
+      const url = "http://localhost:3000/form";
+      const res = axios.post(url, {
+        id: id, 
+        markers:markers // some value
+      });
+      navigate("/home", {
+        state: { cookieValue: cookieValue },
+      });
+    }
+  }
 
   const cookieValue = document.cookie
     .split("; ")
@@ -168,6 +183,7 @@ const FormMap = () => {
                   className="input-text"
                   value={markers.length > 0 ? markers[0].lat : ""}
                   readOnly
+                  required
                 />
               </div>
               <div className="form-row form-row-1">
@@ -179,6 +195,7 @@ const FormMap = () => {
                   className="input-text"
                   value={markers.length > 0 ? markers[0].lng : ""}
                   readOnly
+                  required
                 />
               </div>
               <div className="d-flex justify-content-center align-items-center">
@@ -276,6 +293,7 @@ const FormMap = () => {
                   className="input-text"
                   value={markers.length > 3 ? markers[3].lat : ""}
                   readOnly
+                  required
                 />
               </div>
               <div className="form-row form-row-1">
@@ -287,6 +305,7 @@ const FormMap = () => {
                   className="input-text"
                   value={markers.length > 3 ? markers[3].lat : ""}
                   readOnly
+                  required
                 />
               </div>
               <div className="d-flex justify-content-center align-items-center">
@@ -300,7 +319,7 @@ const FormMap = () => {
               </div>
             </div>
             <div className="form-row-last">
-              <button className="btn btn-outline-dark btn-md">Proceed</button>
+              <button className="btn btn-outline-dark btn-md" onClick={(event) => handlemarkerset(id,event)}>Proceed</button>
             </div>
           </form>
         </div>

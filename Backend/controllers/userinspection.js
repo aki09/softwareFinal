@@ -11,14 +11,14 @@ const fs = require('fs');
 dotenv.config();
 
 exports.inspectionReport = async (req, res, next) => {
-    const token = req.cookies["access-token"];
+    const token = req.query.cookieValue;
     const data = jlol.verify(token, "jwtsecretplschange");
     uid=data.id;
     let user = await User.findOne({_id:uid});
-    companyn=user.companyname;
+    companyn=user.company;
     var userReports = await firebase.getPDF(companyn)
     var numberOfFiles = userReports.length;
-    console.log("inspection")
+    res.status(200).send({ report:userReports,reportcount:numberOfFiles });
 }
 
 exports.generatePDF = async (req, res, next) => {
