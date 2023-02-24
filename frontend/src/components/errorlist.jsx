@@ -10,10 +10,10 @@ const styles = {
 
 const ErrorList = ({ drones }) => {
   const [navbarHeight, setNavbarHeight] = useState(0);
-  const[Droneno,setDroneno]=useState();
-  const[time,setTime]=useState();
+  const[Droneno,setDroneno]=useState([]);
+  const[time,setTime]=useState([]);
   const[error,setError]=useState([]);
-
+  let droneidno=0;
   useEffect(() => {
 
     const socket = io("http://localhost:3000", {
@@ -23,12 +23,17 @@ const ErrorList = ({ drones }) => {
       const error  = data;
       for(let i=0;i<drones.length;i++)
       {
+        if(drones[i].type==="inspection")
+        {
+          droneidno++;
+        }
         if(drones[i]._id==data.error.droneId)
         {
-          setDroneno(drones[i].droneNo);
+          setDroneno((prevdroneno)=>[...prevdroneno,droneidno]);
           const tstamp = new Date(data.error.timestamps).getSeconds();
-          setTime(tstamp);
+          setTime((prevtime)=>[...prevtime,...tstamp]);
           setError((preverror) => [...preverror, ...error]);
+          break;
         }
       }
     });

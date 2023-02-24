@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const Drone = require('../models/drone');
+const Error = require('../models/error');
 const jlol = require("jsonwebtoken");
 const dotenv = require('dotenv');
 const fs = require('fs');
@@ -13,6 +14,21 @@ exports.dashboard = async(req, res, next) => {
     let user = await User.findOne({_id:uid});
     let drones=await Drone.find({ userId: uid })
     res.status(200).send({ user:user,drones:drones });
+}
+
+exports.set=async(req,res,next)=>{
+    const droneid=req.body.droneid;
+    const userid=req.body.userid;
+    const eror=req.body.eror;
+    const error=new Error({
+        droneId:droneid,
+        userId:userid,
+        timestamps:new Date,
+        title:eror
+    })
+    error.save().then((result) => {
+    });
+
 }
 
 exports.settakeoff=async(req,res,next)=>{
