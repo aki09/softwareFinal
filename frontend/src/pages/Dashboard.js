@@ -7,6 +7,12 @@ import Maap1 from "../components/map1";
 import Sidebar from "../components/sidebar";
 import Topbar from "../components/topbar";
 
+const styles = {
+  mainContent: {
+    marginTop: "",
+  },
+};
+
 const Dashboard = () => {
   const [user, setUser] = useState([]);
   const [drones, setDrones] = useState([]);
@@ -14,6 +20,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const cookieValue = location.state.cookieValue;
+  const [navbarHeight, setNavbarHeight] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,6 +67,9 @@ const Dashboard = () => {
       }
     };
     fetchData();
+
+    const navbar = document.querySelector(".navbar");
+    setNavbarHeight(navbar.offsetHeight);
   }, []);
 
   return drones.length ? (
@@ -83,26 +93,22 @@ const Dashboard = () => {
     </div>
   ) : (
     <>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <Container fluid className="bg-light">
-      <Row>
-        <Topbar user={user} />
-      </Row>
-      <Row className="d-flex justify-content-center">
-        <h4 style={{ color: "#2a265f" }}>Flynovate</h4>
-        <p className="text-dark">
-          Please contact FLYNOVATE team for your DRONE requirements.
-        </p>
-      </Row>
-    </Container>
+      <Container
+        fluid
+        className="bg-light"
+        style={{ ...styles.mainContent, marginTop: `${navbarHeight}px` }}
+      >
+        <Row>
+          <Topbar user={user} />
+        </Row>
+        <Row className="d-flex justify-content-center">
+          <h4 style={{ color: "#2a265f" }}>Flynovate</h4>
+          <p className="text-dark">
+            Please contact FLYNOVATE team for your DRONE requirements.
+          </p>
+        </Row>
+      </Container>
     </>
-    
   );
 };
 

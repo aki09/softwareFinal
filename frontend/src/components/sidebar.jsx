@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import { FaBroom, FaCamera } from "react-icons/fa";
 import { BsCircleFill } from "react-icons/bs";
+import { CgCircleci } from "react-icons/cg";
 import { Button, ListGroup, Card } from "react-bootstrap";
 import BatteryGauge from "react-battery-gauge";
 import io from "socket.io-client";
@@ -14,7 +15,7 @@ const styles = {
   },
 };
 
-const Sidebar = ({ drones}) => {
+const Sidebar = ({ drones }) => {
   const [navbarHeight, setNavbarHeight] = useState(0);
   const [droneList, setDroneList] = useState(drones);
   const [showCleaning, setShowCleaning] = useState(false);
@@ -23,7 +24,7 @@ const Sidebar = ({ drones}) => {
     const socket = io("http://localhost:3000", {
       transports: ["websocket", "polling", "flashsocket"],
     });
-    
+
     socket.on("battery", (data) => {
       const { id, battery } = data;
       const batteryIndex = drones.findIndex((drone) => drone._id === id);
@@ -35,7 +36,7 @@ const Sidebar = ({ drones}) => {
       const { id, takeoff } = data;
       const batteryIndex = drones.findIndex((drone) => drone._id === id);
       if (batteryIndex === -1) return;
-      handletakeoff(id,takeoff);
+      handletakeoff(id, takeoff);
     });
 
     const navbar = document.querySelector(".navbar");
@@ -56,10 +57,10 @@ const Sidebar = ({ drones}) => {
     setShowInspection((prevShowInspection) => !prevShowInspection);
   };
 
-  const handleTakeoffStatus = async(id) => {
+  const handleTakeoffStatus = async (id) => {
     const url = "http://localhost:3000/settakeoff";
     const res = await axios.get(url, {
-      params: {droneid:id},
+      params: { droneid: id },
     });
   };
 
@@ -130,68 +131,77 @@ const Sidebar = ({ drones}) => {
 
           <div className="pt-3">
             {filteredDrones.map((drone, i) => (
-              <ListGroup>
-                <Card
-                  className="m-2 pt-3 pb-3"
-                  style={{ boxShadow: "0 0 10px #ccc" }}
-                  variant="light"
-                  key={i}
-                >
-                  <Card.Body>
-                    <Card.Subtitle
-                      className="d-flex justify-content-start"
-                      style={{ color: "black" }}
-                    >
-                      <BsCircleFill
-                        className="me-2 mt-1"
-                        fontSize="11px"
-                        style={{ color: drone.color }}
-                      />
-                      {drone.name}
-                    </Card.Subtitle>
-                    <Card.Text className="battery-gauge d-flex justify-content-end">
-                      <BatteryGauge
-                        value={filteredDrones[i].battery}
-                        size={45}
-                      />
-                    </Card.Text>
-                    <div className="m-auto">
-                      {drone.takeOffStatus ? (
-                          <Button
-                          variant="outline-dark"
-                          size="sm"
-                          className="me-1 mb-0"
-                          onClick={() => handleTakeoffStatus(drone._id)}
-                          style={{ width: "90%" }}
-                        >
-                          Land
-                        </Button>
-                  
-                      ) : (
-                        <Link to="/grid" state={{ id: drone._id }}>
+              <div key={drone._id}>
+                <ListGroup>
+                  <Card
+                    className="m-2 pt-3 pb-3"
+                    style={{ boxShadow: "0 0 10px #ccc" }}
+                    variant="light"
+                  >
+                    <Card.Body>
+                      <Card.Subtitle
+                        className="d-flex justify-content-start"
+                        style={{ color: "black" }}
+                      >
+                        {drone.type === "cleaning" ? (
+                          <CgCircleci
+                            className="me-2 mt-1"
+                            fontSize="11px"
+                            style={{ color: drone.color }}
+                          />
+                        ) : (
+                          <BsCircleFill
+                            className="me-2 mt-1"
+                            fontSize="11px"
+                            style={{ color: drone.color }}
+                          />
+                        )}
+
+                        {drone.name}
+                      </Card.Subtitle>
+                      <Card.Text className="battery-gauge d-flex justify-content-end">
+                        <BatteryGauge
+                          value={filteredDrones[i].battery}
+                          size={45}
+                        />
+                      </Card.Text>
+                      <div className="m-auto">
+                        {drone.takeOffStatus ? (
                           <Button
                             variant="outline-dark"
                             size="sm"
                             className="me-1 mb-0"
+                            onClick={() => handleTakeoffStatus(drone._id)}
                             style={{ width: "90%" }}
                           >
-                            TakeOff
+                            Land
                           </Button>
-                        </Link>
-                      )}
+                        ) : (
+                          <Link to="/grid" state={{ id: drone._id }}>
+                            <Button
+                              variant="outline-dark"
+                              size="sm"
+                              className="me-1 mb-0"
+                              style={{ width: "90%" }}
+                            >
+                              TakeOff
+                            </Button>
+                          </Link>
+                        )}
 
-                      <Button
-                        variant="dark"
-                        size="sm"
-                        className="mt-1 mb-0"
-                        style={{ width: "90%" }}
-                      >
-                        Show Live Feed
-                      </Button>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </ListGroup>
+                        <Button
+                          variant="dark"
+                          size="sm"
+                          className="mt-1 mb-0"
+                          style={{ width: "90%" }}
+                        >
+                          Show Live Feed
+                        </Button>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </ListGroup>
+              </div>
             ))}
           </div>
 

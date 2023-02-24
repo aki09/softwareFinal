@@ -11,6 +11,7 @@ import {
   Tab,
   Tabs,
 } from "react-bootstrap";
+import { RiAdminFill } from "react-icons/ri";
 
 const styles = {
   mainContent: {
@@ -55,25 +56,24 @@ const AdminHome = () => {
   const inspectionDrones = drones.filter(
     (drone) => drone.type === "inspection"
   );
-  const handleremoveuser = async (id,event) => {
+  const handleremoveuser = async (id, event) => {
     event.preventDefault();
     const url = "http://localhost:3000/adm/removeuser";
     const res = await axios.get(url, {
       params: { droneid: id },
     });
-    if(res)
-    {
+    if (res) {
       setDrones((prevDroneList) =>
-      prevDroneList.map((drone) => {
-        if (drone._id === id) {
-          return {
-            ...drone,
-            userId: null,
-          };
-        }
-        return drone;
-      })
-    );
+        prevDroneList.map((drone) => {
+          if (drone._id === id) {
+            return {
+              ...drone,
+              userId: null,
+            };
+          }
+          return drone;
+        })
+      );
     }
   };
 
@@ -90,12 +90,13 @@ const AdminHome = () => {
             className="justify-content-end"
           >
             <Nav className="mr-auto">
-              <Button variant="outline-secondary" size="md" className="me-1">
-                Dashboard
-              </Button>
-              <Button variant="outline-secondary" size="md">
-                Sign Out
-              </Button>
+              <Nav.Link>
+                <RiAdminFill
+                  style={{ fontSize: "36px" }}
+                  className="ms-3"
+                  color="#2a265f"
+                />
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -156,7 +157,9 @@ const AdminHome = () => {
                                 <Button
                                   variant="outline-dark"
                                   size="sm"
-                                  onClick={(event) => handleremoveuser(drone._id,event)}
+                                  onClick={(event) =>
+                                    handleremoveuser(drone._id, event)
+                                  }
                                 >
                                   De-Allocate Drone
                                 </Button>
@@ -224,7 +227,9 @@ const AdminHome = () => {
                                 <Button
                                   variant="outline-dark"
                                   size="sm"
-                                  onClick={(event) => handleremoveuser(drone._id,event)}
+                                  onClick={(event) =>
+                                    handleremoveuser(drone._id, event)
+                                  }
                                 >
                                   De-Allocate Drone
                                 </Button>

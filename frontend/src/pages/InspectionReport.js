@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
-import { Container, Navbar, Card ,Row, Col, Button} from "react-bootstrap";
+import {
+  Container,
+  Navbar,
+  Card,
+  Row,
+  Col,
+  Button,
+  Nav,
+} from "react-bootstrap";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { BiRefresh } from "react-icons/bi";
 
 const styles = {
   mainContent: {
@@ -9,20 +19,24 @@ const styles = {
   },
 };
 
-
 const InspectionReport = () => {
   const [navbarHeight, setNavbarHeight] = useState(0);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-   const[files,setFiles]=useState([])
+  const [files, setFiles] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("http://localhost:3000/inspectionReport", {
-          params: { cookieValue: cookieValue},
-        });
+        const response = await axios.get(
+          "http://localhost:3000/inspectionReport",
+          {
+            params: { cookieValue: cookieValue },
+          }
+        );
         setFiles(response.data.report);
         setIsLoading(false);
       } catch (err) {
@@ -41,32 +55,29 @@ const InspectionReport = () => {
 
   return (
     <>
-      <Navbar
-        bg="light"
-        expand="lg"
-        fixed="top"
-        className="navbar"
-        style={{ borderBottom: "1px solid #ccc" }}
-      >
+      <Navbar expand="lg" fixed="top" className="navbar bg-light mt-3">
         <Container>
           <Navbar.Brand>
             <img src={logo} alt="" height="50" width="160" />
           </Navbar.Brand>
-          <Navbar.Toggle />
-          <Navbar.Collapse className="justify-content-end me-5">
-            <Navbar.Text>
-              <a
-                href="/"
-                className="text-bold"
-                style={{
-                  color: "#2a265f",
-                  textDecoration: "none",
-                  fontSize: "20px",
-                }}
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse
+            id="basic-navbar-nav"
+            className="justify-content-end"
+          >
+            <Nav className="mr-auto">
+              <Button
+                variant="outline-secondary"
+                size="md"
+                className="me-1"
+                onClick={() => navigate(-1)}
               >
                 Dashboard
-              </a>
-            </Navbar.Text>
+              </Button>
+              <Button variant="outline-secondary" size="md">
+                Sign Out
+              </Button>
+            </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
@@ -88,15 +99,16 @@ const InspectionReport = () => {
                 Detailed result of Thermal inspection and solar panel cleaning
               </h5>
             </div>
-            <div className="ms-5">
-              <h2
-                className="ms-2 mt-5 me-5"
+            <Container>
+              <div
+                className="d-flex justify-content-between container"
                 style={{ borderBottom: "1px solid #ccc" }}
               >
-                All Reports
-              </h2>
-            </div>
-            <Container>
+                <h2 className="ms-2 mt-5 me-5">All Reports</h2>
+                <a style={{ cursor: "pointer", fontSize: "43px", color: "#2a265f" }}>
+                  <BiRefresh className="mb-0 pb-0 mt-5" />
+                </a>
+              </div>
               <Row>
                 {files.map((file, index) => (
                   <Col md={3} key={index} className="mt-4">

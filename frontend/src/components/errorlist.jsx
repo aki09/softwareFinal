@@ -10,28 +10,24 @@ const styles = {
 
 const ErrorList = ({ drones }) => {
   const [navbarHeight, setNavbarHeight] = useState(0);
-  const[Droneno,setDroneno]=useState([]);
-  const[time,setTime]=useState([]);
-  const[error,setError]=useState([]);
-  let droneidno=0;
+  const [Droneno, setDroneno] = useState([]);
+  const [time, setTime] = useState([]);
+  const [error, setError] = useState([]);
+  let droneidno = 0;
   useEffect(() => {
-
     const socket = io("http://localhost:3000", {
       transports: ["websocket", "polling", "flashsocket"],
     });
     socket.on("errorlist", (data) => {
-      const error  = data;
-      for(let i=0;i<drones.length;i++)
-      {
-        if(drones[i].type==="inspection")
-        {
+      const error = data;
+      for (let i = 0; i < drones.length; i++) {
+        if (drones[i].type === "inspection") {
           droneidno++;
         }
-        if(drones[i]._id==data.error.droneId)
-        {
-          setDroneno((prevdroneno)=>[...prevdroneno,droneidno]);
+        if (drones[i]._id == data.error.droneId) {
+          setDroneno((prevdroneno) => [...prevdroneno, droneidno]);
           const tstamp = new Date(data.error.timestamps).getSeconds();
-          setTime((prevtime)=>[...prevtime,...tstamp]);
+          setTime((prevtime) => [...prevtime, ...tstamp]);
           setError((preverror) => [...preverror, ...error]);
           break;
         }
@@ -42,14 +38,37 @@ const ErrorList = ({ drones }) => {
   }, []);
   return (
     <div
-      style={{ ...styles.mainContent, marginTop: `${navbarHeight}px` }}
+      style={{ ...styles.mainContent, marginTop: `${navbarHeight + 30}px` }}
       className="d-flex justify-content-center"
     >
+      {console.log(error)}
       <div style={{ width: "70%" }} className="pt-4">
         <Card>
-          <Card.Title className="ms-3 mt-3">ERROR LIST</Card.Title>
+          <Card.Title
+            className="ms-3 mt-3"
+            style={{ fontWeight: "600", color: "#2a265f", fontSize: "25px" }}
+          >
+            ERROR LIST{" "}
+          </Card.Title>
           <Card.Body>
-
+            {error.length != 0 ? (
+              <>
+                <div style={{ color: "#333" }}>{error.length} ERRORS FOUND</div>
+                <ul>
+                  <li style={{ listStyle: "disc", color: "#2a265f" }}>
+                    <div
+                      class="d-flex justify-content-between"
+                      style={{ color: "#333" }}
+                    >
+                      <span> Drone {droneidno} spotted a Fault</span>
+                      <span class="ml-auto">1s ago</span>
+                    </div>
+                  </li>
+                </ul>
+              </>
+            ) : (
+              <div style={{ color: "#333" }}>No errors found</div>
+            )}
           </Card.Body>
         </Card>
       </div>

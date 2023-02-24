@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   Dropdown,
+  Overlay,
 } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
@@ -29,8 +30,15 @@ const Allocation = () => {
   const [users, setUsers] = useState([]);
   const [selectedItem, setSelectedItem] = useState();
   const user = users.find((user) => user._id === selectedItem);
+  const [showOverlay, setShowOverlay] = useState(false);
+
   const handleSelect = (eventKey) => {
     setSelectedItem(eventKey);
+    setShowOverlay(true);
+  };
+
+  const handleOverlay = () => {
+    setShowOverlay(false);
   };
 
   useEffect(() => {
@@ -52,6 +60,7 @@ const Allocation = () => {
     const navbar = document.querySelector(".navbar");
     setNavbarHeight(navbar.offsetHeight);
   }, []);
+
   const handleadduser = async (id, droneid, event) => {
     event.preventDefault();
     const url = "http://localhost:3000/adm/allotdrone";
@@ -64,10 +73,12 @@ const Allocation = () => {
       });
     }
   };
+
   const cookieValue = document.cookie
     .split("; ")
     .find((row) => row.startsWith("access_token="))
     ?.split("=")[1];
+
   return (
     <>
       <Navbar expand="lg" fixed="top" className="navbar">
@@ -81,7 +92,12 @@ const Allocation = () => {
             className="justify-content-end"
           >
             <Nav className="mr-auto">
-              <Button variant="outline-secondary" size="md" className="me-1">
+              <Button
+                variant="outline-secondary"
+                size="md"
+                className="me-1"
+                onClick={() => navigate(-1)}
+              >
                 Dashboard
               </Button>
               <Button variant="outline-secondary" size="md">
@@ -146,11 +162,19 @@ const Allocation = () => {
             </div>
           </div>
           {selectedItem ? (
-            
-            <div className="mt-3 d-flex justify-content-center">
-              <h3>User Name: {user.userName} </h3>
-              <h3 className="ms-4">Company Name: {user.company}</h3>
-            </div>
+            <>
+              <Overlay
+                show={showOverlay}
+                placement="bottom"
+                target={() => document.getElementById("dropdown-basic")}
+                onHide={handleOverlay}
+              >
+                <div className="mt-3 bg-dark text-light p-4 text-center" style={{borderRadius:"20px"}}>
+                  <h5>User Name: {user.userName} </h5>
+                  <h5>Company Name: {user.company}</h5>
+                </div>
+              </Overlay>
+            </>
           ) : (
             <></>
           )}

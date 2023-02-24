@@ -5,7 +5,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Container, Navbar, Nav, Button } from "react-bootstrap";
 import logo from "../assets/logo.png";
-import { AiFillDelete } from "react-icons/ai";
+import { MdOutlineClear } from "react-icons/md";
 
 const styles = {
   mainContent: {
@@ -78,20 +78,19 @@ const FormMap = () => {
       }
     );
   };
-  const handlemarkerset=(id,event)=>{
+  const handlemarkerset = (id, event) => {
     event.preventDefault();
-    if(markers.length==4)
-    {
+    if (markers.length == 4) {
       const url = "http://localhost:3000/form";
       const res = axios.post(url, {
-        id: id, 
-        markers:markers // some value
+        id: id,
+        markers: markers, // some value
       });
       navigate("/home", {
         state: { cookieValue: cookieValue },
       });
     }
-  }
+  };
 
   const cookieValue = document.cookie
     .split("; ")
@@ -129,7 +128,12 @@ const FormMap = () => {
             className="justify-content-end"
           >
             <Nav className="mr-auto">
-              <Button variant="outline-secondary" size="md" className="me-1">
+              <Button
+                variant="outline-secondary"
+                size="md"
+                className="me-1"
+                onClick={() => navigate(-1)}
+              >
                 Dashboard
               </Button>
               <Button variant="outline-secondary" size="md">
@@ -204,7 +208,7 @@ const FormMap = () => {
                   onClick={(event) => handleMarkerDelete(0, event)}
                   className="m-2 btn btn-outline-danger"
                 >
-                  <AiFillDelete fontSize={20} />
+                  <MdOutlineClear fontSize={13} />
                 </button>
               </div>
             </div>
@@ -240,7 +244,7 @@ const FormMap = () => {
                   onClick={(event) => handleMarkerDelete(1, event)}
                   className="m-2 btn btn-outline-danger"
                 >
-                  <AiFillDelete fontSize={20} />
+                  <MdOutlineClear fontSize={13} />
                 </button>
               </div>
             </div>
@@ -276,7 +280,7 @@ const FormMap = () => {
                   onClick={(event) => handleMarkerDelete(2, event)}
                   className="m-2 btn btn-outline-danger"
                 >
-                  <AiFillDelete fontSize={20} />
+                  <MdOutlineClear fontSize={13} />
                 </button>
               </div>
             </div>
@@ -314,12 +318,17 @@ const FormMap = () => {
                   onClick={(event) => handleMarkerDelete(3, event)}
                   className="m-2 btn btn-outline-danger"
                 >
-                  <AiFillDelete fontSize={20} />
+                  <MdOutlineClear fontSize={13} />
                 </button>
               </div>
             </div>
             <div className="form-row-last">
-              <button className="btn btn-outline-dark btn-md" onClick={(event) => handlemarkerset(id,event)}>Proceed</button>
+              <button
+                className="btn btn-outline-dark btn-md"
+                onClick={(event) => handlemarkerset(id, event)}
+              >
+                Proceed
+              </button>
             </div>
           </form>
         </div>
