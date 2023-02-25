@@ -8,7 +8,7 @@ function Maap1({ drones }) {
   const [droneList, setDroneList] = useState(drones);
   const mapRef = useRef(null);
   const [markerObjs, setMarkerObjs] = useState([]);
-  let c=0;
+  let c = 0;
   const fetchlocation = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -41,7 +41,8 @@ function Maap1({ drones }) {
       const { id, location } = data;
       const LocationIndex = drones.findIndex((drone) => drone._id === id);
       if (LocationIndex === -1) return;
-      c++;console.log(c)
+      c++;
+      console.log(c);
       handleLocationLon(id, location);
     });
   }, [markerObjs]);
@@ -68,40 +69,45 @@ function Maap1({ drones }) {
       return [];
     });
   };
-  
+
   const handleLocationLat = (id, location) => {
     let droneListnew = [...droneList];
-      droneList.map((drone) => {
-        if (drone._id === id) {
-          drone.location={lat:location,lon:drone.location.lon}
-        }
-      });
-      removeMarkers();
-      //renderMarkers(droneListnew);
-      setDroneList(droneListnew);
+    droneList.map((drone) => {
+      if (drone._id === id) {
+        drone.location = { lat: location, lon: drone.location.lon };
+      }
+    });
+    removeMarkers();
+    //renderMarkers(droneListnew);
+    setDroneList(droneListnew);
   };
 
   const handleLocationLon = (id, location) => {
     removeMarkers();
     let droneListnew = [...droneList];
-      droneList.map((drone) => {
-        if (drone._id === id) {
-          drone.location={lat:drone.location.lat,lon:location}
-        }
-        return drone;
-      });
-      setDroneList(droneListnew);
-      setTimeout(() => {
-        renderMarkers(droneListnew);
-      }, 10000);
+    droneList.map((drone) => {
+      if (drone._id === id) {
+        drone.location = { lat: drone.location.lat, lon: location };
+      }
+      return drone;
+    });
+    setDroneList(droneListnew);
+    setTimeout(() => {
+      renderMarkers(droneListnew);
+    }, 10000);
   };
   return (
     <div
       style={{ width: "100%", marginTop: "25%", height: "50%" }}
-      className="pt-4"
+      className="pt-4 ms-3"
     >
       <Card>
-        <Card.Title className="ms-3 mt-3">LIVE MAP</Card.Title>
+        <Card.Title
+          className="ms-3 mt-3"
+          style={{ fontWeight: "600", color: "#2a265f", fontSize: "25px" }}
+        >
+          LIVE MAP
+        </Card.Title>
         <Card.Body>
           <Card.Text className="text-secondary">
             Location of all drones appears here in real time

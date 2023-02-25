@@ -82,7 +82,12 @@ const Dashboard = () => {
         </Row>
         <Row>
           <Col md={3} className="justify-content-center">
-            <Sidebar drones={drones} />
+            <div
+              style={{ height: "100vh", overflowY: "scroll" }}
+              className="sidebarScroll"
+            >
+              <Sidebar drones={drones} />
+            </div>
           </Col>
           <Col md={5}>
             <Maap1 drones={drones} cookieValue={cookieValue} />
