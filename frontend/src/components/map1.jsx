@@ -34,7 +34,6 @@ function Maap1({ drones }) {
       if (LocationIndex === -1) return;
       handleLocationLat(id, location);
     });
-  
 
     socket.on("locationlon", (data) => {
       const { id, location } = data;
@@ -46,7 +45,6 @@ function Maap1({ drones }) {
     fetchlocation();
   }, []);
 
-  
   const renderMarkers = (markers) => {
     const newMarkerObjs = markers.map((marker) => {
       return new window.google.maps.Marker({
@@ -60,23 +58,21 @@ function Maap1({ drones }) {
     });
     setMarkerObjs([...markerObjs, ...newMarkerObjs]);
   };
-  
 
   const removeMarkers = () => {
-    console.log("removing",markerObjs.length)
+    console.log("removing", markerObjs.length);
     for (let i = 0; i < markerObjs.length; i++) {
-      console.log("removing",markerObjs.length)
+      console.log("removing", markerObjs.length);
       markerObjs[i].setMap(null);
     }
     setMarkerObjs([]);
   };
 
-  
   const handleLocationLat = (id, location) => {
     // setDroneList((prevDroneList) =>
     //   prevDroneList.map((drone) => {
     //     if (drone._id === id) {
-          
+
     //       return {
     //         ...drone,
     //         location: { lat: location, lon: drone.location.lon },
@@ -87,7 +83,7 @@ function Maap1({ drones }) {
     // );
 
     //removeMarkers();
-    console.log("remov",markerObjs.length)
+    console.log("remov", markerObjs.length);
   };
 
   const handleLocationLon = (id, location) => {
@@ -109,7 +105,12 @@ function Maap1({ drones }) {
       className="pt-4"
     >
       <Card>
-        <Card.Title className="ms-3 mt-3">LIVE MAP</Card.Title>
+        <Card.Title
+          className="ms-3 mt-3"
+          style={{ fontWeight: "600", color: "#2a265f", fontSize: "25px" }}
+        >
+          LIVE MAP
+        </Card.Title>
         <Card.Body>
           <Card.Text className="text-secondary">
             Location of all drones appears here in real time

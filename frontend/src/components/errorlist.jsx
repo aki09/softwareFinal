@@ -14,13 +14,33 @@ const ErrorList = ({ drones }) => {
   const [time, setTime] = useState([]);
   const [error, setError] = useState([]);
   let droneidno = 0;
+
+  const errorDiv = Droneno.map((droneno, index) => (
+    <>
+      <li style={{ listStyle: "disc", color: "#2a265f" }} key={index}>
+        <div
+          className="d-flex justify-content-between row"
+          style={{ color: "#333" }}
+        >
+          <div className="d-flex row" key={index}>
+            <span> Drone {droneno} spotted a Fault</span>
+            <span className="ml-auto">1s ago</span>
+          </div>
+        </div>
+      </li>
+
+      <br />
+    </>
+  )).reverse();
+
   useEffect(() => {
     const socket = io("http://localhost:3000", {
       transports: ["websocket", "polling", "flashsocket"],
     });
+
     socket.on("errorlist", (data) => {
       const error = data;
-      
+
       for (let i = 0; i < drones.length; i++) {
         if (drones[i].type === "inspection") {
           droneidno++;
@@ -32,7 +52,7 @@ const ErrorList = ({ drones }) => {
           // const timeDiff = Math.floor((now - tstamp) / 1000);
           // const minutes = Math.floor(timeDiff / 60);
           // const seconds = timeDiff % 60;
-          setTime((prevtime) => [...prevtime,tstamp]);
+          setTime((prevtime) => [...prevtime, tstamp]);
           setError((preverror) => [...preverror, error]);
           break;
         }
@@ -56,24 +76,14 @@ const ErrorList = ({ drones }) => {
             ERROR LIST{" "}
           </Card.Title>
           <Card.Body>
-            {/* {error.length != 0 ? (
+            {error.length != 0 ? (
               <>
                 <div style={{ color: "#333" }}>{error.length} ERRORS FOUND</div>
-                <ul>
-                  <li style={{ listStyle: "disc", color: "#2a265f" }}>
-                    <div
-                      class="d-flex justify-content-between"
-                      style={{ color: "#333" }}
-                    >
-                      <span> Drone {droneidno} spotted a Fault</span>
-                      <span className="ml-auto">1s ago</span>
-                    </div>
-                  </li>
-                </ul>
+                <ul>{errorDiv}</ul>
               </>
             ) : (
               <div style={{ color: "#333" }}>No errors found</div>
-            )} */}
+            )}
           </Card.Body>
         </Card>
       </div>

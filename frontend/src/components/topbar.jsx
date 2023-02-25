@@ -1,4 +1,4 @@
-import React,{ useEffect } from "react";
+import React, { useEffect } from "react";
 import logo from "../assets/logo.png";
 
 import Container from "react-bootstrap/Container";
@@ -14,24 +14,23 @@ import { useNavigate } from "react-router-dom";
 const Topbar = ({ user }) => {
   const navigate = useNavigate();
 
-  const handleTake=(event)=>{
+  const handleTake = (event) => {
     event.preventDefault();
     const url = "http://localhost:3000/set";
     const res = axios.post(url, {
-         droneid:"63d9138e870ba132c5d20aa6",
-         userid:"6156272d93d079ba45eab3af",
-         eror:"fault"
-      });
-  }
-  const handleSignout=(event)=>{
+      droneid: "63d9138e870ba132c5d20aa6",
+      userid: "6156272d93d079ba45eab3af",
+      eror: "fault",
+    });
+  };
+  const handleSignout = (event) => {
     event.preventDefault();
     const url = "http://localhost:3000/logout";
     const res = axios.post(url);
-    document.cookie = 'access_token=';
-    navigate('/login', { replace: true });
-    
-  }
-  
+    document.cookie = "access_token=";
+    navigate("/login", { replace: true });
+  };
+
   return (
     <>
       <Navbar bg="light" expand="lg" fixed="top" className="navbar">
@@ -58,19 +57,38 @@ const Topbar = ({ user }) => {
           >
             <Nav className="mr-auto">
               {/* <ButtonGroup> */}
-              <Link to="/report">
-                <Button variant="outline-secondary" size="md" className="me-1">
-                  Inspection Reports
-                </Button>
-              </Link>
+              <div className="pt-1 pb-2">
+                <Link to="/report">
+                  <Button
+                    variant="outline-secondary"
+                    size="md"
+                    className="ps-3 pe-3 me-1"
+                  >
+                    Inspection Reports
+                  </Button>
+                </Link>
+              </div>
               {/* <Link> */}
-                <Button variant="outline-secondary" size="md" onClick={(event) => handleSignout(event)}>
+              <div className="pt-1 pb-2">
+                <Button
+                  variant="outline-secondary"
+                  size="md"
+                  onClick={(event) => handleSignout(event)}
+                  className="ps-3 pe-3 me-1"
+                >
                   Sign Out
                 </Button>
+              </div>
+
               {/* </Link> */}
-              <Button variant="outline-secondary" size="md" onClick={(event) => handleTake(event)}>
-                  Push Error
-                </Button>
+              <Button
+                variant="outline-secondary"
+                size="md"
+                onClick={(event) => handleTake(event)}
+                style={{ borderRadius: "10%" }}
+              >
+                Push Error
+              </Button>
 
               {/* </ButtonGroup> */}
               <Nav.Link>
