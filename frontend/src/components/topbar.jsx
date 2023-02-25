@@ -81,14 +81,7 @@ const Topbar = ({ user }) => {
               </div>
 
               {/* </Link> */}
-              <Button
-                variant="outline-secondary"
-                size="md"
-                onClick={(event) => handleTake(event)}
-                style={{ borderRadius: "10%" }}
-              >
-                Push Error
-              </Button>
+             
 
               {/* </ButtonGroup> */}
               <Nav.Link>
