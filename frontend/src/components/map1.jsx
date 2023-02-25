@@ -107,7 +107,6 @@ function Maap1({ drones }) {
     >
       <Card>
         <Card.Title className="ms-3 mt-3">LIVE MAP</Card.Title>
->>>>>>> Stashed changes
         <Card.Body>
           <Card.Text className="text-secondary">
             Location of all drones appears here in real time
