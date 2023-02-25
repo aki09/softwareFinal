@@ -24,6 +24,7 @@ function Maap1({ drones }) {
   };
 
   useEffect(() => {
+    fetchlocation();
     const socket = io("http://localhost:3000", {
       transports: ["websocket", "polling", "flashsocket"],
     });
@@ -32,7 +33,7 @@ function Maap1({ drones }) {
       const { id, location } = data;
       const LocationIndex = drones.findIndex((drone) => drone._id === id);
       if (LocationIndex === -1) return;
-      handleLocationLat(id, location,markerObjs);
+      handleLocationLat(id, location);
     });
 
     socket.on("locationlon", (data) => {
@@ -41,9 +42,7 @@ function Maap1({ drones }) {
       if (LocationIndex === -1) return;
       handleLocationLon(id, location);
     });
-
-    fetchlocation();
-  }, []);
+  }, [markerObjs]);
 
   const renderMarkers = (markers) => {
     const newMarkerObjs = markers.map((marker) => {
@@ -60,31 +59,25 @@ function Maap1({ drones }) {
   };
 
   const removeMarkers = () => {
-    console.log("removing", markerObjs.length);
-    for (let i = 0; i < markerObjs.length; i++) {
-      console.log("removing", markerObjs.length);
-      markerObjs[i].setMap(null);
-    }
+    markerObjs.forEach((marker) => {
+      marker.setMap(null);
+      console.log("removed",markerObjs)
+    });
     setMarkerObjs([]);
   };
 
   
   const handleLocationLat = (id, location) => {
-    // setDroneList((prevDroneList) =>
-    //   prevDroneList.map((drone) => {
-    //     if (drone._id === id) {
-          
-    //       return {
-    //         ...drone,
-    //         location: { lat: location, lon: drone.location.lon },
-    //       };
-    //     }
-    //     return drone;
-    //   })
-    // );
-
-    //removeMarkers();
-    console.log("remov",markerObjs.length)
+    let droneListnew = [...droneList];
+      droneList.map((drone) => {
+        if (drone._id === id) {
+          drone.location={lat:location,lon:drone.location.lon}
+        }
+      });
+      removeMarkers();
+      console.log(droneListnew)
+      renderMarkers(droneListnew);
+      setDroneList(droneListnew);
   };
 
   const handleLocationLon = (id, location) => {
