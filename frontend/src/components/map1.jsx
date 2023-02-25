@@ -8,6 +8,7 @@ function Maap1({ drones }) {
   const [droneList, setDroneList] = useState(drones);
   const mapRef = useRef(null);
   const [markerObjs, setMarkerObjs] = useState([]);
+  let c=0;
   const fetchlocation = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -40,6 +41,7 @@ function Maap1({ drones }) {
       const { id, location } = data;
       const LocationIndex = drones.findIndex((drone) => drone._id === id);
       if (LocationIndex === -1) return;
+      c++;console.log(c)
       handleLocationLon(id, location);
     });
   }, [markerObjs]);
@@ -59,13 +61,13 @@ function Maap1({ drones }) {
   };
 
   const removeMarkers = () => {
-    markerObjs.forEach((marker) => {
-      marker.setMap(null);
-      console.log("removed",markerObjs)
+    setMarkerObjs((prevMarkerObjs) => {
+      prevMarkerObjs.forEach((marker) => {
+        marker.setMap(null);
+      });
+      return [];
     });
-    setMarkerObjs([]);
   };
-
   
   const handleLocationLat = (id, location) => {
     let droneListnew = [...droneList];
@@ -75,23 +77,23 @@ function Maap1({ drones }) {
         }
       });
       removeMarkers();
-      console.log(droneListnew)
-      renderMarkers(droneListnew);
+      //renderMarkers(droneListnew);
       setDroneList(droneListnew);
   };
 
   const handleLocationLon = (id, location) => {
-    setDroneList((prevDroneList) =>
-      prevDroneList.map((drone) => {
+    removeMarkers();
+    let droneListnew = [...droneList];
+      droneList.map((drone) => {
         if (drone._id === id) {
-          return {
-            ...drone,
-            location: { lat: drone.location.lat, lon: location },
-          };
+          drone.location={lat:drone.location.lat,lon:location}
         }
         return drone;
-      })
-    );
+      });
+      setDroneList(droneListnew);
+      setTimeout(() => {
+        renderMarkers(droneListnew);
+      }, 10000);
   };
   return (
     <div
