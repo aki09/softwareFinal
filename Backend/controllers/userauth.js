@@ -93,6 +93,5 @@ exports.postSignup = (req, res, next) => {
 
 exports.postLogout = (req, res, next) => {
     res.clearCookie("access-token");
-    console.log(logout)
 };
 

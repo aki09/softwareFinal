@@ -12,7 +12,7 @@ import {
   Tabs,
 } from "react-bootstrap";
 import { RiAdminFill } from "react-icons/ri";
-
+import { useNavigate } from "react-router-dom";
 const styles = {
   mainContent: {
     marginTop: "",
@@ -28,6 +28,7 @@ const AdminHome = () => {
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const cookieValue = location.state.cookieValue;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +53,13 @@ const AdminHome = () => {
     fetchData();
   }, []);
 
+  const handleSignout=(event)=>{
+    event.preventDefault();
+    const url = "http://localhost:3000/adm/logout";
+    const res = axios.post(url);
+    document.cookie = 'access_token=';
+    navigate('/pchia');
+  }
   const cleaningDrones = drones.filter((drone) => drone.type === "cleaning");
   const inspectionDrones = drones.filter(
     (drone) => drone.type === "inspection"
@@ -90,6 +98,11 @@ const AdminHome = () => {
             className="justify-content-end"
           >
             <Nav className="mr-auto">
+              <Nav className="pt-2 pb-2">
+                <Button variant="outline-secondary" className="ps-3 pe-3" onClick={(event) => handleSignout(event)}>
+                  Sign Out
+                </Button>
+              </Nav>
               <Nav.Link>
                 <RiAdminFill
                   style={{ fontSize: "36px" }}
@@ -97,6 +110,7 @@ const AdminHome = () => {
                   color="#2a265f"
                 />
               </Nav.Link>
+                        
             </Nav>
           </Navbar.Collapse>
         </Container>

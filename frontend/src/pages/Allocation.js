@@ -73,7 +73,14 @@ const Allocation = () => {
       });
     }
   };
-
+  
+  const handleSignout=(event)=>{
+    event.preventDefault();
+    const url = "http://localhost:3000/adm/logout";
+    const res = axios.post(url);
+    document.cookie = 'access_token=';
+    navigate('/pchia');
+  }
   const cookieValue = document.cookie
     .split("; ")
     .find((row) => row.startsWith("access_token="))
@@ -100,7 +107,7 @@ const Allocation = () => {
               >
                 Dashboard
               </Button>
-              <Button variant="outline-secondary" size="md">
+              <Button variant="outline-secondary" size="md" onClick={(event) => handleSignout(event)}>
                 Sign Out
               </Button>
             </Nav>

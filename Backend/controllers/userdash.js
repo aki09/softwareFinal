@@ -20,6 +20,7 @@ exports.set=async(req,res,next)=>{
     const droneid=req.body.droneid;
     const userid=req.body.userid;
     const eror=req.body.eror;
+    console.log(req.body)
     const error=new Error({
         droneId:droneid,
         userId:userid,
@@ -27,6 +28,7 @@ exports.set=async(req,res,next)=>{
         title:eror
     })
     error.save().then((result) => {
+        console.log(result)
     });
 
 }
@@ -42,6 +44,7 @@ exports.settakeoff=async(req,res,next)=>{
 }
 
 exports.takeoffForm = (req, res, next) => {
+    console.log(req.body)
     const drone_id = req.query.droneid;
     const token = req.query.cookieValue;
     const data = jlol.verify(token, "jwtsecretplschange");

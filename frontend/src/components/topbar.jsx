@@ -1,4 +1,4 @@
-import React from "react";
+import React,{ useEffect } from "react";
 import logo from "../assets/logo.png";
 
 import Container from "react-bootstrap/Container";
@@ -8,8 +8,39 @@ import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import { RiAdminFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Topbar = ({ user }) => {
+  useEffect(() => {
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  const onPopState = () => {
+    window.history.pushState(null, null, window.location.pathname);
+  };
+  const navigate = useNavigate();
+
+  const handleTake=(event)=>{
+    event.preventDefault();
+    const url = "http://localhost:3000/set";
+    const res = axios.post(url, {
+         droneid:"63d9138e870ba132c5d20aa6",
+         userid:"6156272d93d079ba45eab3af",
+         eror:"fault"
+      });
+  }
+  const handleSignout=(event)=>{
+    event.preventDefault();
+    const url = "http://localhost:3000/logout";
+    const res = axios.post(url);
+    document.cookie = 'access_token=';
+    // navigate('/login', { replace: true });
+    window.location.replace('/login');
+  }
+  
   return (
     <>
       <Navbar bg="light" expand="lg" fixed="top" className="navbar">
@@ -41,11 +72,11 @@ const Topbar = ({ user }) => {
                   Inspection Reports
                 </Button>
               </Link>
-              <Link>
-                <Button variant="outline-secondary" size="md">
+              {/* <Link> */}
+                <Button variant="outline-secondary" size="md" onClick={(event) => handleSignout(event)}>
                   Sign Out
                 </Button>
-              </Link>
+              {/* </Link> */}
 
               {/* </ButtonGroup> */}
               <Nav.Link>

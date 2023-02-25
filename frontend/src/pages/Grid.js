@@ -37,6 +37,22 @@ const FormMap = () => {
       renderMarkers([...markers, newMarker]);
     }
   };
+  useEffect(() => {
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  const onPopState = () => {
+    window.history.pushState(null, null, window.location.pathname);
+  };
+  const handleSignout=(event)=>{
+    event.preventDefault();
+    const url = "http://localhost:3000/logout";
+    const res =axios.post(url);
+    document.cookie = 'access_token=';
+    window.location.replace('/login');
+  };
 
   const handleMarkerDelete = (index, event) => {
     event.preventDefault();
@@ -104,7 +120,6 @@ const FormMap = () => {
         const response = await axios.get("http://localhost:3000/form", {
           params: { cookieValue: cookieValue, droneid: id },
         });
-        console.log(response.data);
         setIsLoading(false);
       } catch (err) {
         setError(err);
@@ -136,7 +151,7 @@ const FormMap = () => {
               >
                 Dashboard
               </Button>
-              <Button variant="outline-secondary" size="md">
+              <Button variant="outline-secondary" size="md" onClick={(event) => handleSignout(event)}>
                 Sign Out
               </Button>
             </Nav>

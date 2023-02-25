@@ -24,10 +24,27 @@ const InspectionReport = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState([]);
+  useEffect(() => {
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  const onPopState = () => {
+    window.history.pushState(null, null, window.location.pathname);
+  };
 
   const navigate = useNavigate();
+  const handleSignout=(event)=>{
+    event.preventDefault();
+    const url = "http://localhost:3000/logout";
+    const res =axios.post(url);
+    document.cookie = 'access_token=';
+    window.location.replace('/login');
+  }
 
   useEffect(() => {
+
     const fetchData = async () => {
       setIsLoading(true);
       try {
@@ -48,6 +65,7 @@ const InspectionReport = () => {
     const navbar = document.querySelector(".navbar");
     setNavbarHeight(navbar.offsetHeight);
   }, []);
+
   const cookieValue = document.cookie
     .split("; ")
     .find((row) => row.startsWith("access_token="))
@@ -74,7 +92,7 @@ const InspectionReport = () => {
               >
                 Dashboard
               </Button>
-              <Button variant="outline-secondary" size="md">
+              <Button variant="outline-secondary" size="md" onClick={(event) => handleSignout(event)}>
                 Sign Out
               </Button>
             </Nav>

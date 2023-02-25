@@ -10,11 +10,11 @@ const errorSchema = new Schema({
     },
     title: {
         type: String,
-        required: true
+        //required: true
     },
     folder: {
         type: String,
-        required: true
+        //required: true
     },
     timestamps: {
         type: Date,

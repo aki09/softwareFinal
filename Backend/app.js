@@ -6,7 +6,6 @@ const admin=require("./routes/admin")
 const cors = require('cors');
 const mongoose = require("mongoose");
 const session=require('express-session')
-const errorController = require('./controllers/error');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -47,7 +46,6 @@ app.use(session({
 app.use(cookieParser());
 app.use(user);
 app.use('/adm',admin);
-//app.use(errorController.get404);
 app.set('view engine', 'ejs');
 
 

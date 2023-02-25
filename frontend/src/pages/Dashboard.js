@@ -6,6 +6,7 @@ import ErrorList from "../components/errorlist";
 import Maap1 from "../components/map1";
 import Sidebar from "../components/sidebar";
 import Topbar from "../components/topbar";
+import { useNavigate } from "react-router-dom";
 
 const styles = {
   mainContent: {
@@ -21,6 +22,7 @@ const Dashboard = () => {
   const location = useLocation();
   const cookieValue = location.state.cookieValue;
   const [navbarHeight, setNavbarHeight] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
