@@ -24,15 +24,6 @@ const InspectionReport = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState([]);
-  useEffect(() => {
-    window.history.pushState(null, null, window.location.pathname);
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, []);
-
-  const onPopState = () => {
-    window.history.pushState(null, null, window.location.pathname);
-  };
 
   const navigate = useNavigate();
   const handleSignout=(event)=>{
@@ -40,7 +31,7 @@ const InspectionReport = () => {
     const url = "http://localhost:3000/logout";
     const res =axios.post(url);
     document.cookie = 'access_token=';
-    window.location.replace('/login');
+    navigate('/login', { replace: true });
   }
 
   useEffect(() => {

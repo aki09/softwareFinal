@@ -20,15 +20,20 @@ const ErrorList = ({ drones }) => {
     });
     socket.on("errorlist", (data) => {
       const error = data;
+      
       for (let i = 0; i < drones.length; i++) {
         if (drones[i].type === "inspection") {
           droneidno++;
         }
         if (drones[i]._id == data.error.droneId) {
           setDroneno((prevdroneno) => [...prevdroneno, droneidno]);
-          const tstamp = new Date(data.error.timestamps).getSeconds();
-          setTime((prevtime) => [...prevtime, ...tstamp]);
-          setError((preverror) => [...preverror, ...error]);
+          const tstamp = new Date(data.error.timestamps).getTime();
+          // const now = new Date().getTime();
+          // const timeDiff = Math.floor((now - tstamp) / 1000);
+          // const minutes = Math.floor(timeDiff / 60);
+          // const seconds = timeDiff % 60;
+          setTime((prevtime) => [...prevtime,tstamp]);
+          setError((preverror) => [...preverror, error]);
           break;
         }
       }
@@ -51,7 +56,7 @@ const ErrorList = ({ drones }) => {
             ERROR LIST{" "}
           </Card.Title>
           <Card.Body>
-            {error.length != 0 ? (
+            {/* {error.length != 0 ? (
               <>
                 <div style={{ color: "#333" }}>{error.length} ERRORS FOUND</div>
                 <ul>
@@ -61,14 +66,14 @@ const ErrorList = ({ drones }) => {
                       style={{ color: "#333" }}
                     >
                       <span> Drone {droneidno} spotted a Fault</span>
-                      <span class="ml-auto">1s ago</span>
+                      <span className="ml-auto">1s ago</span>
                     </div>
                   </li>
                 </ul>
               </>
             ) : (
               <div style={{ color: "#333" }}>No errors found</div>
-            )}
+            )} */}
           </Card.Body>
         </Card>
       </div>

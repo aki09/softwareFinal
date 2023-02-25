@@ -16,22 +16,24 @@ exports.dashboard = async(req, res, next) => {
     res.status(200).send({ user:user,drones:drones });
 }
 
-exports.set=async(req,res,next)=>{
-    const droneid=req.body.droneid;
-    const userid=req.body.userid;
-    const eror=req.body.eror;
-    console.log(req.body)
-    const error=new Error({
-        droneId:droneid,
-        userId:userid,
-        timestamps:new Date,
-        title:eror
-    })
-    error.save().then((result) => {
-        console.log(result)
+exports.set = async (req, res, next) => {
+    const { droneid, userid, eror } = req.body;
+  
+    const error = new Error({
+      droneId: droneid,
+      userId: userid,
+      timestamps: new Date(),
+      title: eror
     });
-
-}
+  
+    error.save()
+      .then(result => {
+        console.log('Error added successfully')
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
 
 exports.settakeoff=async(req,res,next)=>{
     const drone_id=req.query.droneid;

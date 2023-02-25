@@ -12,15 +12,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Topbar = ({ user }) => {
-  useEffect(() => {
-    window.history.pushState(null, null, window.location.pathname);
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, []);
-
-  const onPopState = () => {
-    window.history.pushState(null, null, window.location.pathname);
-  };
   const navigate = useNavigate();
 
   const handleTake=(event)=>{
@@ -37,8 +28,8 @@ const Topbar = ({ user }) => {
     const url = "http://localhost:3000/logout";
     const res = axios.post(url);
     document.cookie = 'access_token=';
-    // navigate('/login', { replace: true });
-    window.location.replace('/login');
+    navigate('/login', { replace: true });
+    
   }
   
   return (
@@ -77,6 +68,9 @@ const Topbar = ({ user }) => {
                   Sign Out
                 </Button>
               {/* </Link> */}
+              <Button variant="outline-secondary" size="md" onClick={(event) => handleTake(event)}>
+                  Push Error
+                </Button>
 
               {/* </ButtonGroup> */}
               <Nav.Link>

@@ -19,8 +19,8 @@ const errorSchema = new Schema({
     timestamps: {
         type: Date,
         required: true,
-        createdAt: 'created_at',
-        updatedAt: 'updated_at'
+        // createdAt: 'created_at',
+        // updatedAt: 'updated_at'
     },
     userId: {
         type: Schema.Types.ObjectId,

@@ -37,21 +37,13 @@ const FormMap = () => {
       renderMarkers([...markers, newMarker]);
     }
   };
-  useEffect(() => {
-    window.history.pushState(null, null, window.location.pathname);
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, []);
-
-  const onPopState = () => {
-    window.history.pushState(null, null, window.location.pathname);
-  };
+  
   const handleSignout=(event)=>{
     event.preventDefault();
     const url = "http://localhost:3000/logout";
     const res =axios.post(url);
     document.cookie = 'access_token=';
-    window.location.replace('/login');
+    navigate('/login', { replace: true });
   };
 
   const handleMarkerDelete = (index, event) => {
