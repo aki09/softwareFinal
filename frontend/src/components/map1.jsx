@@ -32,7 +32,7 @@ function Maap1({ drones }) {
       const { id, location } = data;
       const LocationIndex = drones.findIndex((drone) => drone._id === id);
       if (LocationIndex === -1) return;
-      handleLocationLat(id, location);
+      handleLocationLat(id, location,markerObjs);
     });
 
     socket.on("locationlon", (data) => {
@@ -56,7 +56,7 @@ function Maap1({ drones }) {
         },
       });
     });
-    setMarkerObjs([...markerObjs, ...newMarkerObjs]);
+    setMarkerObjs(newMarkerObjs);
   };
 
   const removeMarkers = () => {
@@ -68,6 +68,8 @@ function Maap1({ drones }) {
     setMarkerObjs([]);
   };
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   const handleLocationLat = (id, location) => {
     // setDroneList((prevDroneList) =>
     //   prevDroneList.map((drone) => {
@@ -84,6 +86,46 @@ function Maap1({ drones }) {
 
     //removeMarkers();
     console.log("remov", markerObjs.length);
+=======
+  
+  const handleLocationLat = (id, location,markerObjs) => {
+    setDroneList((prevDroneList) =>
+      prevDroneList.map((drone) => {
+        if (drone._id === id) {
+          
+          return {
+            ...drone,
+            
+            location: { lat: location, lon: drone.location.lon },
+          };
+        }
+        return drone;
+      })
+    );
+
+    //removeMarkers();
+    console.log("remov",markerObjs)
+>>>>>>> Stashed changes
+=======
+  
+  const handleLocationLat = (id, location,markerObjs) => {
+    setDroneList((prevDroneList) =>
+      prevDroneList.map((drone) => {
+        if (drone._id === id) {
+          
+          return {
+            ...drone,
+            
+            location: { lat: location, lon: drone.location.lon },
+          };
+        }
+        return drone;
+      })
+    );
+
+    //removeMarkers();
+    console.log("remov",markerObjs)
+>>>>>>> Stashed changes
   };
 
   const handleLocationLon = (id, location) => {
@@ -105,12 +147,20 @@ function Maap1({ drones }) {
       className="pt-4"
     >
       <Card>
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <Card.Title
           className="ms-3 mt-3"
           style={{ fontWeight: "600", color: "#2a265f", fontSize: "25px" }}
         >
           LIVE MAP
         </Card.Title>
+=======
+=======
+>>>>>>> Stashed changes
+        {console.log(markerObjs.length)}
+        <Card.Title className="ms-3 mt-3">LIVE MAP</Card.Title>
+>>>>>>> Stashed changes
         <Card.Body>
           <Card.Text className="text-secondary">
             Location of all drones appears here in real time

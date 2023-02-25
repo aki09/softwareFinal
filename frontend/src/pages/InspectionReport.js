@@ -36,7 +36,7 @@ const InspectionReport = () => {
 
   useEffect(() => {
 
-    const fetchData = async () => {
+    const fetchData = async() => {
       setIsLoading(true);
       try {
         const response = await axios.get(
@@ -48,6 +48,7 @@ const InspectionReport = () => {
         setFiles(response.data.report);
         setIsLoading(false);
       } catch (err) {
+        
         setError(err);
         setIsLoading(false);
       }

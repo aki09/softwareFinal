@@ -40,6 +40,7 @@ const ErrorList = ({ drones }) => {
 
     socket.on("errorlist", (data) => {
       const error = data;
+      droneidno = 0;
 
       for (let i = 0; i < drones.length; i++) {
         if (drones[i].type === "inspection") {
