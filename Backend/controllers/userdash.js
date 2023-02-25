@@ -28,7 +28,6 @@ exports.set = async (req, res, next) => {
   
     error.save()
       .then(result => {
-        console.log('Error added successfully')
       })
       .catch(error => {
         console.error(error);

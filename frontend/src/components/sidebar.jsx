@@ -137,8 +137,7 @@ const Sidebar = ({ drones }) => {
             />
           </div> */}
 
-          {cleaningDroneList.length !== 0 &&
-          inspectionDroneList.length !== 0 ? (
+          {cleaningDroneList.length !== 0 ? (
             <>
               <div className="d-flex justify-content-center mt-2">
                 <BootstrapSwitchButton
@@ -240,12 +239,93 @@ const Sidebar = ({ drones }) => {
                   width={100}
                 />
               </div>
-              <Card variant="outline-secondary" className="mt-5">
-                <Card.Body>
-                  <Card.Title>No Cleaning Drones</Card.Title>
-                  <Card.Text>Switch the above button to switch to see inspection drone</Card.Text>
-                </Card.Body>
-              </Card>
+              <div className="pt-3">
+                {showInspection &&
+                  inspectionDroneList.map((drone, i) => (
+                    <div key={drone._id}>
+                      <ListGroup>
+                        <Card
+                          className="m-2 pt-3 pb-3"
+                          style={{ boxShadow: "0 0 10px #ccc" }}
+                          variant="light"
+                        >
+                          <Card.Body>
+                            <Card.Subtitle
+                              className="d-flex justify-content-start"
+                              style={{ color: "black" }}
+                            >
+                              <BsCircleFill
+                                className="me-2 mt-1"
+                                fontSize="11px"
+                                style={{ color: drone.color }}
+                              />
+
+                              {drone.name}
+                            </Card.Subtitle>
+                            <Card.Text className="battery-gauge d-flex justify-content-end">
+                              <BatteryGauge
+                                value={filteredDrones[i].battery}
+                                size={45}
+                              />
+                            </Card.Text>
+                            <div className="m-auto">
+                              {drone.takeOffStatus ? (
+                                <Button
+                                  variant="outline-dark"
+                                  size="sm"
+                                  className="me-1 mb-0"
+                                  onClick={() => handleTakeoffStatus(drone._id)}
+                                  style={{ width: "90%" }}
+                                >
+                                  Land
+                                </Button>
+                              ) : (
+                                <Link to="/grid" state={{ id: drone._id }}>
+                                  <Button
+                                    variant="outline-dark"
+                                    size="sm"
+                                    className="me-1 mb-0"
+                                    style={{ width: "90%" }}
+                                  >
+                                    TakeOff
+                                  </Button>
+                                </Link>
+                              )}
+
+                              <Button
+                                variant="dark"
+                                size="sm"
+                                className="mt-1 mb-0"
+                                style={{ width: "90%" }}
+                              >
+                                Show Live Feed
+                              </Button>
+                            </div>
+                          </Card.Body>
+                        </Card>
+                      </ListGroup>
+                    </div>
+                  ))}
+              </div>
+              {showCleaning && (
+                <>
+                  <Card
+                    className="m-2 pt-3 pb-3"
+                    style={{ boxShadow: "0 0 10px #ccc" }}
+                    variant="light"
+                  >
+                    <Card.Body>
+                      <Card.Title style={{ fontWeight: "500" }}>
+                        No Cleaning Drones
+                      </Card.Title>
+                      <Card.Text>
+                        Switch the above button to switch to see inspection
+                        drones
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </>
+              )}
             </>
           )}
 
