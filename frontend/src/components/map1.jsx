@@ -113,7 +113,7 @@ function Maap1({ drones }) {
   return (
     <div
       style={{ width: "100%", marginTop: "25%", height: "50%" }}
-      className="pt-4 ms-3"
+      className="pt-4"
     >
       <Card>
         <Card.Title

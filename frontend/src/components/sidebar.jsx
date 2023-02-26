@@ -15,11 +15,12 @@ const styles = {
   },
 };
 
-const Sidebar = ({ drones }) => {
+const Sidebar = ({ drones, showVideoFeed, setShowVideoFeed, updateVideoUrl }) => {
   const [navbarHeight, setNavbarHeight] = useState(0);
   const [droneList, setDroneList] = useState(drones);
   const [showCleaning, setShowCleaning] = useState(false);
   const [showInspection, setShowInspection] = useState(true);
+  // const [showVideoFeed, setShowVideoFeed] = useState(false);
 
   const cleaningDroneList = droneList.filter(
     (drone) => drone.type === "cleaning"
@@ -123,22 +124,26 @@ const Sidebar = ({ drones }) => {
       })
     );
   };
+
   const handleShowLiveFeed = (serialID) => {
-    const semiurl=process.env.DroneVideoURL;
-    const videourl=semiurl+'/' + serialID;
-    console.log(videourl)
-    const url = 'https://www.youtube.com/embed/UTMh-_wh1xE';
-    const newWindow = window.open('', '_blank');
-    newWindow.document.write(`
-      <html>
-        <head>
-          <title>Live Feed</title>
-        </head>
-        <body>
-          <iframe src="${url}" style="width:70%; height:70%; border:none;" autoplay></iframe>
-        </body>
-      </html>
-    `);
+    const semiurl = process.env.DroneVideoURL;
+    const videourl = semiurl + "/" + serialID;
+    console.log(videourl);
+    const url = "https://www.youtube.com/embed/UTMh-_wh1xE";
+    setShowVideoFeed(true);
+    updateVideoUrl(url);
+
+    // const newWindow = window.open('', '_blank');
+    // newWindow.document.write(`
+    //   <html>
+    //     <head>
+    //       <title>Live Feed</title>
+    //     </head>
+    //     <body>
+    //       <iframe src="${url}" style="width:70%; height:70%; border:none;" autoplay></iframe>
+    //     </body>
+    //   </html>
+    // `);
   };
 
   return (
@@ -162,7 +167,7 @@ const Sidebar = ({ drones }) => {
                   zIndex: 1,
                   width: "25vw",
                   paddingLeft: "7vw",
-                  paddingBottom: "2vh"
+                  paddingBottom: "2vh",
                 }}
               >
                 <BootstrapSwitchButton
@@ -270,7 +275,7 @@ const Sidebar = ({ drones }) => {
                   zIndex: 1,
                   width: "25vw",
                   paddingLeft: "7vw",
-                  paddingBottom: "2vh"
+                  paddingBottom: "2vh",
                 }}
               >
                 <BootstrapSwitchButton
