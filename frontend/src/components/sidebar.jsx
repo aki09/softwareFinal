@@ -55,7 +55,7 @@ const Sidebar = ({ drones }) => {
       const { id, videoStreamStatus } = data;
       const batteryIndex = drones.findIndex((drone) => drone._id === id);
       if (batteryIndex === -1) return;
-      handleVideoStreamstatus(id,videoStreamStatus);
+      handleVideoStreamstatus(id, videoStreamStatus);
     });
 
     const navbar = document.querySelector(".navbar");
@@ -135,10 +135,19 @@ const Sidebar = ({ drones }) => {
         className="d-flex justify-content-center sidebar pt-2"
       >
         <div className="bg-light " style={{ width: "30vw" }}>
-
           {cleaningDroneList.length !== 0 ? (
             <>
-              <div className="d-flex justify-content-center mt-2 ms-4">
+              <div
+                className="pt-2 bg-light"
+                style={{
+                  position: "fixed",
+                  top: `${navbarHeight}px`,
+                  zIndex: 1,
+                  width: "25vw",
+                  paddingLeft: "7vw",
+                  paddingBottom: "2vh"
+                }}
+              >
                 <BootstrapSwitchButton
                   checked={showInspection}
                   onlabel={<FaCamera />}
@@ -149,7 +158,7 @@ const Sidebar = ({ drones }) => {
                   width={100}
                 />
               </div>
-              <div className="pt-3">
+              <div className="pt-5">
                 {filteredDrones.map((drone, i) => (
                   <div key={drone._id}>
                     <Card
@@ -209,23 +218,22 @@ const Sidebar = ({ drones }) => {
                           )}
                           {drone.videoStreamStatus ? (
                             <Button
-                            variant="dark"
-                            size="sm"
-                            className="mt-1 mb-0"
-                            style={{ width: "90%" }}
-                          >
-                            Show Live Feed
-                          </Button>
-                          
+                              variant="dark"
+                              size="sm"
+                              className="mt-1 mb-0"
+                              style={{ width: "90%" }}
+                            >
+                              Show Live Feed
+                            </Button>
                           ) : (
                             <Button
-                            variant="dark"
-                            size="sm"
-                            className="mt-1 mb-0"
-                            style={{ width: "90%" }}
-                          >
-                            No Live Feed
-                          </Button>
+                              variant="dark"
+                              size="sm"
+                              className="mt-1 mb-0"
+                              style={{ width: "90%" }}
+                            >
+                              No Live Feed
+                            </Button>
                           )}
                         </div>
                       </Card.Body>
@@ -236,13 +244,23 @@ const Sidebar = ({ drones }) => {
             </>
           ) : (
             <>
-              <div className="d-flex justify-content-center mt-2">
+              <div
+                className="pt-2 bg-light"
+                style={{
+                  position: "fixed",
+                  top: `${navbarHeight}px`,
+                  zIndex: 1,
+                  width: "25vw",
+                  paddingLeft: "7vw",
+                  paddingBottom: "2vh"
+                }}
+              >
                 <BootstrapSwitchButton
-                  checked={true}
-                  onlabel={<FaCamera fontSize={20} />}
+                  checked={showInspection}
+                  onlabel={<FaCamera />}
                   offlabel={<FaBroom />}
                   onChange={handleType}
-                  onstyle="outline-info"
+                  onstyle="outline-primary"
                   offstyle="outline-primary"
                   width={100}
                 />
