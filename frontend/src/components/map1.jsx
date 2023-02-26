@@ -23,10 +23,7 @@ function Maap1({ drones }) {
       }
     );
   };
-
-  useEffect(() => {
-    fetchlocation();
-    const socket = io("http://localhost:3000", {
+  const socket = io("http://localhost:3000", {
       transports: ["websocket", "polling", "flashsocket"],
     });
 
@@ -45,10 +42,13 @@ function Maap1({ drones }) {
       console.log(c);
       handleLocationLon(id, location);
     });
-  }, [markerObjs,droneList,drones]);
+
+  useEffect(() => {
+    fetchlocation();
+  }, []);
 
   const renderMarkers = (markers) => {
-    console.log("rendering markers")
+    console.log("rendering markers");
     const newMarkerObjs = markers.map((marker) => {
       return new window.google.maps.Marker({
         position: { lat: marker.location.lat, lng: marker.location.lon },
@@ -62,16 +62,24 @@ function Maap1({ drones }) {
     setMarkerObjs(newMarkerObjs);
   };
 
+  // const removeMarkers = () => {
+  //   console.log("remove markers");
+  //   setMarkerObjs((prevMarkerObjs) => {
+  //     prevMarkerObjs.forEach((marker) => {
+  //       marker.setMap(null);
+  //     });
+  //   });
+  //   setMarkerObjs([]);
+  // };
   const removeMarkers = () => {
-    console.log("remove markers")
+    console.log("remove markers");
     setMarkerObjs((prevMarkerObjs) => {
       prevMarkerObjs.forEach((marker) => {
         marker.setMap(null);
       });
+      return [];
     });
-    setMarkerObjs([])
   };
-
   const handleLocationLat = (id, location) => {
     let droneListnew = [...droneList];
     droneList.map((drone) => {
@@ -85,9 +93,9 @@ function Maap1({ drones }) {
   };
 
   const handleLocationLon = (id, location) => {
-    console.log(markerObjs)
+    console.log(markerObjs);
     removeMarkers();
-    console.log(markerObjs)
+    console.log(markerObjs);
     let droneListnew = [...drones];
     droneListnew.map((drone) => {
       if (drone._id === id) {
@@ -97,9 +105,9 @@ function Maap1({ drones }) {
     });
     setDroneList(droneListnew);
     setTimeout(() => {
-      console.log("rendering",markerObjs)
+      console.log("rendering", markerObjs);
       renderMarkers(droneListnew);
-      console.log("after",markerObjs)
+      console.log("after", markerObjs);
     }, 10000);
   };
   return (

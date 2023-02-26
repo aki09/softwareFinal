@@ -23,10 +23,6 @@ const droneSchema = new Schema({
         type: Boolean,
         required: true
     },
-    videoStreamStatus:{
-        type: Boolean,
-        required: true
-    },
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User'

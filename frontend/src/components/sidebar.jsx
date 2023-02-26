@@ -51,12 +51,12 @@ const Sidebar = ({ drones }) => {
       handletakeoff(id, takeoff);
     });
 
-    socket.on("videoStreamStatus", (data) => {
-      const { id, videoStreamStatus } = data;
-      const batteryIndex = drones.findIndex((drone) => drone._id === id);
-      if (batteryIndex === -1) return;
-      handleVideoStreamstatus(id, videoStreamStatus);
-    });
+    // socket.on("videoStreamStatus", (data) => {
+    //   const { id, videoStreamStatus } = data;
+    //   const batteryIndex = drones.findIndex((drone) => drone._id === id);
+    //   if (batteryIndex === -1) return;
+    //   handleVideoStreamstatus(id, videoStreamStatus);
+    // });
 
     const navbar = document.querySelector(".navbar");
     setNavbarHeight(navbar.offsetHeight);
@@ -96,19 +96,19 @@ const Sidebar = ({ drones }) => {
       })
     );
   };
-  const handleVideoStreamstatus = (id, videoStreamStatus) => {
-    setDroneList((prevDroneList) =>
-      prevDroneList.map((drone) => {
-        if (drone._id === id) {
-          return {
-            ...drone,
-            videoStreamStatus: videoStreamStatus,
-          };
-        }
-        return drone;
-      })
-    );
-  };
+  // const handleVideoStreamstatus = (id, videoStreamStatus) => {
+  //   setDroneList((prevDroneList) =>
+  //     prevDroneList.map((drone) => {
+  //       if (drone._id === id) {
+  //         return {
+  //           ...drone,
+  //           videoStreamStatus: videoStreamStatus,
+  //         };
+  //       }
+  //       return drone;
+  //     })
+  //   );
+  // };
 
   const handletakeoff = (id, takeoff) => {
     setDroneList((prevDroneList) =>

@@ -96,9 +96,9 @@ mongoose.connect(MONGOURI, { useNewUrlParser: true, useUnifiedTopology: true }, 
       io.emit("battery", { battery: update.battery, id: droneId })
     }
 
-    if (update.videoStreamStatus != undefined) {
-      io.emit("videoStreamStatus", { videoStreamStatus: update.videoStreamStatus, id: droneId })
-    }
+    // if (update.videoStreamStatus != undefined) {
+    //   io.emit("videoStreamStatus", { videoStreamStatus: update.videoStreamStatus, id: droneId })
+    // }
 
     if (update['location.lat'] != undefined) {
       const lat = update['location.lat'];
