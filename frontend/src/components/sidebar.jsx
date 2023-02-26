@@ -123,6 +123,23 @@ const Sidebar = ({ drones }) => {
       })
     );
   };
+  const handleShowLiveFeed = (serialID) => {
+    const semiurl=process.env.DroneVideoURL;
+    const videourl=semiurl+'/' + serialID;
+    console.log(videourl)
+    const url = 'https://www.youtube.com/embed/UTMh-_wh1xE';
+    const newWindow = window.open('', '_blank');
+    newWindow.document.write(`
+      <html>
+        <head>
+          <title>Live Feed</title>
+        </head>
+        <body>
+          <iframe src="${url}" style="width:70%; height:70%; border:none;" autoplay></iframe>
+        </body>
+      </html>
+    `);
+  };
 
   return (
     <>
@@ -216,12 +233,13 @@ const Sidebar = ({ drones }) => {
                               </Button>
                             </Link>
                           )}
-                          {drone.videoStreamStatus ? (
+                          {drone.takeOffStatus ? (
                             <Button
                               variant="dark"
                               size="sm"
                               className="mt-1 mb-0"
                               style={{ width: "90%" }}
+                              onClick={handleShowLiveFeed}
                             >
                               Show Live Feed
                             </Button>

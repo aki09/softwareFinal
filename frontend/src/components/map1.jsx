@@ -48,6 +48,7 @@ function Maap1({ drones }) {
   }, [markerObjs,droneList,drones]);
 
   const renderMarkers = (markers) => {
+    console.log("rendering markers")
     const newMarkerObjs = markers.map((marker) => {
       return new window.google.maps.Marker({
         position: { lat: marker.location.lat, lng: marker.location.lon },
@@ -62,7 +63,7 @@ function Maap1({ drones }) {
   };
 
   const removeMarkers = () => {
-    console.log("rem",c)
+    console.log("remove markers")
     setMarkerObjs((prevMarkerObjs) => {
       prevMarkerObjs.forEach((marker) => {
         marker.setMap(null);
@@ -84,7 +85,9 @@ function Maap1({ drones }) {
   };
 
   const handleLocationLon = (id, location) => {
+    console.log(markerObjs)
     removeMarkers();
+    console.log(markerObjs)
     let droneListnew = [...drones];
     droneListnew.map((drone) => {
       if (drone._id === id) {
@@ -94,7 +97,9 @@ function Maap1({ drones }) {
     });
     setDroneList(droneListnew);
     setTimeout(() => {
+      console.log("rendering",markerObjs)
       renderMarkers(droneListnew);
+      console.log("after",markerObjs)
     }, 10000);
   };
   return (
