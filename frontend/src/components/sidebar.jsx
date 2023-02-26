@@ -51,6 +51,13 @@ const Sidebar = ({ drones }) => {
       handletakeoff(id, takeoff);
     });
 
+    socket.on("videoStreamStatus", (data) => {
+      const { id, videoStreamStatus } = data;
+      const batteryIndex = drones.findIndex((drone) => drone._id === id);
+      if (batteryIndex === -1) return;
+      handleVideoStreamstatus(id,videoStreamStatus);
+    });
+
     const navbar = document.querySelector(".navbar");
     setNavbarHeight(navbar.offsetHeight);
   }, []);
@@ -89,6 +96,20 @@ const Sidebar = ({ drones }) => {
       })
     );
   };
+  const handleVideoStreamstatus = (id, videoStreamStatus) => {
+    setDroneList((prevDroneList) =>
+      prevDroneList.map((drone) => {
+        if (drone._id === id) {
+          return {
+            ...drone,
+            videoStreamStatus: videoStreamStatus,
+          };
+        }
+        return drone;
+      })
+    );
+  };
+
   const handletakeoff = (id, takeoff) => {
     setDroneList((prevDroneList) =>
       prevDroneList.map((drone) => {
@@ -103,19 +124,6 @@ const Sidebar = ({ drones }) => {
     );
   };
 
-  // const showVideoFeed = (id) => {
-  //   setDroneList((prevDroneList) =>
-  //     prevDroneList.map((drone) => {
-  //       if (drone.id === id) {
-  //         return {
-  //           ...drone,
-  //           videoStreamStatus: !drone.videoStreamStatus,
-  //         };
-  //       }
-  //     })
-  //   );
-  // };
-
   return (
     <>
       <div
@@ -127,23 +135,6 @@ const Sidebar = ({ drones }) => {
         className="d-flex justify-content-center sidebar pt-2"
       >
         <div className="bg-light " style={{ width: "30vw" }}>
-          {/* <h3
-            style={{ color: "#333" }}
-            className="d-flex justify-content-center"
-          >
-            DRONES
-          </h3> */}
-          {/* <div className="d-flex justify-content-center mt-2">
-            <BootstrapSwitchButton
-              checked={true}
-              onlabel={<FaCamera fontSize={20} />}
-              offlabel={<FaBroom />}
-              onChange={handleType}
-              onstyle="outline-info"
-              offstyle="outline-primary"
-              width={100}
-            />
-          </div> */}
 
           {cleaningDroneList.length !== 0 ? (
             <>
@@ -216,8 +207,8 @@ const Sidebar = ({ drones }) => {
                               </Button>
                             </Link>
                           )}
-
-                          <Button
+                          {drone.videoStreamStatus ? (
+                            <Button
                             variant="dark"
                             size="sm"
                             className="mt-1 mb-0"
@@ -225,6 +216,17 @@ const Sidebar = ({ drones }) => {
                           >
                             Show Live Feed
                           </Button>
+                          
+                          ) : (
+                            <Button
+                            variant="dark"
+                            size="sm"
+                            className="mt-1 mb-0"
+                            style={{ width: "90%" }}
+                          >
+                            No Live Feed
+                          </Button>
+                          )}
                         </div>
                       </Card.Body>
                     </Card>

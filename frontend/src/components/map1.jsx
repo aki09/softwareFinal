@@ -45,7 +45,7 @@ function Maap1({ drones }) {
       console.log(c);
       handleLocationLon(id, location);
     });
-  }, [markerObjs]);
+  }, [markerObjs,droneList,drones]);
 
   const renderMarkers = (markers) => {
     const newMarkerObjs = markers.map((marker) => {
@@ -62,12 +62,13 @@ function Maap1({ drones }) {
   };
 
   const removeMarkers = () => {
+    console.log("rem",c)
     setMarkerObjs((prevMarkerObjs) => {
       prevMarkerObjs.forEach((marker) => {
         marker.setMap(null);
       });
-      return [];
     });
+    setMarkerObjs([])
   };
 
   const handleLocationLat = (id, location) => {
@@ -84,8 +85,8 @@ function Maap1({ drones }) {
 
   const handleLocationLon = (id, location) => {
     removeMarkers();
-    let droneListnew = [...droneList];
-    droneList.map((drone) => {
+    let droneListnew = [...drones];
+    droneListnew.map((drone) => {
       if (drone._id === id) {
         drone.location = { lat: drone.location.lat, lon: location };
       }
