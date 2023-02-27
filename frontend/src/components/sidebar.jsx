@@ -15,7 +15,12 @@ const styles = {
   },
 };
 
-const Sidebar = ({ drones, showVideoFeed, setShowVideoFeed, updateVideoUrl }) => {
+const Sidebar = ({
+  drones,
+  showVideoFeed,
+  setShowVideoFeed,
+  updateVideoUrl,
+}) => {
   const [navbarHeight, setNavbarHeight] = useState(0);
   const [droneList, setDroneList] = useState(drones);
   const [showCleaning, setShowCleaning] = useState(false);
@@ -339,15 +344,26 @@ const Sidebar = ({ drones, showVideoFeed, setShowVideoFeed, updateVideoUrl }) =>
                                   </Button>
                                 </Link>
                               )}
-
-                              <Button
-                                variant="dark"
-                                size="sm"
-                                className="mt-1 mb-0"
-                                style={{ width: "90%" }}
-                              >
-                                Show Live Feed
-                              </Button>
+                              {drone.takeOffStatus ? (
+                                <Button
+                                  variant="dark"
+                                  size="sm"
+                                  className="mt-1 mb-0"
+                                  style={{ width: "90%" }}
+                                  onClick={() => handleShowLiveFeed(drone._id)}
+                                >
+                                  Show Live Feed
+                                </Button>
+                              ) : (
+                                <Button
+                                  variant="dark"
+                                  size="sm"
+                                  className="mt-1 mb-0"
+                                  style={{ width: "90%" }}
+                                >
+                                  No Live Feed
+                                </Button>
+                              )}
                             </div>
                           </Card.Body>
                         </Card>
