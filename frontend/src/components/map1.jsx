@@ -32,6 +32,7 @@ function Maap1({ drones }) {
       const LocationIndex = drones.findIndex((drone) => drone._id === id);
       if (LocationIndex === -1) return;
       handleLocationLat(id, location);
+      renderMarkers(droneList);
     });
 
     socket.on("locationlon", (data) => {
@@ -39,6 +40,7 @@ function Maap1({ drones }) {
       const LocationIndex = drones.findIndex((drone) => drone._id === id);
       if (LocationIndex === -1) return;
       handleLocationLon(id, location);
+      renderMarkers(droneList);
     });
 
   useEffect(() => {
@@ -59,15 +61,6 @@ function Maap1({ drones }) {
     setMarkerObjs(newMarkerObjs);
   };
 
-  // const removeMarkers = () => {
-  //   console.log("remove markers");
-  //   setMarkerObjs((prevMarkerObjs) => {
-  //     prevMarkerObjs.forEach((marker) => {
-  //       marker.setMap(null);
-  //     });
-  //   });
-  //   setMarkerObjs([]);
-  // };
   const removeMarkers = () => {
     setMarkerObjs((prevMarkerObjs) => {
       prevMarkerObjs.forEach((marker) => {
@@ -77,19 +70,21 @@ function Maap1({ drones }) {
     });
   };
   const handleLocationLat = (id, location) => {
-    let droneListnew = [...droneList];
+    removeMarkers()
+    setMarkerObjs([])
+    let droneListnew = [...drones];
     droneList.map((drone) => {
       if (drone._id === id) {
         drone.location = { lat: location, lon: drone.location.lon };
       }
+      return drone;
     });
-    removeMarkers();
-    //renderMarkers(droneListnew);
     setDroneList(droneListnew);
-  };
+  }
 
   const handleLocationLon = (id, location) => {
     removeMarkers()
+    setMarkerObjs([])
     let droneListnew = [...drones];
     droneListnew.map((drone) => {
       if (drone._id === id) {
@@ -98,11 +93,6 @@ function Maap1({ drones }) {
       return drone;
     });
     setDroneList(droneListnew);
-    setTimeout(() => {
-      console.log("rendering", markerObjs);
-      renderMarkers(droneListnew);
-      console.log("after", markerObjs);
-    }, 10000);
   };
   return (
     <div

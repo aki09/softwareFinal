@@ -69,7 +69,6 @@ const ErrorList = ({ drones }) => {
       style={{ ...styles.mainContent, marginTop: `${navbarHeight + 30}px` }}
       className="d-flex justify-content-center"
     >
-      {console.log(error)}
       <div style={{ width: "70%", overflowY:"scroll" }} className="pt-4 sidebarScroll">
         <Card style={{height: "500px"}}>
           <Card.Title
