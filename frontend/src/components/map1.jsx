@@ -38,8 +38,6 @@ function Maap1({ drones }) {
       const { id, location } = data;
       const LocationIndex = drones.findIndex((drone) => drone._id === id);
       if (LocationIndex === -1) return;
-      c++;
-      console.log(c);
       handleLocationLon(id, location);
     });
 
@@ -48,7 +46,6 @@ function Maap1({ drones }) {
   }, []);
 
   const renderMarkers = (markers) => {
-    console.log("rendering markers");
     const newMarkerObjs = markers.map((marker) => {
       return new window.google.maps.Marker({
         position: { lat: marker.location.lat, lng: marker.location.lon },
@@ -72,7 +69,6 @@ function Maap1({ drones }) {
   //   setMarkerObjs([]);
   // };
   const removeMarkers = () => {
-    console.log("remove markers");
     setMarkerObjs((prevMarkerObjs) => {
       prevMarkerObjs.forEach((marker) => {
         marker.setMap(null);
@@ -93,9 +89,7 @@ function Maap1({ drones }) {
   };
 
   const handleLocationLon = (id, location) => {
-    console.log(markerObjs);
-    removeMarkers();
-    console.log(markerObjs);
+    removeMarkers()
     let droneListnew = [...drones];
     droneListnew.map((drone) => {
       if (drone._id === id) {
@@ -130,7 +124,7 @@ function Maap1({ drones }) {
       </Card>
       <GoogleMapReact
         bootstrapURLKeys={{
-          key: process.env.react_google_maps_api,
+          
           libraries: ["places", "geometry"],
         }}
         yesIWantToUseGoogleMapApiInternals

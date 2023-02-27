@@ -58,7 +58,7 @@ const AdminHome = () => {
     const url = "http://localhost:3000/adm/logout";
     const res = axios.post(url);
     document.cookie = 'access_token=';
-    navigate('/pchia');
+    navigate('/pchia', { replace: true });
   }
   const cleaningDrones = drones.filter((drone) => drone.type === "cleaning");
   const inspectionDrones = drones.filter(

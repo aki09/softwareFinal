@@ -126,9 +126,8 @@ const Sidebar = ({ drones, showVideoFeed, setShowVideoFeed, updateVideoUrl }) =>
   };
 
   const handleShowLiveFeed = (serialID) => {
-    const semiurl = process.env.DroneVideoURL;
+    const semiurl = process.env.REACT_APP_DRONEURL;
     const videourl = semiurl + "/" + serialID;
-    console.log(videourl);
     const url = "https://www.youtube.com/embed/UTMh-_wh1xE";
     setShowVideoFeed(true);
     updateVideoUrl(url);
@@ -244,7 +243,7 @@ const Sidebar = ({ drones, showVideoFeed, setShowVideoFeed, updateVideoUrl }) =>
                               size="sm"
                               className="mt-1 mb-0"
                               style={{ width: "90%" }}
-                              onClick={handleShowLiveFeed}
+                              onClick={() => handleShowLiveFeed(drone._id)}
                             >
                               Show Live Feed
                             </Button>

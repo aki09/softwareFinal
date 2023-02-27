@@ -79,7 +79,7 @@ const Allocation = () => {
     const url = "http://localhost:3000/adm/logout";
     const res = axios.post(url);
     document.cookie = 'access_token=';
-    navigate('/pchia');
+    navigate('/pchia', { replace: true });
   }
   const cookieValue = document.cookie
     .split("; ")
