@@ -45,7 +45,6 @@ exports.settakeoff=async(req,res,next)=>{
 }
 
 exports.takeoffForm = (req, res, next) => {
-    console.log(req.body)
     const drone_id = req.query.droneid;
     const token = req.query.cookieValue;
     const data = jlol.verify(token, "jwtsecretplschange");
@@ -80,48 +79,4 @@ exports.takeoffAndLand = (req, res, next) => {
         });
     })
     res.status(200).send({ message: "Takeoff Successful" });
-}
-
-exports.grid = async (req, res, next) => {
-    var id = req.body.drone_id;
-    var lon_1 = req.body.lon_1;
-    var lat_1 = req.body.lat_1;
-    var lon_2 = req.body.lon_2;
-    var lat_2 = req.body.lat_2;
-    var lon_3 = req.body.lon_3;
-    var lat_3 = req.body.lat_3;
-    var lon_4 = req.body.lon_4;
-    var lat_4 = req.body.lat_4;
-    var lat_ch=req.body.lat_ch;
-    var lon_ch=req.body.lon_ch;
-    var gridCoords = [];
-    gridCoords.push(
-        { lat: lat_1, lng: lon_1 },
-        { lat: lat_2, lng: lon_2 },
-        { lat: lat_3, lng: lon_3 },
-        { lat: lat_4, lng: lon_4 }
-    );
-    let latimin=gridCoords[0].lat
-    let longimin=gridCoords[0].lng
-    for(let i=1;i<4;i++)
-    {
-        latimin=Math.min(latimin,gridCoords[i].lat)
-        longimin=Math.min(longimin,gridCoords[i].lng)
-    }
-    let latimax=gridCoords[0].lat
-    let longimax=gridCoords[0].lng
-    for(let i=1;i<4;i++)
-    {
-        latimax=Math.max(latimax,gridCoords[i].lat)
-        longimax=Math.max(longimax,gridCoords[i].lng)
-    }
-    if(lat_ch==undefined)
-    {
-        lat_ch=0.00005;
-    }
-    if(lon_ch==undefined)
-    {
-        lon_ch=0.0001;
-    }
-    res.render('customer/grid',{drone_id: id,gridCoords:gridCoords,latimax:latimax,longimax:longimax,lat_ch:lat_ch,lon_ch:lon_ch})
 }

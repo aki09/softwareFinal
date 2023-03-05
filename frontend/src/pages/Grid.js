@@ -52,8 +52,8 @@ const FormMap = () => {
     const newMarkers = [...markers];
     const deletedMarker = newMarkers.splice(index, 1)[0];
     setMarkers(newMarkers);
-    removeMarkers();
     removePolygon();
+    removeMarkers();
     renderMarkers(newMarkers);
   };
 

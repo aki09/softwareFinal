@@ -20,8 +20,6 @@ router.get('/form', userdashboard.takeoffForm);
 
 router.post('/form', userdashboard.takeoffAndLand);
 
-router.post('/grid', userdashboard.grid);
-
 router.get('/home', userdashboard.dashboard);
 
 router.get('/settakeoff', userdashboard.settakeoff);

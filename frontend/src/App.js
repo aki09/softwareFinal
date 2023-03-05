@@ -7,9 +7,10 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Login from './pages/userlogin';
 import Register from './pages/useregister';
 import FormMap from './pages/Grid';
-import Adminlogin from './pages/adminlogin'
-import AdminHome from './pages/adminhome'
+import Adminlogin from './pages/admin/adminlogin'
+import AdminHome from './pages/admin/adminhome'
 import Allocation from './pages/Allocation';
+import NotFound from './pages/404';
 
 function App() {
   const [ user, setLoginUser] = useState({})
@@ -24,6 +25,7 @@ function App() {
         <Route exact path="/pchiahome" element={<AdminHome/>} />
         <Route exact path="/report" element={<InspectionReport/>} />
         <Route exact path="/pchiaallocation" element={<Allocation/>} />
+        <Route path="*" element={<NotFound/>} />
       </Routes>
     </BrowserRouter>
   );
