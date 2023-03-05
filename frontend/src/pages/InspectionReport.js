@@ -24,6 +24,7 @@ const InspectionReport = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState([]);
+  const [isLoadingreport, setIsLoadingreport] = useState(false);
 
   const navigate = useNavigate();
   const handleSignout=(event)=>{
@@ -57,6 +58,21 @@ const InspectionReport = () => {
     const navbar = document.querySelector(".navbar");
     setNavbarHeight(navbar.offsetHeight);
   }, []);
+
+  const handlereport = async () => {
+    setIsLoadingreport(true);
+    const url = "http://localhost:3000/generate";
+    try {
+      await axios.post(url, { cookieValue: cookieValue });
+      // handle the response data here
+    } catch (error) {
+      // handle any errors here
+    } finally {
+      setTimeout(() => {
+        setIsLoadingreport(false);
+      }, 2000);
+    }
+  };
 
   const cookieValue = document.cookie
     .split("; ")
@@ -101,11 +117,11 @@ const InspectionReport = () => {
           className="pt-5"
         >
           <div className="ms-5 me-5">
-            <div className="ms-5 me-5">
-              <h1 className="ms-2 pb-2" style={{ color: "#2a265f" }}>
+            <div className="ms-5 me-5 d-flex flex-column justify-content-center align-items-center">
+              <h1 className="ms-5 pb-2" style={{ color: "#2a265f" }}>
                 POST INSPECTION REPORT
               </h1>
-              <h5 className="ms-2" style={{ color: "#333" }}>
+              <h5 className="ms-5" style={{ color: "#333" }}>
                 Detailed result of Thermal inspection and solar panel cleaning
               </h5>
             </div>
@@ -114,9 +130,9 @@ const InspectionReport = () => {
                 className="d-flex justify-content-between container"
                 style={{ borderBottom: "1px solid #ccc" }}
               >
-                <h2 className="ms-2 mt-5 me-5">All Reports</h2>
-                <a style={{ cursor: "pointer", fontSize: "43px", color: "#2a265f" }}>
-                  <BiRefresh className="mb-0 pb-0 mt-5" />
+                <h2 className="ms-1 mt-5 me-5">All Reports</h2>
+                <a className="mt-5" style={{ cursor: "pointer", fontSize: "28px", color: "#2a265f",textDecoration: "none" }} onClick={handlereport}>
+                  {isLoadingreport ? "Loading..." : <BiRefresh className="mb-0 pb-0 mt-5" />}
                 </a>
               </div>
               <Row>
