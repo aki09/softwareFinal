@@ -24,6 +24,7 @@ const FormMap = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [markerObjs, setMarkerObjs] = useState([]);
+  const [polygon, setPolygon] = useState(null);
 
   useEffect(() => {
     const navbar = document.querySelector(".navbar");
@@ -52,6 +53,7 @@ const FormMap = () => {
     const deletedMarker = newMarkers.splice(index, 1)[0];
     setMarkers(newMarkers);
     removeMarkers();
+    removePolygon();
     renderMarkers(newMarkers);
   };
 
@@ -63,13 +65,50 @@ const FormMap = () => {
       });
     });
     setMarkerObjs([...markerObjs, ...newMarkerObjs]);
+    if (markers.length === 4) {
+      const sortedMarkers = sortMarkersAnticlockwise(markers);
+      const polygon = new window.google.maps.Polygon({
+        paths: sortedMarkers,
+        strokeColor: "#FF0000",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: "#FF0000",
+        fillOpacity: 0.35,
+        map: mapRef.current,
+      });
+      setPolygon(polygon);
+    } else {
+      setPolygon(null);
+    }
   };
+
+  function sortMarkersAnticlockwise(markers) {
+    const centroid = markers.reduce(function(acc, curr) {
+      return [acc[0] + curr.lat, acc[1] + curr.lng];
+    }, [0, 0]);
+    centroid[0] /= markers.length;
+    centroid[1] /= markers.length;
+    const sortedMarkers = markers.sort(function(a, b) {
+      const angleA = Math.atan2(a.lng - centroid[1], a.lat - centroid[0]);
+      const angleB = Math.atan2(b.lng - centroid[1], b.lat - centroid[0]);
+      return angleA - angleB;
+    });
+  
+    return sortedMarkers;
+  }
 
   const removeMarkers = () => {
     markerObjs.forEach((marker) => {
       marker.setMap(null);
     });
     setMarkerObjs([]);
+  };
+
+  const removePolygon = () => {
+    if (polygon) {
+      polygon.setMap(null);
+      setPolygon(null);
+    }
   };
 
   const fetchlocation = () => {
