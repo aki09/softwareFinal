@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import logo from "../assets/logo.png";
+import logo from "../../assets/logo.png";
 import {
   Container,
   Navbar,
@@ -45,7 +45,7 @@ const Allocation = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("http://localhost:3000/adm/adduser", {
+        const response = await axios.get(process.env.REACT_APP_SERVER+"/adm/adduser", {
           params: { cookieValue: cookieValue, droneid: id },
         });
         setUsers(response.data.users);
@@ -63,7 +63,7 @@ const Allocation = () => {
 
   const handleadduser = async (id, droneid, event) => {
     event.preventDefault();
-    const url = "http://localhost:3000/adm/allotdrone";
+    const url = process.env.REACT_APP_SERVER+"/adm/allotdrone";
     const res = await axios.get(url, {
       params: { userid: id, droneid: droneid },
     });
@@ -76,7 +76,7 @@ const Allocation = () => {
   
   const handleSignout=(event)=>{
     event.preventDefault();
-    const url = "http://localhost:3000/adm/logout";
+    const url = process.env.REACT_APP_SERVER+"/adm/logout";
     const res = axios.post(url);
     document.cookie = 'access_token=';
     navigate('/pchia', { replace: true });

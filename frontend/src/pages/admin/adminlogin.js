@@ -18,7 +18,7 @@ const Adminlogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:3000/adm/login";
+      const url = process.env.REACT_APP_SERVER+"/adm/login";
       const res = await axios.post(url, user);
       const cookie = res.data.access;
       setCookieValue(cookie);

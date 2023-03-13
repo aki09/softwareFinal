@@ -18,7 +18,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:3000/login";
+      const url = process.env.REACT_APP_SERVER+"/login";
       const res = await axios.post(url, user);
       const cookie = res.data.access;
       setCookieValue(cookie);

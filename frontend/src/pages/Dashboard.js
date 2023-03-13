@@ -31,7 +31,7 @@ const Dashboard = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("http://localhost:3000/home", {
+        const response = await axios.get(process.env.REACT_APP_SERVER+"/home", {
           params: { cookieValue: cookieValue },
         });
         document.cookie = `access_token=${cookieValue}`;

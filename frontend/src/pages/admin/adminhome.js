@@ -34,7 +34,7 @@ const AdminHome = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("http://localhost:3000/adm/home", {
+        const response = await axios.get(process.env.REACT_APP_SERVER+"/adm/home", {
           params: { cookieValue: cookieValue },
         });
         document.cookie = `access_token=${cookieValue}`;
@@ -55,7 +55,7 @@ const AdminHome = () => {
 
   const handleSignout=(event)=>{
     event.preventDefault();
-    const url = "http://localhost:3000/adm/logout";
+    const url = process.env.REACT_APP_SERVER+"/adm/logout";
     const res = axios.post(url);
     document.cookie = 'access_token=';
     navigate('/pchia', { replace: true });
@@ -66,7 +66,7 @@ const AdminHome = () => {
   );
   const handleremoveuser = async (id, event) => {
     event.preventDefault();
-    const url = "http://localhost:3000/adm/removeuser";
+    const url = process.env.REACT_APP_SERVER+"/adm/removeuser";
     const res = await axios.get(url, {
       params: { droneid: id },
     });

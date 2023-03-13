@@ -29,19 +29,18 @@ const InspectionReport = () => {
   const navigate = useNavigate();
   const handleSignout=(event)=>{
     event.preventDefault();
-    const url = "http://localhost:3000/logout";
+    const url = process.env.REACT_APP_SERVER+"/logout";
     const res =axios.post(url);
     document.cookie = 'access_token=';
     navigate('/login', { replace: true });
   }
 
   useEffect(() => {
-
     const fetchData = async() => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          "http://localhost:3000/inspectionReport",
+          process.env.REACT_APP_SERVER+"/inspectionReport",
           {
             params: { cookieValue: cookieValue },
           }
@@ -61,7 +60,7 @@ const InspectionReport = () => {
 
   const handlereport = async () => {
     setIsLoadingreport(true);
-    const url = "http://localhost:3000/generate";
+    const url = process.env.REACT_APP_SERVER+"/generate";
     try {
       await axios.post(url, { cookieValue: cookieValue });
       // handle the response data here
@@ -131,7 +130,7 @@ const InspectionReport = () => {
                 style={{ borderBottom: "1px solid #ccc" }}
               >
                 <h2 className="ms-1 mt-5 me-5">All Reports</h2>
-                <a className="mt-5" style={{ cursor: "pointer", fontSize: "28px", color: "#2a265f",textDecoration: "none" }} onClick={handlereport}>
+                <a className="mb-0 pb-0 mt-5" style={{ cursor: "pointer", fontSize: "28px", color: "#2a265f",textDecoration: "none" }} onClick={handlereport}>
                   {isLoadingreport ? "Loading..." : <BiRefresh className="mb-0 pb-0 mt-5" />}
                 </a>
               </div>

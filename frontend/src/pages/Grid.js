@@ -41,7 +41,7 @@ const FormMap = () => {
   
   const handleSignout=(event)=>{
     event.preventDefault();
-    const url = "http://localhost:3000/logout";
+    const url = process.env.REACT_APP_SERVER+"/logout";
     const res =axios.post(url);
     document.cookie = 'access_token=';
     navigate('/login', { replace: true });
@@ -128,7 +128,7 @@ const FormMap = () => {
   const handlemarkerset = (id, event) => {
     event.preventDefault();
     if (markers.length == 4) {
-      const url = "http://localhost:3000/form";
+      const url = process.env.REACT_APP_SERVER+"/form";
       const res = axios.post(url, {
         id: id,
         markers: markers, // some value
@@ -148,7 +148,7 @@ const FormMap = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("http://localhost:3000/form", {
+        const response = await axios.get(process.env.REACT_APP_SERVER+"/form", {
           params: { cookieValue: cookieValue, droneid: id },
         });
         setIsLoading(false);

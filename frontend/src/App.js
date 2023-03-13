@@ -9,7 +9,7 @@ import Register from './pages/useregister';
 import FormMap from './pages/Grid';
 import Adminlogin from './pages/admin/adminlogin'
 import AdminHome from './pages/admin/adminhome'
-import Allocation from './pages/Allocation';
+import Allocation from './pages/admin/Allocation';
 import NotFound from './pages/404';
 
 function App() {
