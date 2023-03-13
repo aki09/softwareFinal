@@ -8,6 +8,7 @@ import Sidebar from "../components/sidebar";
 import Topbar from "../components/topbar";
 import { useNavigate } from "react-router-dom";
 import { AiFillCloseSquare } from "react-icons/ai";
+import Cookies from 'js-cookie';
 
 const styles = {
   mainContent: {
@@ -16,25 +17,28 @@ const styles = {
 };
 
 const Dashboard = () => {
+  const isLoggedIn = !!Cookies.get('auth-token');
   const [user, setUser] = useState([]);
   const [drones, setDrones] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showVideoFeed, setShowVideoFeed] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
-  const location = useLocation();
-  const cookieValue = location.state.cookieValue;
   const [navbarHeight, setNavbarHeight] = useState(0);
   const navigate = useNavigate();
+  let cookie = ""; 
 
   useEffect(() => {
+    cookie = Cookies.get('auth-token');
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
     const fetchData = async () => {
       setIsLoading(true);
       try {
         const response = await axios.get(process.env.REACT_APP_SERVER+"/home", {
-          params: { cookieValue: cookieValue },
+          params: { cookieValue: cookie },
         });
-        document.cookie = `access_token=${cookieValue}`;
         let c = 1;
         let col1 = ["red", "blue", "green", "orange", "pink"];
         let col2 = [
@@ -66,16 +70,24 @@ const Dashboard = () => {
         setUser(response.data.user);
         setDrones(response.data.drones);
         setIsLoading(false);
-      } catch (err) {
-        setError(err);
-        setIsLoading(false);
+      } catch (error) {
+        if (
+          error.response &&
+          error.response.status >= 400 &&
+          error.response.status <= 500
+        ) {
+          setError(error.response.data.message);
+        } else {
+          setError("Something went wrong. Please try again later.");
+        }
       }
+      setIsLoading(false);
     };
     fetchData();
 
     const navbar = document.querySelector(".navbar");
     setNavbarHeight(navbar.offsetHeight);
-  }, []);
+  }, [isLoggedIn]);
 
   function updateVideoUrl(url) {
     setVideoUrl(url);
@@ -85,14 +97,6 @@ const Dashboard = () => {
     setShowVideoFeed(false);
     setVideoUrl("");
   }
-
-  // const handleCloseLiveFeed = () => {
-  //   console.log("close");
-  //   setShowVideoFeed(false);
-  //   setVideoUrl("");
-  //   console.log(videoUrl);
-  //   console.log(showVideoFeed);
-  // };
 
   return drones.length ? (
     <>
@@ -138,7 +142,7 @@ const Dashboard = () => {
                   </div>
                 </Col>
                 <Col md={5}>
-                  <Maap1 drones={drones} cookieValue={cookieValue} />
+                  <Maap1 drones={drones}/>
                 </Col>
                 <Col md={4}>
                   <ErrorList drones={drones} />
@@ -168,7 +172,7 @@ const Dashboard = () => {
                 </div>
               </Col>
               <Col md={5}>
-                <Maap1 drones={drones} cookieValue={cookieValue} />
+                <Maap1 drones={drones} />
               </Col>
               <Col md={4}>
                 <ErrorList drones={drones} />

@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { loadFull } from "tsparticles";
 import Particles from "react-tsparticles";
 import logo from "../assets/logo2.png";
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const [error, setError] = useState("");
   const [user, setuser] = useState({ username: "", password: "" });
-  const [cookieValue, setCookieValue] = useState(null);
   const navigate = useNavigate();
 
   const handleChange = ({ currentTarget: input }) => {
@@ -21,10 +21,8 @@ const Login = () => {
       const url = process.env.REACT_APP_SERVER+"/login";
       const res = await axios.post(url, user);
       const cookie = res.data.access;
-      setCookieValue(cookie);
-      navigate("/home", {
-        state: { user: res.data.user, cookieValue: res.data.access },
-      });
+      Cookies.set('auth-token', cookie);
+      navigate("/home");
     } catch (error) {
       if (
         error.response &&

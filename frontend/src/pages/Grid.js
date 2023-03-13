@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Container, Navbar, Nav, Button } from "react-bootstrap";
 import logo from "../assets/logo.png";
 import { MdOutlineClear } from "react-icons/md";
+import Cookies from "js-cookie";
 
 const styles = {
   mainContent: {
@@ -25,6 +26,7 @@ const FormMap = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [markerObjs, setMarkerObjs] = useState([]);
   const [polygon, setPolygon] = useState(null);
+  let cookieValue=""
 
   useEffect(() => {
     const navbar = document.querySelector(".navbar");
@@ -41,10 +43,10 @@ const FormMap = () => {
   
   const handleSignout=(event)=>{
     event.preventDefault();
-    const url = process.env.REACT_APP_SERVER+"/logout";
-    const res =axios.post(url);
-    document.cookie = 'access_token=';
-    navigate('/login', { replace: true });
+    Cookies.remove("auth-token");
+    navigate("/login", {
+      state: { logout: true },
+    });
   };
 
   const handleMarkerDelete = (index, event) => {
@@ -139,12 +141,8 @@ const FormMap = () => {
     }
   };
 
-  const cookieValue = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("access_token="))
-    ?.split("=")[1];
-
   useEffect(() => {
+    cookieValue = Cookies.get('auth-token');
     const fetchData = async () => {
       setIsLoading(true);
       try {

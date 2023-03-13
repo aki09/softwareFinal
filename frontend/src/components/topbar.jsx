@@ -10,6 +10,7 @@ import { RiAdminFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Topbar = ({ user }) => {
   const navigate = useNavigate();
@@ -25,10 +26,9 @@ const Topbar = ({ user }) => {
   };
   const handleSignout = (event) => {
     event.preventDefault();
-    const url = "http://localhost:3000/logout";
-    const res = axios.post(url);
-    document.cookie = "access_token=";
-    navigate("/login", { replace: true });
+    console.log("signout");
+    Cookies.remove("auth-token");
+    navigate("/login");
   };
 
   return (

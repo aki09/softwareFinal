@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BiRefresh } from "react-icons/bi";
+import Cookies from "js-cookie";
 
 const styles = {
   mainContent: {
@@ -25,17 +26,19 @@ const InspectionReport = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState([]);
   const [isLoadingreport, setIsLoadingreport] = useState(false);
+  let cookieValue = "";
 
   const navigate = useNavigate();
   const handleSignout=(event)=>{
     event.preventDefault();
-    const url = process.env.REACT_APP_SERVER+"/logout";
-    const res =axios.post(url);
-    document.cookie = 'access_token=';
-    navigate('/login', { replace: true });
+    Cookies.remove("auth-token");
+    navigate("/login", {
+      state: { logout: true },
+    });
   }
 
   useEffect(() => {
+    cookieValue = Cookies.get('auth-token');
     const fetchData = async() => {
       setIsLoading(true);
       try {
@@ -72,11 +75,6 @@ const InspectionReport = () => {
       }, 2000);
     }
   };
-
-  const cookieValue = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("access_token="))
-    ?.split("=")[1];
 
   return (
     <>

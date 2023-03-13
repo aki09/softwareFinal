@@ -21,11 +21,7 @@ exports.postLogin = (req, res, next) => {
                 .then((doMatch) => {
                     if (doMatch) {
                         const accessToken = createTokens(user);
-                        res.cookie("access-token", accessToken, {
-                            maxAge: 60 * 60 * 24 * 30 * 1000,
-                            httpOnly: true,
-                        })
-                        res.status(200).send({ user: user,access:accessToken, message: "logged in successfully" });
+                        res.status(200).send({ access:accessToken, message: "logged in successfully" });
                     }
                 })
                 .catch((err) => {
