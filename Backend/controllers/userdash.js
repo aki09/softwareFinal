@@ -12,7 +12,7 @@ exports.dashboard = async (req, res, next) => {
       return res.status(401).send("Authentication token missing");
     }
     try {
-      const data = jlol.verify(token, "jwtsecretplschange");
+      const data = jlol.verify(token, process.env.usersecret);
       const uid = data.id;
       let user = await User.findOne({ _id: uid });
       let drones = await Drone.find({ userId: uid });
@@ -53,11 +53,18 @@ exports.settakeoff=async(req,res,next)=>{
 exports.takeoffForm = (req, res, next) => {
     const drone_id = req.query.droneid;
     const token = req.query.cookieValue;
-    const data = jlol.verify(token, "jwtsecretplschange");
-    uid=data.id;
-    if(uid)
-    {
-        res.status(200).send({ message: " Successful" });
+    if (!token) {
+      return res.status(401).send("Authentication token missing");
+    }
+    try {
+      const data = jlol.verify(token, process.env.usersecret);
+      uid=data.id;
+      if(uid)
+      {
+          res.status(200).send({ message: " Successful" });
+      }
+    } catch (error) {
+      res.status(401).send("Invalid authentication token");
     }
     
 }

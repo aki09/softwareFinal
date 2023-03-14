@@ -12,19 +12,29 @@ dotenv.config();
 
 exports.inspectionReport = async (req, res, next) => {
     const token = req.query.cookieValue;
-    const data = jlol.verify(token, "jwtsecretplschange");
-    uid=data.id;
-    let user = await User.findOne({_id:uid});
-    companyn=user.company;
-    var userReports = await firebase.getPDF(companyn)
-    var numberOfFiles = userReports.length;
-    res.status(200).send({ report:userReports,reportcount:numberOfFiles });
+    if (!token) {
+        return res.status(401).send("Authentication token missing");
+    }
+    try {
+        const data = jlol.verify(token, process.env.usersecret);
+        uid=data.id;
+        let user = await User.findOne({_id:uid});
+        companyn=user.company;
+        var userReports = await firebase.getPDF(companyn)
+        var numberOfFiles = userReports.length;
+        res.status(200).send({ report:userReports,reportcount:numberOfFiles });
+    }catch (error) {
+        res.status(401).send("Invalid authentication token");
+    }
 }
 
 exports.generatePDF = async (req, res, next) => {
     var template = fs.readFileSync(path.join(__dirname, '../utils/inspection.docx'));
     const token = req.body.cookieValue;
-    const data = jlol.verify(token, "jwtsecretplschange");
+    if (!token) {
+        return res.status(401).send("Authentication token missing");
+    }
+    const data = jlol.verify(token, process.env.usersecret);
     uid=data.id;
     let user = await User.findOne({_id:uid});
     res.send({message:"success"})

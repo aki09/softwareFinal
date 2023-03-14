@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import logo from "../assets/logo2.png";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
   const [user, setuser] = useState({
@@ -16,35 +17,93 @@ const Register = () => {
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [passwordError, setPasswordError] = useState("");
+  const [cPasswordError, setcPasswordError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showOTP, setShowOTP] = useState(false);
+  const [OTP, setOTP] = useState("");
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleOTPChange = ({ currentTarget: input  }) => {
+    const { value } = input;
+    setOTP(value);
+  };
+
+  const handleOTPSubmit = async (e) => {
+    e.preventDefault();
+    // try {
+    //   const url = process.env.REACT_APP_SERVER + "/verifyOTP";
+    //   const { success } = await axios.post(url, { otp });
+    //   if (success) {
+    //     navigate("/login");
+    //   } else {
+    //     setError("Invalid OTP");
+    //   }
+    // } catch (error) {
+    //   setError("An error occurred while verifying OTP. Please try again later.");
+    // }
+  };
 
   const handleChange = ({ currentTarget: input }) => {
-    setuser({ ...user, [input.name]: input.value });
+    const { name, value } = input;
+    let errors = {};
+
+    if (name === "password") {
+      if (value.length < 8) {
+        errors.password = "Password must contain at least 8 characters";
+      }
+      if (!/[A-Z]/.test(value)) {
+        errors.password = "Password must contain at least one uppercase letter";
+      }
+      if (!/[a-z]/.test(value)) {
+        errors.password = "Password must contain at least one lowercase letter";
+      }
+      if (!/[0-9]/.test(value)) {
+        errors.password = "Password must contain at least one digit";
+      }
+      if (!/[\W_]/.test(value)) {
+        errors.password =
+          "Password must contain at least one special character";
+      }
+    }
+    if (name === "confirmPassword") {
+      if (value !== user.password) {
+        setcPasswordError("Passwords do not match");
+      } else {
+        setcPasswordError(null);
+      }
+    }
+
+    setuser({ ...user, [name]: value });
+    setPasswordError(errors.password);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const url = process.env.REACT_APP_SERVER+"/signup";
-      const { user: res } = await axios.post(url, user);
-      navigate("/login");
-      console.log(res.message);
-    } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
-        setError(error.response.data.message);
-      }
-    }
+    if (passwordError || cPasswordError) {
+      return;
+    }  
+    setShowOTP(true);
+    // try {
+    //   const url = process.env.REACT_APP_SERVER + "/signup";
+    //   const { user: res } = await axios.post(url, user);
+    //   navigate("/login");
+    //   console.log(res.message)
+    // } catch (error) {
+    //   if (
+    //     error.response &&
+    //     error.response.status >= 400 &&
+    //     error.response.status <= 500
+    //   ) {
+    //     setError(error.response.data.message);
+    //   }
+    // }
   };
 
   const particlesInit = async (main) => {
-    console.log(main);
-
-    // you can initialize the tsParticles instance (main) here, adding custom shapes or presets
-    // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-    // starting from v2 you can add only the features you need reducing the bundle size
     await loadFull(main);
   };
 
@@ -170,12 +229,31 @@ const Register = () => {
         </div>
         <div className="login-box">
           <h2>Sign Up</h2>
+          {showOTP ? (
+          <form onSubmit={handleOTPSubmit}>
+            <div className="user-box">
+              <input
+                type="number"
+                name="otp"
+                required
+                onChange={handleOTPChange}
+                value={OTP}
+              />
+              <label>Enter OTP</label>
+            </div>
+
+            <button type="submit" className="submit-btn">
+              Submit
+            </button>
+          </form>
+        ) : (
           <form onSubmit={handleSubmit}>
             <div className="user-box">
               <input
                 type="text"
                 name="username"
                 required
+                minLength={5}
                 onChange={handleChange}
                 value={user.username}
               />
@@ -203,13 +281,26 @@ const Register = () => {
             </div>
             <div className="user-box">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 required
+                minLength={8}
                 onChange={handleChange}
                 value={user.password}
               />
               <label>Password</label>
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={handleTogglePassword}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+              {passwordError && (
+                <div className="small text-danger mt-1" role="alert">
+                  {passwordError}
+                </div>
+              )}
             </div>
             <div className="user-box">
               <input
@@ -220,11 +311,21 @@ const Register = () => {
                 value={user.confirmPassword}
               />
               <label>Confirm Password</label>
+              {cPasswordError && (
+                <div className="small text-danger mt-1">{cPasswordError}</div>
+              )}
             </div>
 
-            <button type="submit">Submit</button>
+            <button type="submit" className="submit-btn">
+              Submit
+            </button>
           </form>
-
+        )}
+        {error && (
+          <div className="small text-danger mt-3" role="alert">
+            {error}
+          </div>
+        )}
           <div className="mt-5 text-light">
             One of us?{" "}
             <span className="p-2">

@@ -9,9 +9,6 @@ const userdashboard=require("../controllers/userdash");
 router.post('/login', userController.postLogin);
 
 router.post('/signup', userController.postSignup);
-
-router.post('/logout', userController.postLogout);
-
 router.post('/generate', userinspection.generatePDF);
 
 router.get('/inspectionReport',userinspection.inspectionReport);

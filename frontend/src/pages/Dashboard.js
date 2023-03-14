@@ -32,6 +32,8 @@ const Dashboard = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
+        const navbar = document.querySelector(".navbar");
+        setNavbarHeight(navbar.offsetHeight);
         const response = await axios.get(process.env.REACT_APP_SERVER+"/home", {
           params: { cookieValue: cookie },
         });
@@ -85,9 +87,6 @@ const Dashboard = () => {
     } else {
       navigate('/login');
     }
-
-    // const navbar = document.querySelector(".navbar");
-    // setNavbarHeight(navbar.offsetHeight);
   }, []);
 
   function updateVideoUrl(url) {

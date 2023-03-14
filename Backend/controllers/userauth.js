@@ -90,8 +90,3 @@ exports.postSignup = (req, res, next) => {
         return res.redirect("/signup");
     }
 };
-
-exports.postLogout = (req, res, next) => {
-    res.clearCookie("access-token");
-};
-

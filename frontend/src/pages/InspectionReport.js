@@ -26,9 +26,11 @@ const InspectionReport = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState([]);
   const [isLoadingreport, setIsLoadingreport] = useState(false);
-  let cookieValue = "";
+  let cookie = Cookies.get('auth-token'); 
+  const isLoggedIn = !!Cookies.get('auth-token');
 
   const navigate = useNavigate();
+
   const handleSignout=(event)=>{
     event.preventDefault();
     const authToken = Cookies.get("auth-token");
@@ -41,34 +43,45 @@ const InspectionReport = () => {
   }
 
   useEffect(() => {
-    cookieValue = Cookies.get('auth-token');
     const fetchData = async() => {
       setIsLoading(true);
       try {
         const response = await axios.get(
           process.env.REACT_APP_SERVER+"/inspectionReport",
           {
-            params: { cookieValue: cookieValue },
+            params: { cookieValue: cookie },
           }
         );
         setFiles(response.data.report);
         setIsLoading(false);
-      } catch (err) {
-        
-        setError(err);
-        setIsLoading(false);
+      } catch (error) {
+        if (
+          error.response &&
+          error.response.status >= 400 &&
+          error.response.status <= 500
+        ) {
+          setError(error.response.data.message);
+          navigate('/login');
+        } else {
+          setError("Something went wrong. Please try again later.");
+        }
       }
+      setIsLoading(false);
     };
-    fetchData();
-    const navbar = document.querySelector(".navbar");
-    setNavbarHeight(navbar.offsetHeight);
-  }, []);
+    if (cookie) {
+      fetchData();
+    } else {
+      navigate('/login');
+    }
+    // const navbar = document.querySelector(".navbar");
+    // setNavbarHeight(navbar.offsetHeight);
+  }, [navigate]);
 
   const handlereport = async () => {
     setIsLoadingreport(true);
     const url = process.env.REACT_APP_SERVER+"/generate";
     try {
-      await axios.post(url, { cookieValue: cookieValue });
+      await axios.post(url, { cookieValue: cookie });
       // handle the response data here
     } catch (error) {
       // handle any errors here
@@ -79,84 +92,89 @@ const InspectionReport = () => {
     }
   };
 
-  return (
-    <>
-      <Navbar expand="lg" fixed="top" className="navbar bg-light mt-3">
-        <Container>
-          <Navbar.Brand>
-            <img src={logo} alt="" height="50" width="160" />
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse
-            id="basic-navbar-nav"
-            className="justify-content-end"
+  if(!isLoggedIn)
+  {
+    navigate('/login');
+  }else{
+    return (
+      <>
+        <Navbar expand="lg" fixed="top" className="navbar bg-light mt-3">
+          <Container>
+            <Navbar.Brand>
+              <img src={logo} alt="" height="50" width="160" />
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse
+              id="basic-navbar-nav"
+              className="justify-content-end"
+            >
+              <Nav className="mr-auto">
+                <Button
+                  variant="outline-secondary"
+                  size="md"
+                  className="me-1"
+                  onClick={() => navigate(-1)}
+                >
+                  Dashboard
+                </Button>
+                <Button variant="outline-secondary" size="md" onClick={(event) => handleSignout(event)}>
+                  Sign Out
+                </Button>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+        <Container fluid className="bg-light">
+          <div
+            style={{
+              ...styles.mainContent,
+              marginTop: `${navbarHeight}px`,
+              height: "100vh",
+            }}
+            className="pt-5"
           >
-            <Nav className="mr-auto">
-              <Button
-                variant="outline-secondary"
-                size="md"
-                className="me-1"
-                onClick={() => navigate(-1)}
-              >
-                Dashboard
-              </Button>
-              <Button variant="outline-secondary" size="md" onClick={(event) => handleSignout(event)}>
-                Sign Out
-              </Button>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-      <Container fluid className="bg-light">
-        <div
-          style={{
-            ...styles.mainContent,
-            marginTop: `${navbarHeight}px`,
-            height: "100vh",
-          }}
-          className="pt-5"
-        >
-          <div className="ms-5 me-5">
-            <div className="ms-5 me-5 d-flex flex-column justify-content-center align-items-center">
-              <h1 className="ms-5 pb-2" style={{ color: "#2a265f" }}>
-                POST INSPECTION REPORT
-              </h1>
-              <h5 className="ms-5" style={{ color: "#333" }}>
-                Detailed result of Thermal inspection and solar panel cleaning
-              </h5>
-            </div>
-            <Container>
-              <div
-                className="d-flex justify-content-between container"
-                style={{ borderBottom: "1px solid #ccc" }}
-              >
-                <h2 className="ms-1 mt-5 me-5">All Reports</h2>
-                <a className="mb-0 pb-0 mt-5" style={{ cursor: "pointer", fontSize: "28px", color: "#2a265f",textDecoration: "none" }} onClick={handlereport}>
-                  {isLoadingreport ? "Loading..." : <BiRefresh className="mb-0 pb-0 mt-5" />}
-                </a>
+            <div className="ms-5 me-5">
+              <div className="ms-5 me-5 d-flex flex-column justify-content-center align-items-center">
+                <h1 className="ms-5 pb-2" style={{ color: "#2a265f" }}>
+                  POST INSPECTION REPORT
+                </h1>
+                <h5 className="ms-5" style={{ color: "#333" }}>
+                  Detailed result of Thermal inspection and solar panel cleaning
+                </h5>
               </div>
-              <Row>
-                {files.map((file, index) => (
-                  <Col md={3} key={index} className="mt-4">
-                    <Card variant="light">
-                      <Card.Body>
-                        <Button variant="outline-secondary" href={file}>
-                          Download PDF
-                        </Button>
-                      </Card.Body>
-                      <Card.Footer>
-                        <small className="text-muted">Report-{index + 1}</small>
-                      </Card.Footer>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-            </Container>
+              <Container>
+                <div
+                  className="d-flex justify-content-between container"
+                  style={{ borderBottom: "1px solid #ccc" }}
+                >
+                  <h2 className="ms-1 mt-5 me-5">All Reports</h2>
+                  <a className="mb-0 pb-0 mt-5" style={{ cursor: "pointer", fontSize: "28px", color: "#2a265f",textDecoration: "none" }} onClick={handlereport}>
+                    {isLoadingreport ? "Loading..." : <BiRefresh className="mb-0 pb-0 mt-5" />}
+                  </a>
+                </div>
+                <Row>
+                  {files.map((file, index) => (
+                    <Col md={3} key={index} className="mt-4">
+                      <Card variant="light">
+                        <Card.Body>
+                          <Button variant="outline-secondary" href={file}>
+                            Download PDF
+                          </Button>
+                        </Card.Body>
+                        <Card.Footer>
+                          <small className="text-muted">Report-{index + 1}</small>
+                        </Card.Footer>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              </Container>
+            </div>
           </div>
-        </div>
-      </Container>
-    </>
-  );
+        </Container>
+      </>
+    );
+  }
 };
 
 export default InspectionReport;
