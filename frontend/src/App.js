@@ -21,7 +21,7 @@ function App() {
     <Routes>
         <Route exact path="/login" element={isLoggedIn ? <Navigate to="/home" /> : <Login />} />
         <Route exact path="/signup" element={isLoggedIn ? <Navigate to="/home" /> : <Register />} />
-        <Route exact path="/home" element={<Dashboard/>}/>
+        <Route exact path="/home" element={<Dashboard/>} />
         <Route exact path="/grid" element={<FormMap/>} />
         <Route exact path="/report" element={<InspectionReport/>} />
 

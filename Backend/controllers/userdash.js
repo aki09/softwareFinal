@@ -6,15 +6,21 @@ const dotenv = require('dotenv');
 const fs = require('fs');
 dotenv.config();
 
-exports.dashboard = async(req, res, next) => {
+exports.dashboard = async (req, res, next) => {
     const token = req.query.cookieValue;
-    //const token = req.cookies["access-token"];
-    const data = jlol.verify(token, "jwtsecretplschange");
-    uid=data.id;
-    let user = await User.findOne({_id:uid});
-    let drones=await Drone.find({ userId: uid })
-    res.status(200).send({ user:user,drones:drones });
-}
+    if (!token) {
+      return res.status(401).send("Authentication token missing");
+    }
+    try {
+      const data = jlol.verify(token, "jwtsecretplschange");
+      const uid = data.id;
+      let user = await User.findOne({ _id: uid });
+      let drones = await Drone.find({ userId: uid });
+      res.status(200).send({ user: user, drones: drones });
+    } catch (error) {
+      res.status(401).send("Invalid authentication token");
+    }
+  };
 
 exports.set = async (req, res, next) => {
     const { droneid, userid, eror } = req.body;

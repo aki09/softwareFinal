@@ -12,25 +12,29 @@ exports.postLogin = (req, res, next) => {
     const userName = req.body.username;
     const password = req.body.password;
     User.findOne({ userName: userName })
-        .then((user) => {
-            // if (!user) {
-            //     return res.redirect("/login");
-            // }
-            bcrypt
-                .compare(password, user.password)
-                .then((doMatch) => {
-                    if (doMatch) {
-                        const accessToken = createTokens(user);
-                        res.status(200).send({ access:accessToken, message: "logged in successfully" });
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    res.redirect("/login");
-                });
-        })
-        .catch((err) => console.log(err));
-};
+      .then((user) => {
+        if (!user) {
+          return res.status(400).send({ message: "No such user exists" });
+        }
+        bcrypt.compare(password, user.password)
+          .then((doMatch) => {
+            if (doMatch) {
+              const accessToken = createTokens(user);
+              res.status(200).send({ access: accessToken, message: "Logged in successfully" });
+            } else {
+              res.status(401).send({ message: "Wrong password" });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(500).send({ message: "Internal server error" });
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({ message: "Internal server error" });
+      });
+  };
 
 exports.postSignup = (req, res, next) => {
     const userName = req.body.username;

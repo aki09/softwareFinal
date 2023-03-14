@@ -32,6 +32,7 @@ body {
 
 .login-box .user-box {
   position: relative;
+  
 }
 
 .login-box .user-box input {
@@ -64,8 +65,20 @@ body {
   color: #03e9f4;
   font-size: 12px;
 }
+.password-toggle {
+  position: absolute;
+  top: 35%;
+  right: 0;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #fff;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 20px;
+}
 
-.login-box form button {
+.login-box form .submit-btn{
   position: relative;
   display: inline-block;
   padding: 10px 20px;

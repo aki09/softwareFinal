@@ -5,23 +5,31 @@ import { useNavigate } from "react-router-dom";
 import { loadFull } from "tsparticles";
 import Particles from "react-tsparticles";
 import logo from "../assets/logo2.png";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import Alert from "react-bootstrap/Alert";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [error, setError] = useState("");
   const [user, setuser] = useState({ username: "", password: "" });
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = ({ currentTarget: input }) => {
     setuser({ ...user, [input.name]: input.value });
   };
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = process.env.REACT_APP_SERVER+"/login";
+      const url = process.env.REACT_APP_SERVER + "/login";
       const res = await axios.post(url, user);
       const cookie = res.data.access;
-      Cookies.set('auth-token', cookie);
+      Cookies.set("auth-token", cookie);
       navigate("/home");
     } catch (error) {
       if (
@@ -30,16 +38,13 @@ const Login = () => {
         error.response.status <= 500
       ) {
         setError(error.response.data.message);
+      } else {
+        setError("Something went wrong. Please try again later.");
       }
     }
   };
 
   const particlesInit = async (main) => {
-    console.log(main);
-
-    // you can initialize the tsParticles instance (main) here, adding custom shapes or presets
-    // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-    // starting from v2 you can add only the features you need reducing the bundle size
     await loadFull(main);
   };
 
@@ -152,6 +157,12 @@ const Login = () => {
         </div>
         <div className="login-box">
           <h2>Login</h2>
+          {error && (
+            <div className="my-4">
+              <Alert variant="danger">{error}</Alert>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit}>
             <div className="user-box">
               <input
@@ -165,16 +176,23 @@ const Login = () => {
             </div>
             <div className="user-box">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 required
                 onChange={handleChange}
                 value={user.password}
               />
               <label>Password</label>
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={handleTogglePassword}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
 
-            <button type="submit">Submit</button>
+            <button  type="submit" className="submit-btn">Submit</button>
           </form>
 
           <div className="mt-5 text-light">
