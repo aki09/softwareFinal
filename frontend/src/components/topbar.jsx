@@ -26,9 +26,13 @@ const Topbar = ({ user }) => {
   };
   const handleSignout = (event) => {
     event.preventDefault();
-    console.log("signout");
-    Cookies.remove("auth-token");
-    navigate("/login");
+    const authToken = Cookies.get("auth-token");
+    if (authToken) {
+      Cookies.remove("auth-token");
+      if (!Cookies.get("auth-token")) {
+        navigate("/login");
+      }
+    }
   };
 
   return (

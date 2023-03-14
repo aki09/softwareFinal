@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import GoogleMapReact from "google-map-react";
 import "../styles/Form/Form.css";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate,Redirect } from "react-router-dom";
 import { Container, Navbar, Nav, Button } from "react-bootstrap";
 import logo from "../assets/logo.png";
 import { MdOutlineClear } from "react-icons/md";
@@ -43,10 +43,13 @@ const FormMap = () => {
   
   const handleSignout=(event)=>{
     event.preventDefault();
-    Cookies.remove("auth-token");
-    navigate("/login", {
-      state: { logout: true },
-    });
+    const authToken = Cookies.get("auth-token");
+    if (authToken) {
+      Cookies.remove("auth-token");
+      if (!Cookies.get("auth-token")) {
+        navigate("/login");
+      }
+    }
   };
 
   const handleMarkerDelete = (index, event) => {

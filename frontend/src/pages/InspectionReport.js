@@ -31,10 +31,13 @@ const InspectionReport = () => {
   const navigate = useNavigate();
   const handleSignout=(event)=>{
     event.preventDefault();
-    Cookies.remove("auth-token");
-    navigate("/login", {
-      state: { logout: true },
-    });
+    const authToken = Cookies.get("auth-token");
+    if (authToken) {
+      Cookies.remove("auth-token");
+      if (!Cookies.get("auth-token")) {
+        navigate("/login");
+      }
+    }
   }
 
   useEffect(() => {

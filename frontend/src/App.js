@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React,{ useState } from 'react';
+import React,{ useState ,useEffect} from 'react';
 import './App.css';
 import Dashboard from './pages/Dashboard';
 import InspectionReport from './pages/InspectionReport';
@@ -14,12 +14,11 @@ import NotFound from './pages/404';
 import Cookies from 'js-cookie';
 import { Navigate,useNavigate } from "react-router-dom";
 
-
 function App() {
   const isLoggedIn = !!Cookies.get('auth-token');
   return (
     <BrowserRouter>
-      <Routes>
+    <Routes>
         <Route exact path="/login" element={isLoggedIn ? <Navigate to="/home" /> : <Login />} />
         <Route exact path="/signup" element={isLoggedIn ? <Navigate to="/home" /> : <Register />} />
         <Route exact path="/home" element={<Dashboard/>}/>

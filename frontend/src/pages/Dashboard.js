@@ -17,7 +17,6 @@ const styles = {
 };
 
 const Dashboard = () => {
-  const isLoggedIn = !!Cookies.get('auth-token');
   const [user, setUser] = useState([]);
   const [drones, setDrones] = useState([]);
   const [error, setError] = useState(null);
@@ -30,9 +29,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     cookie = Cookies.get('auth-token');
-    if (!isLoggedIn) {
-      navigate("/login");
-    }
     const fetchData = async () => {
       setIsLoading(true);
       try {
@@ -87,7 +83,7 @@ const Dashboard = () => {
 
     const navbar = document.querySelector(".navbar");
     setNavbarHeight(navbar.offsetHeight);
-  }, [isLoggedIn]);
+  }, []);
 
   function updateVideoUrl(url) {
     setVideoUrl(url);
