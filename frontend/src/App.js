@@ -1,12 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React,{ useState ,useEffect} from 'react';
 import './App.css';
-import Dashboard from './pages/Dashboard';
-import InspectionReport from './pages/InspectionReport';
+import Dashboard from './pages/user/Dashboard';
+import InspectionReport from './pages/user/InspectionReport';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import Login from './pages/userlogin';
-import Register from './pages/useregister';
-import FormMap from './pages/Grid';
+import Login from './pages/user/userlogin';
+import Register from './pages/user/useregister';
+import FormMap from './pages/user/Grid';
 import Adminlogin from './pages/admin/adminlogin'
 import AdminHome from './pages/admin/adminhome'
 import Allocation from './pages/admin/Allocation';

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "../styles/Auth/Login.css";
+import "../../styles/Auth/Login.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { loadFull } from "tsparticles";
 import Particles from "react-tsparticles";
-import logo from "../assets/logo2.png";
+import logo from "../../assets/logo2.png";
 import Cookies from "js-cookie";
 import Alert from "react-bootstrap/Alert";
 import { FaEye, FaEyeSlash } from "react-icons/fa";

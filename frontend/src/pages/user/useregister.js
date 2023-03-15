@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
-import logo from "../assets/logo2.png";
+import logo from "../../assets/logo2.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
