@@ -29,7 +29,7 @@ exports.inspectionReport = async (req, res, next) => {
 }
 
 exports.generatePDF = async (req, res, next) => {
-    var template = fs.readFileSync(path.join(__dirname, '../utils/inspection.docx'));
+    var template = fs.readFileSync(path.join(__dirname, '../../utils/inspection.docx'));
     const token = req.body.cookieValue;
     if (!token) {
         return res.status(401).send("Authentication token missing");

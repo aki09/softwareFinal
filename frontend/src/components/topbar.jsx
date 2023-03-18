@@ -40,7 +40,9 @@ const Topbar = ({ user }) => {
       <Navbar bg="light" expand="lg" fixed="top" className="navbar">
         <Container>
           <Navbar.Brand>
-            <img src={logo} alt="" height="50" width="160" />
+            <Link to="/home">
+              <img src={logo} alt="" height="50" width="160" />
+            </Link>
           </Navbar.Brand>
 
           <Navbar.Text>

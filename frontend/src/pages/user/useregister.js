@@ -16,6 +16,7 @@ const Register = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const [passwordError, setPasswordError] = useState("");
   const [cPasswordError, setcPasswordError] = useState("");
@@ -34,17 +35,33 @@ const Register = () => {
 
   const handleOTPSubmit = async (e) => {
     e.preventDefault();
-    // try {
-    //   const url = process.env.REACT_APP_SERVER + "/verifyOTP";
-    //   const { success } = await axios.post(url, { otp });
+    try {
+      const url = process.env.REACT_APP_SERVER + "/verifyotp";
+      const response = await axios.post(url, { email:user.email,otp:OTP });
+      console.log(response)
     //   if (success) {
-    //     navigate("/login");
+    //     console.log("done")
     //   } else {
+    //     setMessage(null)
     //     setError("Invalid OTP");
     //   }
-    // } catch (error) {
-    //   setError("An error occurred while verifying OTP. Please try again later.");
-    // }
+    } catch (error) {
+      setMessage(null)
+      setError("An error occurred while verifying OTP. Please try again later.");
+    }
+  };
+
+  const handleResendOtp = async (e) => {
+    e.preventDefault();
+    try {
+      const url = process.env.REACT_APP_SERVER + "/resendotp";
+      const response = await axios.post(url, { email:user.email });
+      setMessage(response.data.message);
+      setError(null);
+    } catch (error) {
+      setMessage(null)
+      setError(error.response.data.error);
+    }
   };
 
   const handleChange = ({ currentTarget: input }) => {
@@ -87,6 +104,14 @@ const Register = () => {
       return;
     }  
     setShowOTP(true);
+    try {
+      const url = process.env.REACT_APP_SERVER + "/sendotp";
+      const response = await axios.post(url, { email:user.email });
+      setMessage(response.data.message);
+      setError(null);
+    } catch (error) {
+      setError(error.response.data.error);
+    }
     // try {
     //   const url = process.env.REACT_APP_SERVER + "/signup";
     //   const { user: res } = await axios.post(url, user);
@@ -230,21 +255,34 @@ const Register = () => {
         <div className="login-box">
           <h2>Sign Up</h2>
           {showOTP ? (
-          <form onSubmit={handleOTPSubmit}>
+          <form>
             <div className="user-box">
               <input
-                type="number"
+                type="string"
                 name="otp"
-                required
                 onChange={handleOTPChange}
                 value={OTP}
               />
               <label>Enter OTP</label>
             </div>
-
-            <button type="submit" className="submit-btn">
+            <button onClick={handleResendOtp} className="submit-btn">
+              Resend OTP
+            </button>
+            <button onClick={handleOTPSubmit} className="submit-btn">
               Submit
             </button>
+            <br/>
+            <br/>
+            {message && (
+              <div className="alert alert-success" role="alert">
+                {message}
+              </div>
+            )}
+            {error && (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
           </form>
         ) : (
           <form onSubmit={handleSubmit}>
@@ -319,12 +357,12 @@ const Register = () => {
             <button type="submit" className="submit-btn">
               Submit
             </button>
-          </form>
-        )}
-        {error && (
+            {error && (
           <div className="small text-danger mt-3" role="alert">
             {error}
           </div>
+        )}
+          </form>
         )}
           <div className="mt-5 text-light">
             One of us?{" "}

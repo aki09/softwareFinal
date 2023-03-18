@@ -23,4 +23,10 @@ router.get('/settakeoff', userdashboard.settakeoff);
 
 router.post('/set', userdashboard.set);
 
+router.post('/verifyotp',userController.verifyotp);
+
+router.post('/resendotp',userController.resendotp);
+
+router.post('/sendotp',userController.sendotp);
+
 module.exports = router;

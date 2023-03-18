@@ -10,7 +10,7 @@ import {
   Nav,
 } from "react-bootstrap";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import { BiRefresh } from "react-icons/bi";
 import Cookies from "js-cookie";
 
@@ -100,9 +100,11 @@ const InspectionReport = () => {
       <>
         <Navbar expand="lg" fixed="top" className="navbar bg-light mt-3">
           <Container>
-            <Navbar.Brand>
+          <Navbar.Brand>
+            <Link to="/home">
               <img src={logo} alt="" height="50" width="160" />
-            </Navbar.Brand>
+            </Link>
+          </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse
               id="basic-navbar-nav"

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import GoogleMapReact from "google-map-react";
 import "../../styles/Form/Form.css";
 import axios from "axios";
-import { useLocation, useNavigate,Redirect } from "react-router-dom";
+import { useLocation, useNavigate,Link} from "react-router-dom";
 import { Container, Navbar, Nav, Button } from "react-bootstrap";
 import logo from "../../assets/logo.png";
 import { MdOutlineClear } from "react-icons/md";
@@ -181,9 +181,11 @@ const FormMap = () => {
       <>
         <Navbar expand="lg" fixed="top" className="navbar bg-light">
           <Container>
-            <Navbar.Brand>
+          <Navbar.Brand>
+            <Link to="/home">
               <img src={logo} alt="" height="50" width="160" />
-            </Navbar.Brand>
+            </Link>
+          </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse
               id="basic-navbar-nav"
