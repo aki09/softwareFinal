@@ -168,10 +168,10 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      setShowOTP(true);
       try {
         const url = process.env.REACT_APP_SERVER + "/sendotp";
-        const response = await axios.post(url, { email: user.email });
+        const response = await axios.post(url, { email: user.email,username:user.username });
+        setShowOTP(true);
         setMessage(response.data.message);
         setError(null);
       } catch (error) {
@@ -346,6 +346,7 @@ const Register = () => {
                 minLength={8}
                 onChange={handleChange}
                 value={user.password}
+                autoComplete="on"
               />
               <label>Password</label>
               <button
@@ -368,6 +369,7 @@ const Register = () => {
                 required
                 onChange={handleChange}
                 value={user.confirmPassword}
+
               />
               <label>Confirm Password</label>
             </div>

@@ -181,7 +181,7 @@ const Login = () => {
                 required
                 onChange={handleChange}
                 value={user.password}
-                autocomplete="on"
+                autoComplete="on"
               />
               <label>Password</label>
               <button

@@ -46,7 +46,7 @@ exports.postSignup = async (req, res) => {
 
   try {
 
-    const userExists = await User.findOne({ username });
+    const userExists = await User.findOne({ userName: username});
     if (userExists) {
       return res.status(400).json({ error: "User already exists" });
     }
@@ -95,14 +95,13 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.sendotp = async(req, res) => {
-  const email = req.body.email;
+  const { email, username } = req.body;
   if (!email) {
     return res.status(400).json({ error: "Email is required" });
   }
-  const userExists = await User.findOne({ username });
-
+  const userExists = await User.findOne({ userName:username });
     if (userExists) {
-      return res.status(400).send({ message: "User already exists" });
+      return res.status(400).json({ error: "Username already exists. Enter a new one" });
     }
   const otp = otpGenerator.generate(6, {
     upperCase: false,
@@ -141,36 +140,9 @@ exports.resendotp = async (req, res) => {
     return res.status(400).json({ error: "Email is required" });
   }
   try {
-    let otp = await Otp.findOne({ email });
+    let otp = await Otp.findOne({ email:email });
   
     if (!otp) {
-      const newOtp = otpGenerator.generate(6, {
-        upperCase: false,
-        specialChars: false,
-      });
-      const newExpiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
-      const newOtpObj = new Otp({ email, otp: newOtp, expiresAt: newExpiresAt });
-      try {
-        await newOtpObj.save();
-        const mailOptions = {
-          from: process.env.gmailuser,
-          to: email,
-          subject: `Welcome to Flynovate`,
-          text: `Your new OTP is ${newOtp}. This OTP will expire in 5 minutes.`,
-        };
-        transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {
-            return res.status(500).json({ error: "Error resending OTP" });
-          }
-          res.json({ message: "New OTP sent successfully" });
-        });
-      } catch (err) {
-        console.log(err);
-        return res.status(500).json({ error: "Error resending OTP" });
-      }
-    }
-    if(!otp)
-    {
       const newOtp = otpGenerator.generate(6, {
         upperCase: false,
         specialChars: false,
@@ -246,12 +218,11 @@ exports.resendotp = async (req, res) => {
 exports.verifyotp = async (req, res) => {
   const { email, otp } = req.body;
   try {
-    const otpDoc = await Otp.findOne({ email });
+    const otpDoc = await Otp.findOne({ email:email });
     if (!otpDoc) {
       return res.status(400).json({ error: "No OTP sent to this email" });
     }
     if (Date.now() > otpDoc.expiresAt) {
-      await otpDoc.remove();
       return res
         .status(400)
         .json({ error: "OTP expired, please request a new one" });
