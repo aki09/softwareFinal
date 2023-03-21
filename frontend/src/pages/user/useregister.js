@@ -16,10 +16,9 @@ const Register = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const [passwordError, setPasswordError] = useState("");
-  const [cPasswordError, setcPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [OTP, setOTP] = useState("");
@@ -28,26 +27,57 @@ const Register = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleOTPChange = ({ currentTarget: input  }) => {
+  const handleOTPChange = ({ currentTarget: input }) => {
     const { value } = input;
     setOTP(value);
   };
 
   const handleOTPSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const url = process.env.REACT_APP_SERVER + "/verifyotp";
-      const response = await axios.post(url, { email:user.email,otp:OTP });
-      console.log(response)
-    //   if (success) {
-    //     console.log("done")
-    //   } else {
-    //     setMessage(null)
-    //     setError("Invalid OTP");
-    //   }
-    } catch (error) {
+    if(OTP!="" && OTP.length==6)
+    {
+      setError(null)
       setMessage(null)
-      setError("An error occurred while verifying OTP. Please try again later.");
+      try{
+        const url = process.env.REACT_APP_SERVER + "/verifyotp";
+        const response = await axios.post(url, { email: user.email,otp:OTP });
+        if (response.status === 200) {
+          try{
+            const signurl = process.env.REACT_APP_SERVER + "/signup";
+            const res = await axios.post(signurl, {
+              username: user.username,
+              company: user.company,
+              email: user.email,
+              password: user.password,
+            });
+            if (res.status === 200) {
+              setMessage(res.data.message);
+              navigate("/login");
+            }
+
+          }catch (error) {
+            if (
+              error.response &&
+              error.response.status >= 400 &&
+              error.response.status <= 500
+            ) {
+              setError(error.response.data.error);
+            }
+          }
+        }
+        
+      }catch (error) {
+        if (
+          error.response &&
+          error.response.status >= 400 &&
+          error.response.status <= 500
+        ) {
+          setError(error.response.data.error);
+        }
+      }
+    }else{
+      setError("Please Enter a valid OTP ");
+      return;
     }
   };
 
@@ -55,12 +85,17 @@ const Register = () => {
     e.preventDefault();
     try {
       const url = process.env.REACT_APP_SERVER + "/resendotp";
-      const response = await axios.post(url, { email:user.email });
+      const response = await axios.post(url, { email: user.email });
       setMessage(response.data.message);
       setError(null);
     } catch (error) {
-      setMessage(null)
-      setError(error.response.data.error);
+      if (
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status <= 500
+      ) {
+        setError(error.response.data.error);
+      }
     }
   };
 
@@ -86,46 +121,63 @@ const Register = () => {
           "Password must contain at least one special character";
       }
     }
-    if (name === "confirmPassword") {
-      if (value !== user.password) {
-        setcPasswordError("Passwords do not match");
-      } else {
-        setcPasswordError(null);
-      }
-    }
 
     setuser({ ...user, [name]: value });
     setPasswordError(errors.password);
   };
 
+  const validateForm = () => {
+    let isValid = true;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (user.username === "" || user.username.length < 5) {
+      isValid = false;
+      setError("Username must be at least 5 characters long.");
+    } else {
+      setError("");
+    }
+
+    if (user.email === "" || !emailRegex.test(user.email)) {
+      isValid = false;
+      setError("Please enter a valid email address.");
+    } else {
+      setError("");
+    }
+
+    if (
+      user.username === "" ||
+      user.company === "" ||
+      user.email === "" ||
+      user.password === "" ||
+      user.confirmPassword === ""
+    ) {
+      isValid = false;
+      setError("All fields are required.");
+    } else {
+      setError("");
+    }
+    if (user.password !== user.confirmPassword) {
+      isValid = false;
+      setError("Passwords do not match.");
+    } else {
+      setError("");
+    }
+    return isValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (passwordError || cPasswordError) {
-      return;
-    }  
-    setShowOTP(true);
-    try {
-      const url = process.env.REACT_APP_SERVER + "/sendotp";
-      const response = await axios.post(url, { email:user.email });
-      setMessage(response.data.message);
-      setError(null);
-    } catch (error) {
-      setError(error.response.data.error);
+    if (validateForm()) {
+      setShowOTP(true);
+      try {
+        const url = process.env.REACT_APP_SERVER + "/sendotp";
+        const response = await axios.post(url, { email: user.email });
+        setMessage(response.data.message);
+        setError(null);
+      } catch (error) {
+        setError(error.response.data.error);
+      }
     }
-    // try {
-    //   const url = process.env.REACT_APP_SERVER + "/signup";
-    //   const { user: res } = await axios.post(url, user);
-    //   navigate("/login");
-    //   console.log(res.message)
-    // } catch (error) {
-    //   if (
-    //     error.response &&
-    //     error.response.status >= 400 &&
-    //     error.response.status <= 500
-    //   ) {
-    //     setError(error.response.data.message);
-    //   }
-    // }
   };
 
   const particlesInit = async (main) => {
@@ -254,38 +306,7 @@ const Register = () => {
         </div>
         <div className="login-box">
           <h2>Sign Up</h2>
-          {showOTP ? (
           <form>
-            <div className="user-box">
-              <input
-                type="string"
-                name="otp"
-                onChange={handleOTPChange}
-                value={OTP}
-              />
-              <label>Enter OTP</label>
-            </div>
-            <button onClick={handleResendOtp} className="submit-btn">
-              Resend OTP
-            </button>
-            <button onClick={handleOTPSubmit} className="submit-btn">
-              Submit
-            </button>
-            <br/>
-            <br/>
-            {message && (
-              <div className="alert alert-success" role="alert">
-                {message}
-              </div>
-            )}
-            {error && (
-              <div className="alert alert-danger" role="alert">
-                {error}
-              </div>
-            )}
-          </form>
-        ) : (
-          <form onSubmit={handleSubmit}>
             <div className="user-box">
               <input
                 type="text"
@@ -349,21 +370,48 @@ const Register = () => {
                 value={user.confirmPassword}
               />
               <label>Confirm Password</label>
-              {cPasswordError && (
-                <div className="small text-danger mt-1">{cPasswordError}</div>
-              )}
             </div>
 
-            <button type="submit" className="submit-btn">
-              Submit
-            </button>
+            {showOTP ? (
+              <form>
+                <div className="user-box">
+                  <input
+                    type="string"
+                    name="otp"
+                    onChange={handleOTPChange}
+                    value={OTP}
+                  />
+                  <label>Enter OTP</label>
+                </div>
+                <button onClick={handleResendOtp} className="submit-btn">
+                  Resend OTP
+                </button>
+                <button onClick={handleOTPSubmit} className="submit-btn">
+                  Submit
+                </button>
+                <br />
+                <br />
+                {message && (
+                  <div className="alert alert-success" role="alert">
+                    {message}
+                  </div>
+                )}
+              </form>
+            ) : (
+              <button
+                type="submit"
+                className="submit-btn"
+                onClick={handleSubmit}
+              >
+                Submit
+              </button>
+            )}
             {error && (
-          <div className="small text-danger mt-3" role="alert">
-            {error}
-          </div>
-        )}
+              <div className="medium text-danger mt-3" role="alert">
+                {error}
+              </div>
+            )}
           </form>
-        )}
           <div className="mt-5 text-light">
             One of us?{" "}
             <span className="p-2">

@@ -29,65 +29,69 @@ const Dashboard = () => {
   const isLoggedIn = !!Cookies.get('auth-token');
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const navbar = document.querySelector(".navbar");
-        setNavbarHeight(navbar.offsetHeight);
-        const response = await axios.get(process.env.REACT_APP_SERVER+"/home", {
-          params: { cookieValue: cookie },
-        });
-        let c = 1;
-        let col1 = ["red", "blue", "green", "orange", "pink"];
-        let col2 = [
-          "yellow-dot",
-          "blue-dot",
-          "green-dot",
-          "ltblue-dot",
-          "orange-dot",
-        ];
-        let col3 = ["red", "blue", "green", "orange", "pink"];
-        let col4 = ["yellow", "blue", "green", "ltblue", "orange"];
-        for (let i = 0; i < response.data.drones.length; i++) {
-          if (response.data.drones[i].type == "inspection") {
-            response.data.drones[i].name = "Drone " + c;
-            response.data.drones[i].colormap = col1[c - 1];
-            response.data.drones[i].color = col3[c - 1];
-            c++;
-          }
-        }
-        c = 1;
-        for (let i = 0; i < response.data.drones.length; i++) {
-          if (response.data.drones[i].type == "cleaning") {
-            response.data.drones[i].name = "Drone " + c;
-            response.data.drones[i].colormap = col2[c - 1];
-            response.data.drones[i].color = col4[c - 1];
-            c++;
-          }
-        }
-        setUser(response.data.user);
-        setDrones(response.data.drones);
-        setIsLoading(false);
-      } catch (error) {
-        if (
-          error.response &&
-          error.response.status >= 400 &&
-          error.response.status <= 500
-        ) {
-          setError(error.response.data.message);
-          navigate('/login');
-        } else {
-          setError("Something went wrong. Please try again later.");
-        }
-      }
-      setIsLoading(false);
-    };
     if (cookie) {
       fetchData();
     } else {
-      navigate('/login');
+      setTimeout(() => {
+        navigate('/login');
+      }, 0);
     }
-  }, []);
+  }, [cookie, navigate]);
+
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const navbar = document.querySelector(".navbar");
+      setNavbarHeight(navbar.offsetHeight);
+      const response = await axios.get(process.env.REACT_APP_SERVER+"/home", {
+        params: { cookieValue: cookie },
+      });
+      let c = 1;
+      let col1 = ["red", "blue", "green", "orange", "pink"];
+      let col2 = [
+        "yellow-dot",
+        "blue-dot",
+        "green-dot",
+        "ltblue-dot",
+        "orange-dot",
+      ];
+      let col3 = ["red", "blue", "green", "orange", "pink"];
+      let col4 = ["yellow", "blue", "green", "ltblue", "orange"];
+      for (let i = 0; i < response.data.drones.length; i++) {
+        if (response.data.drones[i].type == "inspection") {
+          response.data.drones[i].name = "Drone " + c;
+          response.data.drones[i].colormap = col1[c - 1];
+          response.data.drones[i].color = col3[c - 1];
+          c++;
+        }
+      }
+      c = 1;
+      for (let i = 0; i < response.data.drones.length; i++) {
+        if (response.data.drones[i].type == "cleaning") {
+          response.data.drones[i].name = "Drone " + c;
+          response.data.drones[i].colormap = col2[c - 1];
+          response.data.drones[i].color = col4[c - 1];
+          c++;
+        }
+      }
+      setUser(response.data.user);
+      setDrones(response.data.drones);
+      setIsLoading(false);
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status <= 500
+      ) {
+        setError(error.response.data.message);
+        navigate('/login');
+      } else {
+        setError("Something went wrong. Please try again later.");
+      }
+    }
+    setIsLoading(false);
+  };
 
   function updateVideoUrl(url) {
     setVideoUrl(url);

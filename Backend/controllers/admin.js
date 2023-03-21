@@ -101,7 +101,6 @@ exports.postSignup = (req, res, next) => {
                     })
                     .then((result) => {
                         console.log("acha")
-                        res.redirect("/adminlogin");
                     })
                     .catch(err => {
                         console.log(err);

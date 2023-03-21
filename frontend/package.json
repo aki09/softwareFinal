@@ -24,6 +24,7 @@
     "socket.io-client": "^4.6.0",
     "styled-components": "^5.3.6",
     "tsparticles": "^2.9.3",
+    "uglify-js": "^3.17.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
