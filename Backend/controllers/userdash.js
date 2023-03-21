@@ -72,6 +72,7 @@ exports.takeoffForm = (req, res, next) => {
 exports.takeoffAndLand = (req, res, next) => {
     var id = req.body.id;
     var markers=req.body.markers;
+    var arrayDist=req.body.arrayDist;
     var gridCoords = [];
     gridCoords.push(
         { lat: markers[0].lat, lng: markers[0].lng },
@@ -88,6 +89,7 @@ exports.takeoffAndLand = (req, res, next) => {
             { lat: markers[3].lat, lon: markers[3].lng }
         );
         drone.takeOffStatus = true;
+        drone.arrayDist=arrayDist;
         drone.save().then((result) => {
         });
     })

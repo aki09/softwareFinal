@@ -22,9 +22,10 @@ const FormMap = () => {
   const [currentLocation, setCurrentLocation] = useState({});
   const [markers, setMarkers] = useState([]);
   const mapRef = useRef(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [markerObjs, setMarkerObjs] = useState([]);
+  const [arrayDist,setarrayDist]=useState("")
   const [polygon, setPolygon] = useState(null);
   let cookie = Cookies.get('auth-token'); 
   const isLoggedIn = !!Cookies.get('auth-token');
@@ -103,6 +104,11 @@ const FormMap = () => {
     return sortedMarkers;
   }
 
+  const handledistanceChange = ({ currentTarget: input }) => {
+    const { value } = input;
+    setarrayDist(value);
+  };
+
   const removeMarkers = () => {
     markerObjs.forEach((marker) => {
       marker.setMap(null);
@@ -133,11 +139,23 @@ const FormMap = () => {
   };
   const handlemarkerset = (id, event) => {
     event.preventDefault();
-    if (markers.length == 4) {
+    if(arrayDist.length==0)
+    {
+      console.log("helo")
+      setError("Please Enter the distance between arrays");
+      return 0;
+    }
+    if(arrayDist<1)
+    {
+      setError("Distance between arrays cannot be less than 1");
+      return;
+    }
+    if (markers.length == 4 & arrayDist!="") {
       const url = process.env.REACT_APP_SERVER+"/form";
       const res = axios.post(url, {
         id: id,
-        markers: markers, // some value
+        markers: markers,
+        arrayDist:arrayDist,
       });
       navigate('/home')
     }
@@ -385,6 +403,27 @@ const FormMap = () => {
                     <MdOutlineClear fontSize={13} />
                   </button>
                 </div>
+              </div>
+              <div className="form-group">
+                <div>
+                  <label>Distance between Arrays in metres</label>
+                </div>
+                <div className="form-row">
+                  <input
+                    type="number"
+                    name="arrayDist"
+                    className="input-text"
+                    min="1"
+                    onChange={handledistanceChange}
+                    value={arrayDist}
+                    required
+                  />
+                </div>
+                {error && (
+              <div className="medium text-danger mt-3" role="alert">
+                {error}
+              </div>
+            )}
               </div>
               <div className="form-row-last">
                 <button

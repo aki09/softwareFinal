@@ -27,6 +27,9 @@ const droneSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    arrayDist:{
+        type:Number
+    },
     move: {
         type: String,
     },

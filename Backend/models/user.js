@@ -19,6 +19,9 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    arrayDist:{
+        type:Number
+    },
     drones: [
         {
             droneId: { type: Schema.Types.ObjectId, ref: 'Drone', required: true }
