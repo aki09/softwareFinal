@@ -2,7 +2,7 @@ const User = require("../models/user");
 const Drone = require('../models/drone');
 const { createReport } = require('docx-templates');
 const jlol = require("jsonwebtoken");
-const firebase = require('../firebase')
+const aws=require("../awsfinal")
 const dotenv = require('dotenv');
 const path = require('path');
 const axios = require('axios');
@@ -19,8 +19,8 @@ exports.inspectionReport = async (req, res, next) => {
         const data = jlol.verify(token, process.env.usersecret);
         uid=data.id;
         let user = await User.findOne({_id:uid});
-        companyn=user.company;
-        var userReports = await firebase.getPDF(companyn)
+        companyn=user._id;
+        var userReports = await aws.getPDF(companyn)
         var numberOfFiles = userReports.length;
         res.status(200).send({ report:userReports,reportcount:numberOfFiles });
     }catch (error) {
