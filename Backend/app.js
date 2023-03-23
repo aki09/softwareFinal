@@ -13,7 +13,6 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 const cookieParser = require("cookie-parser");
-const firebase = require('./firebase').initialize()
 
 app.use(express.json())
 app.use(bodyParser.json());

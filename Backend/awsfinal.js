@@ -11,8 +11,8 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const s3 = new S3Client({
-  accessKeyId: "AKIATLAOEO6AE3ZHGYX4",
-  secretAccessKey: "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",
+  accessKeyId: process.env.accessKeyId,
+  secretAccessKey: process.env.secretAccessKey,
   region: "ap-south-1",
   signatureVersion: "v4",
 });
@@ -95,9 +95,9 @@ exports.uploadPDF = async (filename, id) => {
 }
 
 exports.deleteiamges=async(id)=>{
-  const bucketName = 'report-inspection';
+  const bucketName = 'detection-results123';
   const folderName = `${id}/`;
-  const objects = await s3.send(new ListObjectsCommand({ Bucket: bucketName, Prefix: folderName }));
+  const objects = await s3.send(new ListObjectsV2Command({ Bucket: bucketName, Prefix: folderName }));
   if (!objects.Contents.length) {
     return;
   }
