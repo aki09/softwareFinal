@@ -16,9 +16,15 @@ const styles = {
 
 const FormMap = () => {
   const navigate = useNavigate();
+  let cookie = Cookies.get('auth-token'); 
   const [navbarHeight, setNavbarHeight] = useState(0);
   const location = useLocation();
-  const { id } = location.state;
+  let id;
+  try{
+     id = location.state.id;
+  }catch{
+    navigate("/login");
+  }
   const [currentLocation, setCurrentLocation] = useState({});
   const [markers, setMarkers] = useState([]);
   const mapRef = useRef(null);
@@ -27,13 +33,7 @@ const FormMap = () => {
   const [markerObjs, setMarkerObjs] = useState([]);
   const [arrayDist,setarrayDist]=useState("")
   const [polygon, setPolygon] = useState(null);
-  let cookie = Cookies.get('auth-token'); 
   const isLoggedIn = !!Cookies.get('auth-token');
-
-  useEffect(() => {
-    const navbar = document.querySelector(".navbar");
-    setNavbarHeight(navbar.offsetHeight);
-  }, []);
 
   const handleMapClick = (event) => {
     if (markers.length < 4) {
@@ -165,6 +165,8 @@ const FormMap = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
+        const navbar = document.querySelector(".navbar");
+        setNavbarHeight(navbar.offsetHeight);
         const response = await axios.get(process.env.REACT_APP_SERVER+"/form", {
           params: { cookieValue: cookie, droneid: id },
         });

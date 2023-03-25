@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "../../styles/Auth/Login.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -15,10 +15,18 @@ const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
+  useEffect(()=>{
+  let isLoggedIn = !!Cookies.get('auth-token');
+    if(isLoggedIn){
+      navigate("/home");
+    }
+  })
+
+
+
   const handleChange = ({ currentTarget: input }) => {
     setuser({ ...user, [input.name]: input.value });
   };
-
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };

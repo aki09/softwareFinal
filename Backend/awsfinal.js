@@ -55,9 +55,9 @@ exports.getImg = async (id) => {
     for (const item of data.Contents) {
       const key = item.Key;
       if (/\.(jpg|jpeg|png|gif)$/i.test(key)) {
-        const path = key.substring(0, key.lastIndexOf("/") + 1);
+        const path = key.substring( 0,key.lastIndexOf("/") + 1);
         const filename = key.substring(key.lastIndexOf("/") + 1);
-        const new_name = path + filename;
+        const new_name = path+filename;
         const url = await getSignedUrl(
           s3,
           new GetObjectCommand({

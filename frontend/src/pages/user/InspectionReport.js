@@ -46,6 +46,8 @@ const InspectionReport = () => {
     const fetchData = async() => {
       setIsLoading(true);
       try {
+        const navbar = document.querySelector(".navbar");
+        setNavbarHeight(navbar.offsetHeight);
         const response = await axios.get(
           process.env.REACT_APP_SERVER+"/inspectionReport",
           {
@@ -73,8 +75,6 @@ const InspectionReport = () => {
     } else {
       navigate('/login');
     }
-    // const navbar = document.querySelector(".navbar");
-    // setNavbarHeight(navbar.offsetHeight);
   }, [navigate]);
 
   const handlereport = async () => {

@@ -29,7 +29,7 @@ exports.inspectionReport = async (req, res, next) => {
 }
 
 exports.generatePDF = async (req, res, next) => {
-    var template = fs.readFileSync(path.join(__dirname, '../../utils/inspection.docx'));
+    //var template = fs.readFileSync(path.join(__dirname, '../../utils/inspection.docx'));
     const token = req.body.cookieValue;
     if (!token) {
         return res.status(401).send("Authentication token missing");
@@ -37,13 +37,12 @@ exports.generatePDF = async (req, res, next) => {
     const data = jlol.verify(token, process.env.usersecret);
     uid=data.id;
     let user = await User.findOne({_id:uid});
+    var userid=user._id;
+    var returnedData = await aws.getImg(userid)
+    var names = returnedData.map(data => data.name);
+    var urls = returnedData.map(data => data.url);
+    var pdfData = [];   
     res.send({message:"success"})
-    // var reportUser =user.userName;
-    // var returnedData = await firebase.getImg(reportUser)
-    // var imgLinks = returnedData[0]
-    // var imageFiles = returnedData[1]
-    // var pdfData = [];
-    // console.log(reportUser)
     // for (var key in imgLinks) {
     //     var errorsByDrone = [];
     //     var imgs = [];

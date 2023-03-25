@@ -1,11 +1,13 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import logo from "../../assets/logo2.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Cookies from "js-cookie";
+
 
 const Register = () => {
   const [user, setuser] = useState({
@@ -22,6 +24,13 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [OTP, setOTP] = useState("");
+
+  useEffect(()=>{
+    let isLoggedIn = !!Cookies.get('auth-token');
+      if(isLoggedIn){
+        navigate("/home");
+      }
+    })
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
