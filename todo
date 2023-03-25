@@ -1,1 +1,5 @@
-add video listener to videosreamstatus
+add video listener to videosream status
+remove redundant packages
+remove .env from github
+aws error
+UI login/register page
