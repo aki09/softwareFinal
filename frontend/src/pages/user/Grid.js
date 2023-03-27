@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import GoogleMapReact from "google-map-react";
 import "../../styles/Form/Form.css";
 import axios from "axios";
-import { useLocation, useNavigate,Link} from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Container, Navbar, Nav, Button } from "react-bootstrap";
 import logo from "../../assets/logo.png";
 import { MdOutlineClear } from "react-icons/md";
@@ -16,13 +16,13 @@ const styles = {
 
 const FormMap = () => {
   const navigate = useNavigate();
-  let cookie = Cookies.get('auth-token'); 
+  let cookie = Cookies.get("auth-token");
   const [navbarHeight, setNavbarHeight] = useState(0);
   const location = useLocation();
   let id;
-  try{
-     id = location.state.id;
-  }catch{
+  try {
+    id = location.state.id;
+  } catch {
     navigate("/login");
   }
   const [currentLocation, setCurrentLocation] = useState({});
@@ -31,9 +31,9 @@ const FormMap = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [markerObjs, setMarkerObjs] = useState([]);
-  const [arrayDist,setarrayDist]=useState("")
+  const [arrayDist, setarrayDist] = useState("");
   const [polygon, setPolygon] = useState(null);
-  const isLoggedIn = !!Cookies.get('auth-token');
+  const isLoggedIn = !!Cookies.get("auth-token");
 
   const handleMapClick = (event) => {
     if (markers.length < 4) {
@@ -42,8 +42,8 @@ const FormMap = () => {
       renderMarkers([...markers, newMarker]);
     }
   };
-  
-  const handleSignout=(event)=>{
+
+  const handleSignout = (event) => {
     event.preventDefault();
     const authToken = Cookies.get("auth-token");
     if (authToken) {
@@ -90,17 +90,20 @@ const FormMap = () => {
   };
 
   function sortMarkersAnticlockwise(markers) {
-    const centroid = markers.reduce(function(acc, curr) {
-      return [acc[0] + curr.lat, acc[1] + curr.lng];
-    }, [0, 0]);
+    const centroid = markers.reduce(
+      function (acc, curr) {
+        return [acc[0] + curr.lat, acc[1] + curr.lng];
+      },
+      [0, 0]
+    );
     centroid[0] /= markers.length;
     centroid[1] /= markers.length;
-    const sortedMarkers = markers.sort(function(a, b) {
+    const sortedMarkers = markers.sort(function (a, b) {
       const angleA = Math.atan2(a.lng - centroid[1], a.lat - centroid[0]);
       const angleB = Math.atan2(b.lng - centroid[1], b.lat - centroid[0]);
       return angleA - angleB;
     });
-  
+
     return sortedMarkers;
   }
 
@@ -139,25 +142,23 @@ const FormMap = () => {
   };
   const handlemarkerset = (id, event) => {
     event.preventDefault();
-    if(arrayDist.length==0)
-    {
-      console.log("helo")
+    if (arrayDist.length == 0) {
+      console.log("helo");
       setError("Please Enter the distance between arrays");
       return 0;
     }
-    if(arrayDist<1)
-    {
+    if (arrayDist < 1) {
       setError("Distance between arrays cannot be less than 1");
       return;
     }
-    if (markers.length == 4 & arrayDist!="") {
-      const url = process.env.REACT_APP_SERVER+"/form";
+    if ((markers.length == 4) & (arrayDist != "")) {
+      const url = process.env.REACT_APP_SERVER + "/form";
       const res = axios.post(url, {
         id: id,
         markers: markers,
-        arrayDist:arrayDist,
+        arrayDist: arrayDist,
       });
-      navigate('/home')
+      navigate("/home");
     }
   };
 
@@ -167,18 +168,21 @@ const FormMap = () => {
       try {
         const navbar = document.querySelector(".navbar");
         setNavbarHeight(navbar.offsetHeight);
-        const response = await axios.get(process.env.REACT_APP_SERVER+"/form", {
-          params: { cookieValue: cookie, droneid: id },
-        });
+        const response = await axios.get(
+          process.env.REACT_APP_SERVER + "/form",
+          {
+            params: { cookieValue: cookie, droneid: id },
+          }
+        );
         setIsLoading(false);
-      }catch (error) {
+      } catch (error) {
         if (
           error.response &&
           error.response.status >= 400 &&
           error.response.status <= 500
         ) {
           setError(error.response.data.message);
-          navigate('/login');
+          navigate("/login");
         } else {
           setError("Something went wrong. Please try again later.");
         }
@@ -189,23 +193,22 @@ const FormMap = () => {
     if (cookie) {
       fetchData();
     } else {
-      navigate('/login');
+      navigate("/login");
     }
   }, []);
 
-  if(!isLoggedIn)
-  {
-    navigate('/login');
-  }else{
+  if (!isLoggedIn) {
+    navigate("/login");
+  } else {
     return (
       <>
         <Navbar expand="lg" fixed="top" className="navbar bg-light">
           <Container>
-          <Navbar.Brand>
-            <Link to="/home">
-              <img src={logo} alt="" height="50" width="160" />
-            </Link>
-          </Navbar.Brand>
+            <Navbar.Brand>
+              <Link to="/home">
+                <img src={logo} alt="" height="50" width="160" />
+              </Link>
+            </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse
               id="basic-navbar-nav"
@@ -220,7 +223,11 @@ const FormMap = () => {
                 >
                   Dashboard
                 </Button>
-                <Button variant="outline-secondary" size="md" onClick={(event) => handleSignout(event)}>
+                <Button
+                  variant="outline-secondary"
+                  size="md"
+                  onClick={(event) => handleSignout(event)}
+                >
                   Sign Out
                 </Button>
               </Nav>
@@ -248,7 +255,10 @@ const FormMap = () => {
                     renderMarkers(markers);
                   }}
                   onClick={handleMapClick}
-                  center={{ lat: currentLocation.lat, lng: currentLocation.lng }}
+                  center={{
+                    lat: currentLocation.lat,
+                    lng: currentLocation.lng,
+                  }}
                   defaultZoom={18}
                   options={{
                     mapTypeId: "satellite",
@@ -406,26 +416,33 @@ const FormMap = () => {
                   </button>
                 </div>
               </div>
-              <div className="form-group">
+              <div className="form-group form-row">
+                <label
+                  style={{
+                    marginRight: "50px",
+                    fontSize: "1.1rem",
+                    justifyContent: "center",
+                  }}
+                >
+                  Distance between Arrays in metres
+                </label>
                 <div>
-                  <label>Distance between Arrays in metres</label>
-                </div>
-                <div className="form-row">
                   <input
                     type="number"
                     name="arrayDist"
                     className="input-text"
+                    style={{ width: "80px" }}
                     min="1"
                     onChange={handledistanceChange}
                     value={arrayDist}
                     required
                   />
+                  {error && (
+                    <div className="medium text-danger text-3xl" role="alert">
+                      {error}
+                    </div>
+                  )}
                 </div>
-                {error && (
-              <div className="medium text-danger mt-3" role="alert">
-                {error}
-              </div>
-            )}
               </div>
               <div className="form-row-last">
                 <button

@@ -137,7 +137,6 @@ body {
   .form-v4-content .form-detail .form-row label.error {
     padding-left: 0;
     margin-left: 0;
-    display: block;
     position: absolute;
     bottom: -5px;
     width: 100%;
