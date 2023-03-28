@@ -7,7 +7,6 @@ const dotenv = require("dotenv");
 const path = require("path");
 const axios = require("axios");
 const ERRORS = require("../models/error");
-const jsPDF = require('jspdf');
 const fs = require("fs");
 dotenv.config();
 
@@ -65,17 +64,7 @@ exports.generatePDF = async (req, res, next) => {
     subject: "Thermal Inspection",
     images: urls,
   });
-  console.log(jsPDF);
-  var doc = new jsPDF;
-
-  pdfData.forEach(function (data) {
-    var urls = data.images;
-    urls.forEach(function (url) {
-      doc.addImage(url, "JPEG", 10, 10, 100, 100);
-    });
-  });
-
-  doc.save("thermal_inspection.pdf");
+  // fs.writeFileSync('output.pdf', pdf);
   res.send({ message: "success" });
   // for (var key in imgLinks) {
   //     var errorsByDrone = [];
