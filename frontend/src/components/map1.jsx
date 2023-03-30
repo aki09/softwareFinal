@@ -7,6 +7,7 @@ function Maap1({ drones }) {
   const [currentLocation, setCurrentLocation] = useState({});
   const [droneList, setDroneList] = useState(drones);
   const mapRef = useRef(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [markerObjs, setMarkerObjs] = useState([]);
   let c = 0;
   const fetchlocation = () => {
@@ -24,27 +25,36 @@ function Maap1({ drones }) {
     );
   };
   const socket = io("http://localhost:3000", {
-      transports: ["websocket", "polling", "flashsocket"],
-    });
+    transports: ["websocket", "polling", "flashsocket"],
+  });
 
-    socket.on("locationlat", (data) => {
-      const { id, location } = data;
-      const LocationIndex = drones.findIndex((drone) => drone._id === id);
-      if (LocationIndex === -1) return;
-      handleLocationLat(id, location);
-      renderMarkers(droneList);
-    });
+  socket.on("locationlat", (data) => {
+    const { id, location } = data;
+    const LocationIndex = drones.findIndex((drone) => drone._id === id);
+    if (LocationIndex === -1) return;
+    handleLocationLat(id, location);
+    renderMarkers(droneList);
+  });
 
-    socket.on("locationlon", (data) => {
-      const { id, location } = data;
-      const LocationIndex = drones.findIndex((drone) => drone._id === id);
-      if (LocationIndex === -1) return;
-      handleLocationLon(id, location);
-      renderMarkers(droneList);
-    });
+  socket.on("locationlon", (data) => {
+    const { id, location } = data;
+    const LocationIndex = drones.findIndex((drone) => drone._id === id);
+    if (LocationIndex === -1) return;
+    handleLocationLon(id, location);
+    renderMarkers(droneList);
+  });
 
   useEffect(() => {
     fetchlocation();
+
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const renderMarkers = (markers) => {
@@ -70,8 +80,8 @@ function Maap1({ drones }) {
     });
   };
   const handleLocationLat = (id, location) => {
-    removeMarkers()
-    setMarkerObjs([])
+    removeMarkers();
+    setMarkerObjs([]);
     let droneListnew = [...drones];
     droneList.map((drone) => {
       if (drone._id === id) {
@@ -80,11 +90,11 @@ function Maap1({ drones }) {
       return drone;
     });
     setDroneList(droneListnew);
-  }
+  };
 
   const handleLocationLon = (id, location) => {
-    removeMarkers()
-    setMarkerObjs([])
+    removeMarkers();
+    setMarkerObjs([]);
     let droneListnew = [...drones];
     droneListnew.map((drone) => {
       if (drone._id === id) {
@@ -96,8 +106,12 @@ function Maap1({ drones }) {
   };
   return (
     <div
-      style={{ width: "100%", marginTop: "25%", height: "50%" }}
-      className="pt-4"
+      style={{
+        width: `${windowWidth > 768 ? "100%" : "80%"}`,
+        marginTop: "25%",
+        height: "100%",
+      }}
+      className="pt-4 container"
     >
       <Card>
         <Card.Title
@@ -114,7 +128,6 @@ function Maap1({ drones }) {
       </Card>
       <GoogleMapReact
         bootstrapURLKeys={{
-          
           libraries: ["places", "geometry"],
         }}
         yesIWantToUseGoogleMapApiInternals

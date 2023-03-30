@@ -8,21 +8,15 @@ import { Container, Navbar, Nav } from "react-bootstrap";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCards } from "swiper";
 
-import { BsPersonFill, BsWifi } from "react-icons/bs";
-import { MdEmail } from "react-icons/md";
+import { BsPersonFill } from "react-icons/bs";
+import { MdEmail, MdCleaningServices } from "react-icons/md";
 import { TbReportAnalytics } from "react-icons/tb";
-import { BiVideo, BiBot } from "react-icons/bi";
-import {
-  GiClick,
-  GiArtificialIntelligence,
-  GiDeliveryDrone,
-} from "react-icons/gi";
+import { BiVideo, BiError, BiCurrentLocation } from "react-icons/bi";
+import { GiClick, GiDeliveryDrone } from "react-icons/gi";
 
 import logo from "../../assets/logo3.png";
 import logo1 from "../../assets/logo1.png";
-import laptop from "../../assets/laptop.png";
 import hexagon from "../../assets/hexagons.png";
-import drivenByFuture from "../../assets/drivenByFuture.png";
 
 import drone1 from "../../assets/drone1.png";
 import drone2 from "../../assets/drone2.jpg";
@@ -43,55 +37,58 @@ import pic6 from "../../assets/pic6.png";
 import pic7 from "../../assets/pic7.png";
 import pic8 from "../../assets/pic8.png";
 
+import laptop from "../../assets/laptop.png";
+import laptop1 from "../../assets/laptop1.png";
+import laptop2 from "../../assets/laptop2.png";
+import laptop3 from "../../assets/laptop3.png";
+import laptop4 from "../../assets/laptop4.png";
+import laptop5 from "../../assets/laptop5.png";
+import laptop6 from "../../assets/laptop6.png";
+import laptop7 from "../../assets/laptop7.png";
+
 const imagesHeader = [drone1, drone2, drone3, drone4];
 
 const services = [
   {
     id: 1,
-    img_url:
-      "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW5zcGVjdGlvbiUyMHJlcG9ydHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-    title: "Reports",
+    img_url: laptop5,
+    title: "Inspection Reports",
     icon: <TbReportAnalytics className="small-circle--icon" />,
   },
   {
     id: 2,
-    img_url:
-      "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c29sYXIlMjBwYW5lbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-    title: "Live Video",
+    img_url: laptop2,
+    title: "Live Video Feed",
     icon: <BiVideo className="small-circle--icon" />,
   },
   {
     id: 3,
-    img_url:
-      "https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fGxpdmUlMjB2aWRlbyd8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+    img_url: laptop1,
     title: "One Click TakeOff",
     icon: <GiClick className="small-circle--icon" />,
   },
   {
     id: 4,
-    img_url:
-      "https://images.unsplash.com/photo-1455894127589-22f75500213a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8Y29tcHV0ZXIlMjB2aXNpb258ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
-    title: "Edge Cleaning",
-    icon: <BsWifi className="small-circle--icon" />,
+    img_url: laptop4,
+    title: "Error Detection",
+    icon: <BiError className="small-circle--icon" />,
   },
   {
     id: 5,
-    img_url:
-      "https://images.unsplash.com/photo-1526378722484-bd91ca387e72?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8YXJ0aWZpY2lhbCUyMGludGVsbGlnZW5jZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+    img_url: laptop3,
     title: "AI based Detections",
-    icon: <GiArtificialIntelligence className="small-circle--icon" />,
+    icon: <BiCurrentLocation className="small-circle--icon" />,
   },
   {
     id: 6,
-    img_url:
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8Ym90fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-    title: "Multi-Bot System",
-    icon: <BiBot className="small-circle--icon" />,
+    img_url: laptop7,
+    title: "Waterless Cleaning",
+    icon: <MdCleaningServices className="small-circle--icon" />,
   },
   {
     id: 7,
-    img_url: "",
-    title: "Software",
+    img_url: laptop6,
+    title: "Inspection Drone",
     icon: <GiDeliveryDrone className="small-circle--icon" />,
   },
 ];
@@ -227,11 +224,7 @@ const PromoPage = () => {
       </div>
 
       <div className="main-content">
-        <div
-          id="aboutUs"
-          className="container d-flex about-us "
-          style={{ height: `calc(100vh - ${navbarHeight}px)` }}
-        >
+        <div id="aboutUs" className="container d-flex about-us">
           <div className="aboutus-container">
             <div className="about-card justify-content-center align-items-center">
               <p>
@@ -377,6 +370,15 @@ const PromoPage = () => {
                 src={services[5].img_url}
               />
             )}
+            {service === 0 && (
+              <motion.img
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.5 }}
+                className="laptop-img"
+                src={services[6].img_url}
+              />
+            )}
           </div>
           {windowWidth < 992 ? (
             <>
@@ -435,7 +437,7 @@ const PromoPage = () => {
                       onClick={() => handleService(4)}
                       style={{ cursor: "pointer" }}
                     >
-                      <BsWifi
+                      <BiError
                         className={`circle-icon--m ${
                           service === 4 ? "active--m" : ""
                         }`}
@@ -447,7 +449,7 @@ const PromoPage = () => {
                       onClick={() => handleService(5)}
                       style={{ cursor: "pointer" }}
                     >
-                      <GiArtificialIntelligence
+                      <BiCurrentLocation
                         className={`circle-icon--m ${
                           service === 5 ? "active--m" : ""
                         }`}
@@ -459,7 +461,7 @@ const PromoPage = () => {
                       onClick={() => handleService(6)}
                       style={{ cursor: "pointer" }}
                     >
-                      <BiBot
+                      <MdCleaningServices
                         className={`circle-icon--m ${
                           service === 6 ? "active--m" : ""
                         }`}
@@ -474,7 +476,78 @@ const PromoPage = () => {
               className="spinner-container"
               style={{ height: "63%", float: "bottom", position: "relative" }}
             >
-              <div className="main-circle"></div>
+              <div className="main-circle">
+                {service == 0 && (
+                  <motion.h2
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="main-circle--text"
+                  >
+                    {services[6].title}
+                  </motion.h2>
+                )}
+                {service == 1 && (
+                  <motion.h2
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="main-circle--text"
+                  >
+                    {services[0].title}
+                  </motion.h2>
+                )}
+                {service == 2 && (
+                  <motion.h2
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="main-circle--text"
+                  >
+                    {services[1].title}
+                  </motion.h2>
+                )}
+                {service == 3 && (
+                  <motion.h2
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="main-circle--text"
+                  >
+                    {services[2].title}
+                  </motion.h2>
+                )}
+                {service == 4 && (
+                  <motion.h2
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="main-circle--text"
+                  >
+                    {services[3].title}
+                  </motion.h2>
+                )}
+                {service == 5 && (
+                  <motion.h2
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="main-circle--text"
+                  >
+                    {services[4].title}
+                  </motion.h2>
+                )}
+                {service == 6 && (
+                  <motion.h2
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="main-circle--text"
+                  >
+                    {services[5].title}
+                  </motion.h2>
+                )}
+              </div>
               <div className="center-circle d-flex justify-content-center align-items-center">
                 <motion.a
                   initial={{ rotate: 0 }}
@@ -492,11 +565,13 @@ const PromoPage = () => {
                   )}
                   {service === 2 && <BiVideo className="center-circle--icon" />}
                   {service === 3 && <GiClick className="center-circle--icon" />}
-                  {service === 4 && <BsWifi className="center-circle--icon" />}
+                  {service === 4 && <BiError className="center-circle--icon" />}
                   {service === 5 && (
-                    <GiArtificialIntelligence className="center-circle--icon" />
+                    <BiCurrentLocation className="center-circle--icon" />
                   )}
-                  {service === 6 && <BiBot className="center-circle--icon" />}
+                  {service === 6 && (
+                    <MdCleaningServices className="center-circle--icon" />
+                  )}
                 </motion.a>
               </div>
               <div className="small-circle" style={{ top: "55%", left: "5%" }}>
@@ -569,7 +644,7 @@ const PromoPage = () => {
                     onClick={() => handleService(4)}
                     style={{ cursor: "pointer" }}
                   >
-                    <BsWifi className="small-circle--icon" />
+                    <BiError className="small-circle--icon" />
                   </a>
                 )}
               </div>
@@ -589,7 +664,7 @@ const PromoPage = () => {
                     onClick={() => handleService(5)}
                     style={{ cursor: "pointer" }}
                   >
-                    <GiArtificialIntelligence className="small-circle--icon" />
+                    <BiCurrentLocation className="small-circle--icon" />
                   </a>
                 )}
               </div>
@@ -606,22 +681,12 @@ const PromoPage = () => {
                     onClick={() => handleService(6)}
                     style={{ cursor: "pointer" }}
                   >
-                    <BiBot className="small-circle--icon" />
+                    <MdCleaningServices className="small-circle--icon" />
                   </a>
                 )}
               </div>
             </div>
           )}
-        </div>
-
-        <div
-          className="header-container"
-          style={{
-            height: `calc(30vh - ${navbarHeight}px)`,
-            position: "relative",
-          }}
-        >
-          <img src={drivenByFuture} alt="future" className="header-img" />
         </div>
 
         <div

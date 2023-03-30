@@ -16,6 +16,7 @@ const styles = {
 };
 
 const Sidebar = ({
+  user,
   drones,
   showVideoFeed,
   setShowVideoFeed,
@@ -25,6 +26,7 @@ const Sidebar = ({
   const [droneList, setDroneList] = useState(drones);
   const [showCleaning, setShowCleaning] = useState(false);
   const [showInspection, setShowInspection] = useState(true);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // const [showVideoFeed, setShowVideoFeed] = useState(false);
 
   const cleaningDroneList = droneList.filter(
@@ -66,6 +68,15 @@ const Sidebar = ({
 
     const navbar = document.querySelector(".navbar");
     setNavbarHeight(navbar.offsetHeight);
+
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const filteredDrones = droneList.filter((drone) => {
@@ -157,39 +168,84 @@ const Sidebar = ({
           ...styles.mainContent,
           marginTop: `${navbarHeight}px`,
           overflowY: showScrollbar ? "scroll" : "hidden",
+          width: `${windowWidth > 768 ? "" : "80vw"}`,
         }}
-        className="d-flex justify-content-center sidebar pt-2"
+        className={`${
+          windowWidth > 768 ? "pt-2" : ""
+        } d-flex justify-content-center sidebar `}
       >
-        <div className="bg-light " style={{ width: "30vw" }}>
+        <div
+          className="bg-light "
+          style={{ width: `${windowWidth > 768 ? "" : "100vw"}` }}
+        >
           {cleaningDroneList.length !== 0 ? (
             <>
+              {windowWidth > 768 ? (
+                <div
+                  className="pt-2 bg-light"
+                  style={{
+                    position: "fixed",
+                    top: `${navbarHeight}px`,
+                    zIndex: 1,
+                    width: "20%",
+                    paddingLeft: "7vw",
+                    paddingBottom: "2vh",
+                  }}
+                >
+                  <BootstrapSwitchButton
+                    checked={showInspection}
+                    onlabel={<FaCamera />}
+                    offlabel={<FaBroom />}
+                    onChange={handleType}
+                    onstyle="outline-primary"
+                    offstyle="outline-primary"
+                    width={100}
+                  />
+                </div>
+              ) : (
+                <>
+                  <div
+                    className={` bg-light`}
+                    style={{
+                      position: "fixed",
+                      top: `${navbarHeight}px`,
+                      zIndex: 1,
+                      width: "100%",
+                      paddingLeft: "7vw",
+                      paddingBottom: "2vh",
+                    }}
+                  >
+                    <div className="ms-4">
+                      <h1>
+                        Greetings,{" "}
+                        <span style={{ color: "#2a265f" }}>{user.company}</span>
+                      </h1>
+                      <h6>Your Performance Report</h6>
+                      <BootstrapSwitchButton
+                        checked={showInspection}
+                        onlabel={<FaCamera />}
+                        offlabel={<FaBroom />}
+                        onChange={handleType}
+                        onstyle="outline-primary"
+                        offstyle="outline-primary"
+                        width={100}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
               <div
-                className="pt-2 bg-light"
-                style={{
-                  position: "fixed",
-                  top: `${navbarHeight}px`,
-                  zIndex: 1,
-                  width: "25vw",
-                  paddingLeft: "7vw",
-                  paddingBottom: "2vh",
-                }}
+                style={{ marginTop: `${windowWidth > 768 ? "30%" : "30%"}` }}
+                className="container"
               >
-                <BootstrapSwitchButton
-                  checked={showInspection}
-                  onlabel={<FaCamera />}
-                  offlabel={<FaBroom />}
-                  onChange={handleType}
-                  onstyle="outline-primary"
-                  offstyle="outline-primary"
-                  width={100}
-                />
-              </div>
-              <div className="pt-5">
                 {filteredDrones.map((drone, i) => (
                   <div key={drone._id}>
                     <Card
                       className="mt-3 pt-3 pb-3 ms-4 mb-3"
-                      style={{ boxShadow: "0 0 10px #ccc" }}
+                      style={{
+                        boxShadow: "0 0 10px #ccc",
+                        width: `${windowWidth > 768 ? "95%" : "50%"}`,
+                      }}
                       variant="light"
                     >
                       <Card.Body>

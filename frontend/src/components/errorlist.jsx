@@ -13,6 +13,7 @@ const ErrorList = ({ drones }) => {
   const [Droneno, setDroneno] = useState([]);
   const [time, setTime] = useState([]);
   const [error, setError] = useState([]);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   let droneidno = 0;
 
   const errorDiv = Droneno.map((droneno, index) => {
@@ -60,17 +61,33 @@ const ErrorList = ({ drones }) => {
           break;
         }
       }
+
+      function handleResize() {
+        setWindowWidth(window.innerWidth);
+      }
+
+      window.addEventListener("resize", handleResize);
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
     });
     const navbar = document.querySelector(".navbar");
     setNavbarHeight(navbar.offsetHeight);
   }, []);
   return (
     <div
-      style={{ ...styles.mainContent, marginTop: `${navbarHeight + 30}px` }}
+      style={{
+        ...styles.mainContent,
+        marginTop: `${windowWidth > 768 ? "25%" : "55%"}`,
+        marginBottom: `${windowWidth > 768 ? "25%" : "15%"}`,
+      }}
       className="d-flex justify-content-center"
     >
-      <div style={{ width: "70%", overflowY:"scroll" }} className="pt-4 sidebarScroll">
-        <Card style={{height: "500px"}}>
+      <div
+        style={{ width: "70%", overflowY: "scroll" }}
+        className="pt-4 sidebarScroll"
+      >
+        <Card style={{ height: "500px" }}>
           <Card.Title
             className="ms-3 mt-3"
             style={{ fontWeight: "600", color: "#2a265f", fontSize: "25px" }}

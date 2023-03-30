@@ -140,6 +140,7 @@ body {
 .about-us {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
 .aboutus-container {
@@ -255,14 +256,13 @@ body {
 }
 
 @media only screen and (max-width: 767px) {
-  /* On screens smaller than 768px, display the About card in full-screen */
   .about-card {
     width: 100%;
     margin-right: 0;
   }
 
-  .mySwiper {
-    width: 100%;
+  .swiper-container {
+    display: none;
   }
 }
 
@@ -489,6 +489,14 @@ body {
   display: none;
 }
 
+.main-circle--text {
+  text-align: center;
+  margin-top: 10rem;
+  color: #eee;
+  font-size: 2.5rem;
+  text-shadow: #eee 0 0 10px;
+}
+
 .center-circle {
   position: absolute;
   width: 10%;
@@ -604,24 +612,6 @@ body {
 
 .active--m {
   color: #07c0db;
-}
-
-/* Header - Driven By Future */
-.header-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100vh;
-  background-color: #050049;
-}
-
-.header-img {
-  width: 80%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  filter: brightness(1.5);
 }
 
 /* Grid */

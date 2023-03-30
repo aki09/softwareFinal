@@ -174,12 +174,13 @@ const Dashboard = () => {
                 <Topbar user={user} />
               </Row>
               <Row>
-                <Col md={12} lg={3} className="order-1 order-lg-1">
+                <Col md={11} lg={3} className="order-1 order-lg-1">
                   <div
                     style={{ height: "100vh", overflowY: "scroll" }}
                     className="sidebarScroll"
                   >
                     <Sidebar
+                      user={user}
                       drones={drones}
                       showVideoFeed={showVideoFeed}
                       setShowVideoFeed={setShowVideoFeed}
@@ -190,7 +191,7 @@ const Dashboard = () => {
                 <Col lg={5} md={12} className="order-2 order-lg-2">
                   <Maap1 drones={drones} />
                 </Col>
-                <Col lg={4} md={12} className="order-3">
+                <Col lg={4} md={12} className="order-3 order-lg-3">
                   <ErrorList drones={drones} />
                 </Col>
               </Row>
