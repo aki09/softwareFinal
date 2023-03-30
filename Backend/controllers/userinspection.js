@@ -1,6 +1,5 @@
 const User = require("../models/user");
 const Drone = require("../models/drone");
-const { createReport } = require("docx-templates");
 const jlol = require("jsonwebtoken");
 const aws = require("../awsfinal");
 const dotenv = require("dotenv");
