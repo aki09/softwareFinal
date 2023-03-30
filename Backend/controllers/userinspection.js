@@ -99,10 +99,3 @@ exports.generatePDF = async (req, res, next) => {
   await browser.close();
   res.status(200).send({ report: userReports, reportcount: numberOfFiles });
 };
-
-// pdfData.images.forEach((url) => {
-    //   const img = document.createElement("img");
-    //   img.src = 'https://detection-results123.s3.ap-south-1.amazonaws.com/6156272d93d079ba45eab3af/array2/panel1.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIATLAOEO6AE3ZHGYX4%2F20230330%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20230330T024603Z&X-Amz-Expires=900&X-Amz-Signature=1869082669cf23dcee82a3ff1a3034c67881a15da52066b120106ab420b6c78b&X-Amz-SignedHeaders=host&x-id=GetObject';
-    //   imagesEl.appendChild(img);
-    //   console.log(`Added image: ${url}`);;
-    // });
