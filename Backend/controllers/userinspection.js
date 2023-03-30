@@ -60,13 +60,16 @@ exports.generatePDF = async (req, res, next) => {
     });
   }
   var imgs = [];
-  console.log(urls[1])
+  let htmlString = '<html><head><title>PDF REOPRT</title></head><body><h1>PDF Report</h1><div id="company-name"></div><div id="subject"></div>';
   for (var j in urls) {
     response = await axios.get(urls[j], { responseType: 'arraybuffer' });
-    buff = Buffer.from(response.data, "utf-8");
-    myimg = { width: 4, height: 4, data: buff, extension: '.jpg' };
+    myimg = { width: 4, height: 4, data: response.data, extension: '.jpg' };
     imgs.push(myimg);
+    const dataUri = `data:image/jpeg;base64,${response.data.toString('base64')}`;
+    htmlString += `<img src="${dataUri}" alt="Image ${j}" width="150px" height ="150px" /><br>`;
   }
+  htmlString += '</body></html>';
+
   pdfData = {
     companyName: user.company.toUpperCase(),
     date: Date(),
@@ -76,28 +79,17 @@ exports.generatePDF = async (req, res, next) => {
   
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  const filePath = path.join(__dirname, "../template.html");
-  await page.goto(filePath);
+  // const filePath = path.join(__dirname, "../template.html");
+  // await page.goto(filePath);
+  await page.setContent(htmlString);
   await page.emulateMediaType("screen");
   await page.evaluate(async(pdfData) => {
     const companyNameEl = document.querySelector("#company-name");
     companyNameEl.textContent = pdfData.companyName;
     const subjectEl = document.querySelector("#subject");
     subjectEl.textContent = pdfData.subject;
-    const imagesEl = document.querySelector("#images");
-    for (let i = 0; i < pdfData.images.length; i++) {
-      const img = pdfData.images[i];
-      const imgEl = document.createElement("img");
-      imgEl.src = `data:image/${img.extension};base64,${img.data.toString("base64")}`;
-      imgEl.style.width = `${img.width}in`;
-      imgEl.style.height = `${img.height}in`;
-      imagesEl.appendChild(imgEl);
-    }
   }, pdfData);
-  const pdfBuffer = await page.pdf({
-    format: "A4",
-    printBackground: true,
-  });
+  const pdfBuffer = await page.pdf({ format: "A4" });
   if (!pdfBuffer) {
     console.error("Error generating PDF");
   }

@@ -43,39 +43,40 @@ const InspectionReport = () => {
   }
 
   useEffect(() => {
-    const fetchData = async() => {
-      setIsLoading(true);
-      try {
-        const navbar = document.querySelector(".navbar");
-        setNavbarHeight(navbar.offsetHeight);
-        const response = await axios.get(
-          process.env.REACT_APP_SERVER+"/inspectionReport",
-          {
-            params: { cookieValue: cookie },
-          }
-        );
-        setFiles(response.data.report);
-        setIsLoading(false);
-      } catch (error) {
-        if (
-          error.response &&
-          error.response.status >= 400 &&
-          error.response.status <= 500
-        ) {
-          setError(error.response.data.message);
-          navigate('/login');
-        } else {
-          setError("Something went wrong. Please try again later.");
-        }
-      }
-      setIsLoading(false);
-    };
     if (cookie) {
       fetchData();
     } else {
       navigate('/login');
     }
   }, [navigate]);
+
+  const fetchData = async() => {
+    setIsLoading(true);
+    try {
+      const navbar = document.querySelector(".navbar");
+      setNavbarHeight(navbar.offsetHeight);
+      const response = await axios.get(
+        process.env.REACT_APP_SERVER+"/inspectionReport",
+        {
+          params: { cookieValue: cookie },
+        }
+      );
+      setFiles(response.data.report);
+      setIsLoading(false);
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status <= 500
+      ) {
+        setError(error.response.data.message);
+        navigate('/login');
+      } else {
+        setError("Something went wrong. Please try again later.");
+      }
+    }
+    setIsLoading(false);
+  };
 
   const handlereport = async () => {
     setIsLoadingreport(true);
