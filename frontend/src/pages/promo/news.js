@@ -38,8 +38,8 @@ const News = () => {
 
   return (
     <div
-      className="vh-100 bg-banner-bg bg-no-repeat bg-center bg-cover position-relative"
-      style={{ backgroundColor: "#0a0338" }}
+      className="bg-banner bg-no-repeat bg-center bg-cover position-relative"
+      style={{ backgroundColor: "#050049" }}
     >
       <div className="position-absolute top-0 left-0 w-100 h-100">
         <Particles
@@ -51,7 +51,7 @@ const News = () => {
             fullScreen: false,
             background: {
               color: {
-                value: "#0a0338",
+                value: "#050049",
               },
             },
             fpsLimit: 60,

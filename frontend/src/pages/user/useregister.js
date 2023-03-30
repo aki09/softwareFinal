@@ -1,5 +1,5 @@
 import React from "react";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Particles from "react-tsparticles";
@@ -7,7 +7,6 @@ import { loadFull } from "tsparticles";
 import logo from "../../assets/logo2.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Cookies from "js-cookie";
-
 
 const Register = () => {
   const [user, setuser] = useState({
@@ -25,12 +24,12 @@ const Register = () => {
   const [showOTP, setShowOTP] = useState(false);
   const [OTP, setOTP] = useState("");
 
-  useEffect(()=>{
-    let isLoggedIn = !!Cookies.get('auth-token');
-      if(isLoggedIn){
-        navigate("/home");
-      }
-    })
+  useEffect(() => {
+    let isLoggedIn = !!Cookies.get("auth-token");
+    if (isLoggedIn) {
+      navigate("/home");
+    }
+  });
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -43,15 +42,14 @@ const Register = () => {
 
   const handleOTPSubmit = async (e) => {
     e.preventDefault();
-    if(OTP!="" && OTP.length==6)
-    {
-      setError(null)
-      setMessage(null)
-      try{
+    if (OTP != "" && OTP.length == 6) {
+      setError(null);
+      setMessage(null);
+      try {
         const url = process.env.REACT_APP_SERVER + "/verifyotp";
-        const response = await axios.post(url, { email: user.email,otp:OTP });
+        const response = await axios.post(url, { email: user.email, otp: OTP });
         if (response.status === 200) {
-          try{
+          try {
             const signurl = process.env.REACT_APP_SERVER + "/signup";
             const res = await axios.post(signurl, {
               username: user.username,
@@ -63,8 +61,7 @@ const Register = () => {
               setMessage(res.data.message);
               navigate("/login");
             }
-
-          }catch (error) {
+          } catch (error) {
             if (
               error.response &&
               error.response.status >= 400 &&
@@ -74,8 +71,7 @@ const Register = () => {
             }
           }
         }
-        
-      }catch (error) {
+      } catch (error) {
         if (
           error.response &&
           error.response.status >= 400 &&
@@ -84,7 +80,7 @@ const Register = () => {
           setError(error.response.data.error);
         }
       }
-    }else{
+    } else {
       setError("Please Enter a valid OTP ");
       return;
     }
@@ -179,7 +175,10 @@ const Register = () => {
     if (validateForm()) {
       try {
         const url = process.env.REACT_APP_SERVER + "/sendotp";
-        const response = await axios.post(url, { email: user.email,username:user.username });
+        const response = await axios.post(url, {
+          email: user.email,
+          username: user.username,
+        });
         setShowOTP(true);
         setMessage(response.data.message);
         setError(null);
@@ -366,19 +365,18 @@ const Register = () => {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
               {passwordError && (
-                <div className="small text-danger mt-1" role="alert">
+                <div className="small text-danger" role="alert">
                   {passwordError}
                 </div>
               )}
             </div>
-            <div className="user-box">
+            <div className={`user-box ${passwordError ? "mt-3" : ""}`}>
               <input
                 type="password"
                 name="confirmPassword"
                 required
                 onChange={handleChange}
                 value={user.confirmPassword}
-
               />
               <label>Confirm Password</label>
             </div>

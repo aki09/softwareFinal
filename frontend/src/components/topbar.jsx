@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
 
 import Container from "react-bootstrap/Container";
@@ -14,6 +14,19 @@ import Cookies from "js-cookie";
 
 const Topbar = ({ user }) => {
   const navigate = useNavigate();
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleTake = (event) => {
     event.preventDefault();
@@ -24,6 +37,7 @@ const Topbar = ({ user }) => {
       eror: "fault",
     });
   };
+  
   const handleSignout = (event) => {
     event.preventDefault();
     const authToken = Cookies.get("auth-token");
@@ -45,24 +59,25 @@ const Topbar = ({ user }) => {
             </Link>
           </Navbar.Brand>
 
-          <Navbar.Text>
-            <div className="ms-4">
-              <h1>
-                Greetings,{" "}
-                <span style={{ color: "#2a265f" }}>{user.company}</span>
-              </h1>
-              {/* <h6>Your Performance Report</h6> */}
-            </div>
-          </Navbar.Text>
+          {windowWidth > 768 && (
+            <Navbar.Text>
+              <div className="ms-4">
+                <h1>
+                  Greetings,{" "}
+                  <span style={{ color: "#2a265f" }}>{user.company}</span>
+                </h1>
+                <h6>Your Performance Report</h6>
+              </div>
+            </Navbar.Text>
+          )}
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
           <Navbar.Collapse
             id="basic-navbar-nav"
-            className="justify-content-end"
+            className={windowWidth > 768 ? "justify-content-end" : ""}
           >
             <Nav className="mr-auto">
-              {/* <ButtonGroup> */}
               <div className="pt-1 pb-2">
                 <Link to="/report">
                   <Button
@@ -74,7 +89,6 @@ const Topbar = ({ user }) => {
                   </Button>
                 </Link>
               </div>
-              {/* <Link> */}
               <div className="pt-1 pb-2">
                 <Button
                   variant="outline-secondary"
@@ -86,10 +100,6 @@ const Topbar = ({ user }) => {
                 </Button>
               </div>
 
-              {/* </Link> */}
-             
-
-              {/* </ButtonGroup> */}
               <Nav.Link>
                 <RiAdminFill
                   style={{ fontSize: "36px" }}
