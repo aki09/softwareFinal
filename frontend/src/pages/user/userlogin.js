@@ -166,7 +166,7 @@ const Login = () => {
         <div className="login-box">
           <h2>Login</h2>
           {error && (
-            <div className="my-4">
+            <div className="my-4 pb-3">
               <Alert variant="danger">{error}</Alert>
             </div>
           )}

@@ -8,7 +8,7 @@ import Sidebar from "../../components/sidebar";
 import Topbar from "../../components/topbar";
 import { useNavigate } from "react-router-dom";
 import { AiFillCloseSquare } from "react-icons/ai";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const styles = {
   mainContent: {
@@ -24,27 +24,38 @@ const Dashboard = () => {
   const [showVideoFeed, setShowVideoFeed] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
   const [navbarHeight, setNavbarHeight] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
-  let cookie = Cookies.get('auth-token'); 
-  const isLoggedIn = !!Cookies.get('auth-token');
+  let cookie = Cookies.get("auth-token");
+  const isLoggedIn = !!Cookies.get("auth-token");
 
   useEffect(() => {
     if (cookie) {
       fetchData();
     } else {
       setTimeout(() => {
-        navigate('/login');
+        navigate("/login");
       }, 0);
     }
   }, [cookie, navigate]);
 
+  useEffect(() => {
+    function handleResize() {
+      const navbar = document.querySelector(".navbar");
+      setNavbarHeight(navbar.offsetHeight);
+    }
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const navbar = document.querySelector(".navbar");
-      setNavbarHeight(navbar.offsetHeight);
-      const response = await axios.get(process.env.REACT_APP_SERVER+"/home", {
+      const response = await axios.get(process.env.REACT_APP_SERVER + "/home", {
         params: { cookieValue: cookie },
       });
       let c = 1;
@@ -85,13 +96,7 @@ const Dashboard = () => {
         error.response.status <= 500
       ) {
         setError(error.response.data.message);
-        const authToken = Cookies.get("auth-token");
-        if (authToken) {
-          Cookies.remove("auth-token");
-          if (!Cookies.get("auth-token")) {
-            navigate("/login");
-      }
-    }
+        navigate("/login");
       } else {
         setError("Something went wrong. Please try again later.");
       }
@@ -108,10 +113,9 @@ const Dashboard = () => {
     setVideoUrl("");
   }
 
-  if(!isLoggedIn)
-  {
-    navigate('/login');
-  }else{
+  if (!isLoggedIn) {
+    navigate("/login");
+  } else {
     return drones.length ? (
       <>
         {showVideoFeed ? (
@@ -131,9 +135,7 @@ const Dashboard = () => {
                 onClick={handleCloseVideoFeed}
                 className="btn btn-danger"
               >
-                <AiFillCloseSquare
-                  style={{ fontSize: "24px" }}
-                />
+                <AiFillCloseSquare style={{ fontSize: "24px" }} />
               </button>
             </div>
             <div style={{ filter: "blur(2px)" }}>
@@ -156,7 +158,7 @@ const Dashboard = () => {
                     </div>
                   </Col>
                   <Col md={5}>
-                    <Maap1 drones={drones}/>
+                    <Maap1 drones={drones} />
                   </Col>
                   <Col md={4}>
                     <ErrorList drones={drones} />
@@ -172,7 +174,7 @@ const Dashboard = () => {
                 <Topbar user={user} />
               </Row>
               <Row>
-                <Col md={3} className="justify-content-center">
+                <Col md={12} lg={3} className="order-1 order-lg-1">
                   <div
                     style={{ height: "100vh", overflowY: "scroll" }}
                     className="sidebarScroll"
@@ -185,10 +187,10 @@ const Dashboard = () => {
                     />
                   </div>
                 </Col>
-                <Col md={5}>
+                <Col lg={5} md={12} className="order-2 order-lg-2">
                   <Maap1 drones={drones} />
                 </Col>
-                <Col md={4}>
+                <Col lg={4} md={12} className="order-3">
                   <ErrorList drones={drones} />
                 </Col>
               </Row>
