@@ -63,7 +63,7 @@ exports.getImg = async (id) => {
           new GetObjectCommand({
             Bucket: "detection-results123",
             Key: key,
-            Expires: 360000,
+            Expires: 3600,
           })
         );
         all_files.push({ name: new_name, url: url });

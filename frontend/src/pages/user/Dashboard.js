@@ -85,7 +85,13 @@ const Dashboard = () => {
         error.response.status <= 500
       ) {
         setError(error.response.data.message);
-        navigate('/login');
+        const authToken = Cookies.get("auth-token");
+        if (authToken) {
+          Cookies.remove("auth-token");
+          if (!Cookies.get("auth-token")) {
+            navigate("/login");
+      }
+    }
       } else {
         setError("Something went wrong. Please try again later.");
       }

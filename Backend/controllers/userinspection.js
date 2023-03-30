@@ -7,7 +7,9 @@ const dotenv = require("dotenv");
 const path = require("path");
 const axios = require("axios");
 const ERRORS = require("../models/error");
+const puppeteer = require("puppeteer");
 const fs = require("fs");
+
 dotenv.config();
 
 exports.inspectionReport = async (req, res, next) => {
@@ -29,7 +31,7 @@ exports.inspectionReport = async (req, res, next) => {
 };
 
 exports.generatePDF = async (req, res, next) => {
-  //var template = fs.readFileSync(path.join(__dirname, '../../utils/inspection.docx'));
+  const templatePath = path.join(__dirname, "../utils/inspection.docx");
   const token = req.body.cookieValue;
   if (!token) {
     return res.status(401).send("Authentication token missing");
@@ -41,7 +43,6 @@ exports.generatePDF = async (req, res, next) => {
   var returnedData = await aws.getImg(userid);
   var names = returnedData.map((data) => data.name);
   var urls = returnedData.map((data) => data.url);
-  var pdfData = [];
   var errorsByDrone = [];
   for (var key in names) {
     await Drone.find({ userId: uid }).then(async (drones) => {
@@ -58,38 +59,56 @@ exports.generatePDF = async (req, res, next) => {
       }
     });
   }
-  pdfData.push({
+  var imgs = [];
+  console.log(urls[1])
+  for (var j in urls) {
+    response = await axios.get(urls[j], { responseType: 'arraybuffer' });
+    buff = Buffer.from(response.data, "utf-8");
+    myimg = { width: 4, height: 4, data: buff, extension: '.jpg' };
+    imgs.push(myimg);
+  }
+  pdfData = {
     companyName: user.company.toUpperCase(),
     date: Date(),
     subject: "Thermal Inspection",
-    images: urls,
+    images: imgs,
+  };
+  
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  const filePath = path.join(__dirname, "../template.html");
+  await page.goto(filePath);
+  await page.emulateMediaType("screen");
+  await page.evaluate(async(pdfData) => {
+    const companyNameEl = document.querySelector("#company-name");
+    companyNameEl.textContent = pdfData.companyName;
+    const subjectEl = document.querySelector("#subject");
+    subjectEl.textContent = pdfData.subject;
+    const imagesEl = document.querySelector("#images");
+    for (let i = 0; i < pdfData.images.length; i++) {
+      const img = pdfData.images[i];
+      const imgEl = document.createElement("img");
+      imgEl.src = `data:image/${img.extension};base64,${img.data.toString("base64")}`;
+      imgEl.style.width = `${img.width}in`;
+      imgEl.style.height = `${img.height}in`;
+      imagesEl.appendChild(imgEl);
+    }
+  }, pdfData);
+  const pdfBuffer = await page.pdf({
+    path: "example.pdf",
+    format: "A4",
+    printBackground: true,
   });
-  // fs.writeFileSync('output.pdf', pdf);
+  if (!pdfBuffer) {
+    console.error("Error generating PDF");
+  }
+  await browser.close();
   res.send({ message: "success" });
-  // for (var key in imgLinks) {
-  //     var errorsByDrone = [];
-  //     var imgs = [];
-  //     await Drone.find({ userId: uid }).then(async (drones) => {
-  //         for (var i in drones) {
-  //             await ERRORS.find({ userId: uid, droneId: drones[i]._id, folder: key }).then((errors) => {
-  //                 console.log(errors)
-  //                 errorsByDrone.push({
-  //                     'droneId': drones[i]._id.toString(),
-  //                     'count': errors.length
-  //                 })
-  //             })
-  //         }
-  //
-
-  // for (pdf in pdfData) {
-  //     const buffer = await createReport({
-  //         template,
-  //         data: pdfData[pdf],
-  //         cmdDelimiter: ['{', '}'],
-  //     });
-  //     var filename = 'report.docx';
-  //     fs.writeFileSync(path.join(__dirname, `../utils/${filename}`), buffer)
-  //     await firebase.uploadPDF(path.join(__dirname, `../utils/${filename}`), user.company)
-  // }
-  // await firebase.moveImages(imageFiles, reportUser)
 };
+
+// pdfData.images.forEach((url) => {
+    //   const img = document.createElement("img");
+    //   img.src = 'https://detection-results123.s3.ap-south-1.amazonaws.com/6156272d93d079ba45eab3af/array2/panel1.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIATLAOEO6AE3ZHGYX4%2F20230330%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20230330T024603Z&X-Amz-Expires=900&X-Amz-Signature=1869082669cf23dcee82a3ff1a3034c67881a15da52066b120106ab420b6c78b&X-Amz-SignedHeaders=host&x-id=GetObject';
+    //   imagesEl.appendChild(img);
+    //   console.log(`Added image: ${url}`);;
+    // });

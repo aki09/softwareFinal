@@ -51,7 +51,7 @@ const Topbar = ({ user }) => {
                 Greetings,{" "}
                 <span style={{ color: "#2a265f" }}>{user.company}</span>
               </h1>
-              <h6>Your Performance Report</h6>
+              {/* <h6>Your Performance Report</h6> */}
             </div>
           </Navbar.Text>
 
