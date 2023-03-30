@@ -40,7 +40,14 @@ exports.generatePDF = async (req, res, next) => {
   let user = await User.findOne({ _id: uid });
   var userid = user._id;
   var returnedData = await aws.getImg(userid);
-  var names = returnedData.map((data) => data.name);
+  var names = returnedData.map((data) => {
+    const [_, arrayno, panelno] = data.name.split('/');
+    return {
+      name: data.name,
+      arrayno: arrayno.split('array')[1],
+      panelno: panelno.split('panel')[1].split('.')[0]
+    }
+  });
   var urls = returnedData.map((data) => data.url);
   var errorsByDrone = [];
   for (var key in names) {
@@ -59,14 +66,22 @@ exports.generatePDF = async (req, res, next) => {
     });
   }
   var imgs = [];
-  let htmlString = '<html><head><title>PDF REOPRT</title></head><body><h1>PDF Report</h1><div id="company-name"></div><div id="subject"></div>';
+  let htmlString = '<html><head><title>PDF REPORT</title></head><body><h1>PDF Report</h1><div id="company-name"></div><div id="subject"></div>';
   for (var j in urls) {
     response = await axios.get(urls[j], { responseType: 'arraybuffer' });
     myimg = { width: 4, height: 4, data: response.data, extension: '.jpg' };
     imgs.push(myimg);
     const dataUri = `data:image/jpeg;base64,${response.data.toString('base64')}`;
-    htmlString += `<img src="${dataUri}" alt="Image ${j}" width="150px" height ="150px" /><br>`;
+    htmlString += `<div style="display: inline-block; text-align: center;">`;
+    htmlString += `<img src="${dataUri}" alt="Image ${j}" style="display:block; margin: 10px auto; width: 500px; height: 400px;" />`;
+    htmlString += `<div style="background-color: #f2f2f2; border: 1px solid #ccc; padding: 10px; font-size: 14px; margin: 10px auto; width: 500px; text-align: center;">`;
+    htmlString += `Array No: ${names[j].arrayno}<br />`;
+    htmlString += `Panel No: ${names[j].panelno}<br />`;
+    htmlString += `</div>`;
+    htmlString += `</div>`;
+    htmlString += `<div style="page-break-after: always;"></div>`;
   }
+  htmlString = `<div style="text-align: center;">${htmlString}</div>`;
   htmlString += '</body></html>';
 
   pdfData = {
