@@ -95,15 +95,17 @@ exports.generatePDF = async (req, res, next) => {
     }
   }, pdfData);
   const pdfBuffer = await page.pdf({
-    path: "example.pdf",
     format: "A4",
     printBackground: true,
   });
   if (!pdfBuffer) {
     console.error("Error generating PDF");
   }
+  await aws.uploadPDF(pdfBuffer,uid)
+  var userReports = await aws.getPDF(uid);
+  var numberOfFiles = userReports.length;
   await browser.close();
-  res.send({ message: "success" });
+  res.status(200).send({ report: userReports, reportcount: numberOfFiles });
 };
 
 // pdfData.images.forEach((url) => {

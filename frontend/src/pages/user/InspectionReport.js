@@ -81,14 +81,13 @@ const InspectionReport = () => {
     setIsLoadingreport(true);
     const url = process.env.REACT_APP_SERVER+"/generate";
     try {
-      await axios.post(url, { cookieValue: cookie });
-      // handle the response data here
+      const response = await axios.post(url, { cookieValue: cookie });
+      setFiles(response.data.report);
+      setError(null);
     } catch (error) {
-      // handle any errors here
+      setError(error.response.data.message);
     } finally {
-      setTimeout(() => {
-        setIsLoadingreport(false);
-      }, 2000);
+      setIsLoadingreport(false);
     }
   };
 

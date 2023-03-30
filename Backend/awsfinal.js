@@ -76,21 +76,21 @@ exports.getImg = async (id) => {
   }
 };
 
-exports.uploadPDF = async (filename, id) => {
+exports.uploadPDF = async (pdfBuffer, id) => {
   const dateStr = new Date().toISOString().replace(/:/g, '-');
   const s3Key = `${id}/report-${dateStr}.pdf`;
 
   const params = {
     Bucket: 'report-inspection',
     Key: s3Key,
-    Body: filename,
-    ContentType: 'application/pdf'
+    Body: pdfBuffer,
+    ContentType: 'application/pdf',
   };
 
   try {
       await s3.send(new PutObjectCommand(params));
   } catch (err) {
-    console.error(`Failed to upload ${filename} to S3:`, err);
+    console.error(`Failed to upload file to S3:`, err);
   }
 }
 
