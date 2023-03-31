@@ -2,11 +2,12 @@ import "../../styles/promo/promo.css";
 import "swiper/css";
 import "swiper/css/effect-cards";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Container, Navbar, Nav } from "react-bootstrap";
+import { Container, Navbar, Nav, Alert } from "react-bootstrap";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCards } from "swiper";
+import emailjs from "@emailjs/browser";
 
 import { BsPersonFill } from "react-icons/bs";
 import { MdEmail, MdCleaningServices } from "react-icons/md";
@@ -19,9 +20,10 @@ import logo1 from "../../assets/logo1.png";
 import hexagon from "../../assets/hexagons.png";
 
 import drone1 from "../../assets/drone1.png";
-import drone2 from "../../assets/drone2.jpg";
-import drone3 from "../../assets/drone3.JPG";
-import drone4 from "../../assets/drone4.jpg";
+import drone2 from "../../assets/drone2.png";
+import drone3 from "../../assets/drone3.png";
+import drone4 from "../../assets/drone4.png";
+import drone5 from "../../assets/drone5.png";
 
 import process1 from "../../assets/1.png";
 import process2 from "../../assets/2.png";
@@ -59,7 +61,7 @@ import grid8 from "../../assets/grid8.png";
 import grid9 from "../../assets/grid9.png";
 import grid10 from "../../assets/grid10.png";
 
-const imagesHeader = [drone1, drone2, drone3, drone4];
+const imagesHeader = [drone1, drone2, drone3, drone4, drone5];
 
 const services = [
   {
@@ -131,6 +133,51 @@ const PromoPage = () => {
   const [service, setService] = useState(0);
   const [isRotated, setIsRotated] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    message: "",
+  });
+
+  const form = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        "service_n6rdebg",
+        "template_xzmyg2g",
+        form.current,
+        "-0X-MEoHgmltSbWlt"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          setShowSuccessAlert(true);
+          setShowErrorAlert(false);
+          setFormData({
+            name: "",
+            email: "",
+            company: "",
+            message: "",
+          });
+        },
+        (error) => {
+          console.log(error.text);
+          setShowSuccessAlert(false);
+          setShowErrorAlert(true);
+        }
+      );
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -806,7 +853,15 @@ const PromoPage = () => {
             <div className="px-5 contact-form-container">
               <div className="contact-line"></div>
               <h1>CONTACT US</h1>
-              <form action="#">
+              {showSuccessAlert && (
+                <Alert variant="success">Message sent successfully!!</Alert>
+              )}
+              {showErrorAlert && (
+                <Alert variant="danger">
+                  Something is wrong! Try again later.
+                </Alert>
+              )}
+              <form ref={form} onSubmit={sendEmail}>
                 <div className="form-group">
                   <input
                     type="text"
@@ -815,6 +870,8 @@ const PromoPage = () => {
                     name="name"
                     placeholder="NAME"
                     required
+                    value={formData.name}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="form-group">
@@ -822,9 +879,11 @@ const PromoPage = () => {
                     type="email"
                     className="form-control bg-transparent text-white"
                     id="email"
-                    name="eamil"
+                    name="email"
                     placeholder="EMAIL"
                     required
+                    value={formData.email}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="form-group">
@@ -835,6 +894,8 @@ const PromoPage = () => {
                     name="company"
                     placeholder="COMPANY"
                     required
+                    value={formData.company}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="form-group">
@@ -846,6 +907,8 @@ const PromoPage = () => {
                     rows={5}
                     placeholder="MESSAGE"
                     required
+                    value={formData.message}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="d-flex justify-content-end">
