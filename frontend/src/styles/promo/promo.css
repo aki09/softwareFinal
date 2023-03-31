@@ -614,6 +614,19 @@ body {
   color: #07c0db;
 }
 
+.header-container--m {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.heading--m {
+  font-weight: 600;
+  color: #050049;
+  font-size: 2rem;
+}
+
 /* Grid */
 
 .grid-container {

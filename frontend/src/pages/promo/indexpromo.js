@@ -36,6 +36,8 @@ import pic5 from "../../assets/pic5.png";
 import pic6 from "../../assets/pic6.png";
 import pic7 from "../../assets/pic7.png";
 import pic8 from "../../assets/pic8.png";
+import pic9 from "../../assets/pic9.png";
+import pic10 from "../../assets/pic10.png";
 
 import laptop from "../../assets/laptop.png";
 import laptop1 from "../../assets/laptop1.png";
@@ -46,19 +48,30 @@ import laptop5 from "../../assets/laptop5.png";
 import laptop6 from "../../assets/laptop6.png";
 import laptop7 from "../../assets/laptop7.png";
 
+import grid1 from "../../assets/grid1.png";
+import grid2 from "../../assets/grid2.png";
+import grid3 from "../../assets/grid3.png";
+import grid4 from "../../assets/grid4.png";
+import grid5 from "../../assets/grid5.png";
+import grid6 from "../../assets/grid6.png";
+import grid7 from "../../assets/grid7.png";
+import grid8 from "../../assets/grid8.png";
+import grid9 from "../../assets/grid9.png";
+import grid10 from "../../assets/grid10.png";
+
 const imagesHeader = [drone1, drone2, drone3, drone4];
 
 const services = [
   {
     id: 1,
     img_url: laptop5,
-    title: "Inspection Reports",
+    title: "Fault Isolation Report",
     icon: <TbReportAnalytics className="small-circle--icon" />,
   },
   {
     id: 2,
     img_url: laptop2,
-    title: "Live Video Feed",
+    title: "Live Video Stream on",
     icon: <BiVideo className="small-circle--icon" />,
   },
   {
@@ -70,25 +83,25 @@ const services = [
   {
     id: 4,
     img_url: laptop4,
-    title: "Error Detection",
+    title: "Real-time Error Update on Dashboard",
     icon: <BiError className="small-circle--icon" />,
   },
   {
     id: 5,
     img_url: laptop3,
-    title: "AI based Detections",
+    title: "Real-time Drone Tracking on Dashboard",
     icon: <BiCurrentLocation className="small-circle--icon" />,
   },
   {
     id: 6,
     img_url: laptop7,
-    title: "Waterless Cleaning",
+    title: "Drone Enabled Waterless Cleaning",
     icon: <MdCleaningServices className="small-circle--icon" />,
   },
   {
     id: 7,
     img_url: laptop6,
-    title: "Inspection Drone",
+    title: "Drone Enabled Thermal Inspection",
     icon: <GiDeliveryDrone className="small-circle--icon" />,
   },
 ];
@@ -266,6 +279,12 @@ const PromoPage = () => {
               </SwiperSlide>
               <SwiperSlide>
                 <img src={pic8} alt="" />
+              </SwiperSlide>
+              <SwiperSlide>
+                <img src={pic9} alt="" />
+              </SwiperSlide>
+              <SwiperSlide>
+                <img src={pic10} alt="" />
               </SwiperSlide>
             </Swiper>
           </div>
@@ -468,6 +487,78 @@ const PromoPage = () => {
                       />
                     </a>
                   </div>
+                </div>
+                <div className="header-container--m">
+                  {service == 0 && (
+                    <motion.h2
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="heading--m"
+                    >
+                      {services[6].title}
+                    </motion.h2>
+                  )}
+                  {service == 1 && (
+                    <motion.h2
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="heading--m"
+                    >
+                      {services[0].title}
+                    </motion.h2>
+                  )}
+                  {service == 2 && (
+                    <motion.h2
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="heading--m"
+                    >
+                      {services[1].title}
+                    </motion.h2>
+                  )}
+                  {service == 3 && (
+                    <motion.h2
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="heading--m"
+                    >
+                      {services[2].title}
+                    </motion.h2>
+                  )}
+                  {service == 4 && (
+                    <motion.h2
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="heading--m"
+                    >
+                      {services[3].title}
+                    </motion.h2>
+                  )}
+                  {service == 5 && (
+                    <motion.h2
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="heading--m"
+                    >
+                      {services[4].title}
+                    </motion.h2>
+                  )}
+                  {service == 6 && (
+                    <motion.h2
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="heading--m"
+                    >
+                      {services[5].title}
+                    </motion.h2>
+                  )}
                 </div>
               </div>
             </>
@@ -697,56 +788,16 @@ const PromoPage = () => {
           }}
         >
           <div class="grid-wrapper">
-            <img
-              src="https://source.unsplash.com/random/600x600?water"
-              alt=""
-              className="grid-img"
-            />
-            <img
-              src="https://source.unsplash.com/random/600x600?summer"
-              alt=""
-              className="grid-img"
-            />
-            <img
-              src="https://source.unsplash.com/random/600x600?plants"
-              alt=""
-              className="grid-img"
-            />
-            <img
-              src="https://source.unsplash.com/random/600x600?snow"
-              alt=""
-              className="grid-img"
-            />
-            <img
-              src="https://source.unsplash.com/random/600x600?roses"
-              alt=""
-              className="grid-img"
-            />
-            <img
-              src="https://source.unsplash.com/random/600x600?sky"
-              alt=""
-              className="grid-img"
-            />
-            <img
-              src="https://source.unsplash.com/random/600x600?nature"
-              alt=""
-              className="grid-img"
-            />
-            <img
-              src="https://source.unsplash.com/random/600x600?blossom"
-              alt=""
-              className="grid-img"
-            />
-            <img
-              src="https://source.unsplash.com/random/600x600?ice"
-              alt=""
-              className="grid-img"
-            />
-            <img
-              src="https://source.unsplash.com/random/600x600?spring"
-              alt=""
-              className="grid-img"
-            />
+            <img src={grid1} alt="" className="grid-img" />
+            <img src={grid2} alt="" className="grid-img" />
+            <img src={grid3} alt="" className="grid-img" />
+            <img src={grid4} alt="" className="grid-img" />
+            <img src={grid5} alt="" className="grid-img" />
+            <img src={grid6} alt="" className="grid-img" />
+            <img src={grid7} alt="" className="grid-img" />
+            <img src={grid8} alt="" className="grid-img" />
+            <img src={grid9} alt="" className="grid-img" />
+            <img src={grid10} alt="" className="grid-img" />
           </div>
         </div>
 
