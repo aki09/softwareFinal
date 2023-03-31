@@ -65,13 +65,11 @@ mongoose.connect(MONGOURI, { useNewUrlParser: true, useUnifiedTopology: true }, 
   io.on('connection', (socket) => {
     socket.handshake.headers.origin = 'http://localhost:8000';
     socket.emit('connected', { message: 'Connected to server' });
-    console.log('A user connected');
 
   
 
     // Listen for socket disconnections
     socket.on('disconnect', () => {
-      console.log('A user disconnected');
     });
   });
   io.on('error', (err) => {

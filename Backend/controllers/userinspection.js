@@ -22,6 +22,9 @@ exports.inspectionReport = async (req, res, next) => {
     let user = await User.findOne({ _id: uid });
     companyn = user._id;
     var userReports = await aws.getPDF(companyn);
+    if (!userReports) {
+      return res.status(200).send({ report: [], reportcount: 0 });
+    }
     var numberOfFiles = userReports.length;
     res.status(200).send({ report: userReports, reportcount: numberOfFiles });
   } catch (error) {
@@ -48,6 +51,22 @@ exports.generatePDF = async (req, res, next) => {
       panelno: panelno.split('panel')[1].split('.')[0]
     }
   });
+  const getDefects = (data) => {
+    const defects = {};
+    data.forEach(({ name }) => {
+      const [, arrayno, panelno] = name.split('/');
+      if (!defects[arrayno]) {
+        defects[arrayno] = {
+          arrayno,
+          total: 0,
+        };
+      }
+      defects[arrayno].total++;
+    });
+    return Object.values(defects);
+  };
+  
+  const defects = getDefects(returnedData);
   var urls = returnedData.map((data) => data.url);
   var errorsByDrone = [];
   for (var key in names) {
@@ -65,6 +84,11 @@ exports.generatePDF = async (req, res, next) => {
       }
     });
   }
+  pdfData = {
+    companyName: user.company.toUpperCase(),
+    date: Date(),
+    subject: "Thermal Inspection",
+  };
   var imgs = [];
   const imagePath = path.join(__dirname, '../front.png');
   const imageData = fs.readFileSync(imagePath);
@@ -77,23 +101,21 @@ exports.generatePDF = async (req, res, next) => {
     myimg = { width: 4, height: 4, data: response.data, extension: '.jpg' };
     imgs.push(myimg);
     const dataUri = `data:image/jpeg;base64,${response.data.toString('base64')}`;
-    htmlString += `<div style="display: inline-block; text-align: center;">`;
-    htmlString += `<img src="${dataUri}" alt="Image ${j}" style="display:block; margin: 10px auto; width: 500px; height: 400px;" />`;
-    htmlString += `<div style="background-color: #f2f2f2; border: 1px solid #ccc; padding: 10px; font-size: 14px; margin: 10px auto; width: 500px; text-align: center;">`;
+    htmlString += `<div style="position: relative; font-family: Arial, Helvetica, sans-serif; padding: 1rem 2rem; width: 30%; margin: 0 auto"><h4 style="display: block; font-size: 1.5rem; color: #050049; text-align: left">DEFECT DETAILS</h4><div style="display: flex; flex-direction: column; align-items: center">`;
+    htmlString += `<img src="${dataUri}" alt="Image ${j}" style="display:block; margin: 10px; width:700px ;margin-bottom: 1rem"/>`;
+    htmlString += `<div style="padding: 2rem 3rem; border: 2px solid #050049; border-radius: 30px; width: 150px; text-align: center">`;
     htmlString += `Array No: ${names[j].arrayno}<br />`;
+    htmlString += `</div>`;
+    htmlString += `<div style="padding: 2rem 3rem; border: 2px solid #050049; border-radius: 30px; width: 150px; margin-top: 1rem; text-align: center">`;
     htmlString += `Panel No: ${names[j].panelno}<br />`;
     htmlString += `</div>`;
-    htmlString += `</div>`;
+    htmlString += `</div></div>`;
+    htmlString += `<div style="display: flex; justify-content: space-between; margin-top: 13rem; color: #050049; font-size: 1.30em;">`;
+    htmlString += `<div style="flex-grow: 3;margin-left:1rem">Flynovate: Driven By Future</div><div style="margin-right:1rem">page | ${parseInt(j) + 1}</div></div>`;
     htmlString += `<div style="page-break-after: always;"></div>`;
   }
   
   htmlString += '</body></html>';
-
-  pdfData = {
-    companyName: user.company.toUpperCase(),
-    date: Date(),
-    subject: "Thermal Inspection",
-  };
   
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -103,11 +125,12 @@ exports.generatePDF = async (req, res, next) => {
     const companyNameEl = document.querySelector("#company-name");
     companyNameEl.textContent = pdfData.companyName;
   }, pdfData);
-  const pdfBuffer = await page.pdf({ format: "A4"});
+  const pdfBuffer = await page.pdf({ format: "A4",printBackground:true});
   if (!pdfBuffer) {
     console.error("Error generating PDF");
   }
-  await aws.uploadPDF(pdfBuffer,uid)
+  await aws.uploadPDF(pdfBuffer,uid);
+  // await aws.deleteiamges(uid);
   var userReports = await aws.getPDF(uid);
   var numberOfFiles = userReports.length;
   await browser.close();
