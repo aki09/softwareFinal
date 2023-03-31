@@ -43,20 +43,21 @@ const InspectionReport = () => {
   }
 
   useEffect(() => {
+    const url = process.env.REACT_APP_SERVER + "/inspectionReport" + "?cache-bust=" + Date.now();
     if (cookie) {
-      fetchData();
+      fetchData(url);
     } else {
       navigate('/login');
     }
   }, [navigate]);
 
-  const fetchData = async() => {
+  const fetchData = async(url) => {
     setIsLoading(true);
     try {
       const navbar = document.querySelector(".navbar");
       setNavbarHeight(navbar.offsetHeight);
       const response = await axios.get(
-        process.env.REACT_APP_SERVER+"/inspectionReport",
+        url,
         {
           params: { cookieValue: cookie },
         }
