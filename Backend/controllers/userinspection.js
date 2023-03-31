@@ -57,7 +57,7 @@ exports.generatePDF = async (req, res, next) => {
       const [, arrayno, panelno] = name.split('/');
       if (!defects[arrayno]) {
         defects[arrayno] = {
-          arrayno,
+          arrayno: `${arrayno.split('array')[1]}`,
           total: 0,
         };
       }
@@ -96,6 +96,14 @@ exports.generatePDF = async (req, res, next) => {
   const dataUri = `data:image/png;base64,${base64Image}`;
 
   let htmlString= `<html><head><title>PDF REPORT</title></head><body><img src="${dataUri}" alt="Image " style="display: block; width: 100%; height: 100%;object-fit: cover;" /><div style="position: absolute;top: 40%;left: 20%;transform: translate(-50%, -50%);text-align: center;"><h3 id="company-name" style="color: white;text-transform: uppercase;font-family: Arial, Helvetica, sans-serif;font-size: 1.5rem;font-weight: 500;">User</h3></div></div>`
+  htmlString+=`<div style="position: relative; padding: 1em; color: #050049; font-family: Arial, Helvetica, sans-serif;"><div style="border-bottom: 3px solid #000; text-align: center;"> <h3 id="company-name" style="margin: 0.5em auto; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; font-size: 1.8rem;">${pdfData.companyName}</h3><h5 style="margin: 0 auto; text-transform: uppercase; font-weight: 500; font-size: 1.2rem; letter-spacing: 0.1em;">Thermal Inspection Report</h5><span id="date" style="display: block; margin: 0.5em auto;">Date of Inspection: ${pdfData.date}</span></div><div style="text-align: left;"><h1 style="text-transform: uppercase;margin:1rem 0;">Defect Overview</h1><hr color="#050049" size="2"><table style="width: 100%;"><thead style="color: #050049; font-size: 1.3rem"><th style="padding: 5px;">Sno.</th><th style="padding: 5px;">Array Number</th><th style="padding: 5px;">Number of Defects</th></thead>`
+  var ctotal=0;
+  for (var i in defects) {
+    htmlString+=`<tr style="font-size:1.5rem;"><td style="text-align: center; padding: 5px;">${parseInt(i) + 1}</td><td style="text-align: center; padding: 5px;">${defects[i].arrayno}</td><td style="text-align: center; padding: 5px;">${defects[i].total}</td></tr>`
+    ctotal+=defects[i].total;
+  }
+  htmlString+=`<tr></tr></tbody><tfoot style=" color: #050049; font-size: 1.5rem;"><td style="text-align: center; padding: 5px;" colspan="2">Total No. of Defects:</td><td style="text-align: center; padding: 5px;">${ctotal}</td></tfoot></table></div></div>`
+  htmlString += `<div style="page-break-after: always;"></div>`;
   for (var j in urls) {
     response = await axios.get(urls[j], { responseType: 'arraybuffer' });
     myimg = { width: 4, height: 4, data: response.data, extension: '.jpg' };
