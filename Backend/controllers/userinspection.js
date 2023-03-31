@@ -66,7 +66,8 @@ exports.generatePDF = async (req, res, next) => {
     });
   }
   var imgs = [];
-  let htmlString = '<html><head><title>PDF REPORT</title></head><body><h1>PDF Report</h1><div id="company-name"></div><div id="subject"></div>';
+  const pat= path.join(__dirname, "../template.txt");
+  let htmlString=fs.readFileSync(pat, 'utf8')
   for (var j in urls) {
     response = await axios.get(urls[j], { responseType: 'arraybuffer' });
     myimg = { width: 4, height: 4, data: response.data, extension: '.jpg' };
