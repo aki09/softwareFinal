@@ -107,9 +107,9 @@ function Maap1({ drones }) {
   return (
     <div
       style={{
-        width: `${windowWidth > 768 ? "100%" : "80%"}`,
+        width: `${windowWidth > 768 ? "" : "80%"}`,
         marginTop: "25%",
-        height: "100%",
+        height: `${windowWidth > 768 ? "50%" : "100%"}`,
       }}
       className="pt-4 container"
     >
