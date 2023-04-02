@@ -7,6 +7,9 @@ import { Container, Navbar, Nav, Button } from "react-bootstrap";
 import logo from "../../assets/logo.png";
 import { MdOutlineClear } from "react-icons/md";
 import Cookies from "js-cookie";
+import io from "socket.io-client";
+import { RiAdminFill } from "react-icons/ri";
+
 
 const styles = {
   mainContent: {
@@ -195,6 +198,9 @@ const FormMap = () => {
     } else {
       navigate("/login");
     }
+    const socket = io("http://localhost:3000", {
+      transports: ["websocket", "polling", "flashsocket"],
+    });
   }, []);
 
   if (!isLoggedIn) {
@@ -215,22 +221,36 @@ const FormMap = () => {
               className="justify-content-end"
             >
               <Nav className="mr-auto">
-                <Button
-                  variant="outline-secondary"
-                  size="md"
-                  className="me-1"
-                  onClick={() => navigate(-1)}
-                >
-                  Dashboard
-                </Button>
+              <div className="pt-1 pb-2">
+                <Link to="/home">
+                  <Button
+                    variant="outline-secondary"
+                    size="md"
+                    className="ps-3 pe-3 me-1"
+                  >
+                    Dashboard
+                  </Button>
+                </Link>
+              </div>
+              <div className="pt-1 pb-2">
                 <Button
                   variant="outline-secondary"
                   size="md"
                   onClick={(event) => handleSignout(event)}
+                  className="ps-3 pe-3 me-1"
                 >
                   Sign Out
                 </Button>
-              </Nav>
+              </div>
+
+              <Nav.Link>
+                <RiAdminFill
+                  style={{ fontSize: "36px" }}
+                  className="ms-3"
+                  color="#2a265f"
+                />
+              </Nav.Link>
+            </Nav>
             </Navbar.Collapse>
           </Container>
         </Navbar>

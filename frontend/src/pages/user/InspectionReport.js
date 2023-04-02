@@ -10,9 +10,10 @@ import {
   Nav,
 } from "react-bootstrap";
 import axios from "axios";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { BiRefresh } from "react-icons/bi";
 import Cookies from "js-cookie";
+import { RiAdminFill } from "react-icons/ri";
 
 const styles = {
   mainContent: {
@@ -26,12 +27,12 @@ const InspectionReport = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState([]);
   const [isLoadingreport, setIsLoadingreport] = useState(false);
-  let cookie = Cookies.get('auth-token'); 
-  const isLoggedIn = !!Cookies.get('auth-token');
+  let cookie = Cookies.get("auth-token");
+  const isLoggedIn = !!Cookies.get("auth-token");
 
   const navigate = useNavigate();
 
-  const handleSignout=(event)=>{
+  const handleSignout = (event) => {
     event.preventDefault();
     const authToken = Cookies.get("auth-token");
     if (authToken) {
@@ -40,28 +41,37 @@ const InspectionReport = () => {
         navigate("/login");
       }
     }
-  }
+  };
 
   useEffect(() => {
-    const url = process.env.REACT_APP_SERVER + "/inspectionReport" + "?cache-bust=" + Date.now();
+    const url =
+      process.env.REACT_APP_SERVER +
+      "/inspectionReport" +
+      "?cache-bust=" +
+      Date.now();
     if (cookie) {
       fetchData(url);
     } else {
-      navigate('/login');
+      navigate("/login");
     }
   }, [navigate]);
+  
+  const Loading = () => {
+    return (
+      <div className="loading">
+        <div className="loading-spinner"></div>
+      </div>
+    );
+  };
 
-  const fetchData = async(url) => {
+  const fetchData = async (url) => {
     setIsLoading(true);
     try {
       const navbar = document.querySelector(".navbar");
       setNavbarHeight(navbar.offsetHeight);
-      const response = await axios.get(
-        url,
-        {
-          params: { cookieValue: cookie },
-        }
-      );
+      const response = await axios.get(url, {
+        params: { cookieValue: cookie },
+      });
       setFiles(response.data.report);
       setIsLoading(false);
     } catch (error) {
@@ -71,7 +81,7 @@ const InspectionReport = () => {
         error.response.status <= 500
       ) {
         setError(error.response.data.message);
-        navigate('/login');
+        navigate("/login");
       } else {
         setError("Something went wrong. Please try again later.");
       }
@@ -81,7 +91,7 @@ const InspectionReport = () => {
 
   const handlereport = async () => {
     setIsLoadingreport(true);
-    const url = process.env.REACT_APP_SERVER+"/generate";
+    const url = process.env.REACT_APP_SERVER + "/generate";
     try {
       const response = await axios.post(url, { cookieValue: cookie });
       setFiles(response.data.report);
@@ -93,37 +103,56 @@ const InspectionReport = () => {
     }
   };
 
-  if(!isLoggedIn)
-  {
-    navigate('/login');
-  }else{
+  if (!isLoggedIn) {
+    navigate("/login");
+  } else if (isLoading) {
+    return <Loading />;
+  }else {
     return (
       <>
         <Navbar expand="lg" fixed="top" className="navbar bg-light mt-3">
           <Container>
-          <Navbar.Brand>
-            <Link to="/home">
-              <img src={logo} alt="" height="50" width="160" />
-            </Link>
-          </Navbar.Brand>
+            <Navbar.Brand>
+              <Link to="/home">
+                <img src={logo} alt="" height="50" width="160" />
+              </Link>
+            </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse
               id="basic-navbar-nav"
               className="justify-content-end"
             >
               <Nav className="mr-auto">
+              <div className="pt-1 pb-2">
+                <Link to="/home">
+                  <Button
+                    variant="outline-secondary"
+                    size="md"
+                    className="ps-3 pe-3 me-1"
+                  >
+                    Dashboard
+                  </Button>
+                </Link>
+              </div>
+              <div className="pt-1 pb-2">
                 <Button
                   variant="outline-secondary"
                   size="md"
-                  className="me-1"
-                  onClick={() => navigate(-1)}
+                  onClick={(event) => handleSignout(event)}
+                  className="ps-3 pe-3 me-1"
                 >
-                  Dashboard
-                </Button>
-                <Button variant="outline-secondary" size="md" onClick={(event) => handleSignout(event)}>
                   Sign Out
                 </Button>
-              </Nav>
+              </div>
+
+              <Nav.Link>
+                <RiAdminFill
+                  style={{ fontSize: "36px" }}
+                  className="ms-3"
+                  color="#2a265f"
+                />
+              </Nav.Link>
+            </Nav>
             </Navbar.Collapse>
           </Container>
         </Navbar>
@@ -151,26 +180,59 @@ const InspectionReport = () => {
                   style={{ borderBottom: "1px solid #ccc" }}
                 >
                   <h2 className="ms-1 mt-5 me-5">All Reports</h2>
-                  <a className="mb-0 pb-0 mt-5" style={{ cursor: "pointer", fontSize: "28px", color: "#2a265f",textDecoration: "none" }} onClick={handlereport}>
-                    {isLoadingreport ? "Loading..." : <BiRefresh className="mb-0 pb-0 mt-5" />}
+                  <a
+                    className="mb-0 pb-0 mt-5"
+                    style={{
+                      cursor: "pointer",
+                      fontSize: "28px",
+                      color: "#2a265f",
+                      textDecoration: "none",
+                    }}
+                    onClick={handlereport}
+                  >
+                    {isLoadingreport ? (
+                      "Loading..."
+                    ) : (
+                      <BiRefresh className="mb-0 pb-0 mt-5" />
+                    )}
                   </a>
                 </div>
-                <Row>
-                  {files.map((file, index) => (
-                    <Col md={3} key={index} className="mt-4">
-                      <Card variant="light">
-                        <Card.Body>
-                          <Button variant="outline-secondary" href={file}>
-                            Download PDF
-                          </Button>
-                        </Card.Body>
-                        <Card.Footer>
-                          <small className="text-muted">Report-{index + 1}</small>
-                        </Card.Footer>
-                      </Card>
-                    </Col>
-                  ))}
-                </Row>
+                {files.length ? (
+                  <Row>
+                    {files.map((file, index) => (
+                      <Col md={3} key={index} className="mt-4">
+                        <Card variant="light">
+                          <Card.Body>
+                            <Button variant="outline-secondary" href={file}>
+                              Download PDF
+                            </Button>
+                          </Card.Body>
+                          <Card.Footer>
+                            <small className="text-muted">
+                              Report-{index + 1}
+                            </small>
+                          </Card.Footer>
+                        </Card>
+                      </Col>
+                    ))}
+                  </Row>
+                ) : (
+                  <div
+                    className="d-flex justify-content-center align-items-center"
+                    style={{ height: "50vh" }}
+                  >
+                    <h4
+                      style={{
+                        color: "#2a265f",
+                        fontSize: "36px",
+                        fontWeight: "700",
+                      }}
+                    >
+                      No Reports generated yet. Get your first inspection Drone
+                      quickly.
+                    </h4>
+                  </div>
+                )}
               </Container>
             </div>
           </div>

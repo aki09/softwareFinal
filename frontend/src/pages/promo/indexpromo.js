@@ -269,13 +269,13 @@ const PromoPage = () => {
                 <br />
                 Cleaning Technology for Solar Panels.
               </h3>
-              <div className="d-flex align-items-center mt-3">
+              <div className="d-flex align-items-center mt-4">
                 <BsPersonFill size="50" className="iconButton" />
                 <a
-                  className="text-white pe-4 py-1 rounded-pill ps-5 spanButton"
+                  className="text-white pe-4 py-2 rounded-pill ps-5 spanButton"
                   href="#contact"
                 >
-                  CONTACT US
+                    CONTACT US
                 </a>
               </div>
             </div>
@@ -947,13 +947,13 @@ const PromoPage = () => {
               <h3>SOCIAL</h3>
               <ul>
                 <li>
-                  <a>LinkedIn</a>
+                  <a href="https://www.linkedin.com/company/flynovate/" style={{ color: "inherit", textDecoration: "none" }}>LinkedIn</a>
                 </li>
-                <li>
+                {/* <li>
                   <a>Twitter</a>
-                </li>
+                </li> */}
                 <li>
-                  <a>Instagram</a>
+                  <a href="https://www.instagram.com/_flynovate_/" style={{ color: "inherit", textDecoration: "none" }}>Instagram</a>
                 </li>
               </ul>
             </div>
@@ -962,10 +962,10 @@ const PromoPage = () => {
               <h3>FLYNOVATE</h3>
               <ul>
                 <li>
-                  <a>About Us</a>
+                  <a href="#aboutUs" style={{ color: "inherit", textDecoration: "none" }}>About Us</a>
                 </li>
                 <li>
-                  <a>News & Articles</a>
+                  <a href="/news" style={{ color: "inherit", textDecoration: "none" }}>News & Articles</a>
                 </li>
                 <li>
                   <a>Career</a>

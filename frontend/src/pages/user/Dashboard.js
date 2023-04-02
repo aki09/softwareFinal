@@ -9,6 +9,7 @@ import Topbar from "../../components/topbar";
 import { useNavigate } from "react-router-dom";
 import { AiFillCloseSquare } from "react-icons/ai";
 import Cookies from "js-cookie";
+import { Button } from "react-bootstrap";
 
 const styles = {
   mainContent: {
@@ -104,6 +105,14 @@ const Dashboard = () => {
     setIsLoading(false);
   };
 
+  const Loading = () => {
+    return (
+      <div className="loading">
+        <div className="loading-spinner"></div>
+      </div>
+    );
+  };
+
   function updateVideoUrl(url) {
     setVideoUrl(url);
   }
@@ -115,6 +124,8 @@ const Dashboard = () => {
 
   if (!isLoggedIn) {
     navigate("/login");
+  } else if (isLoading) {
+    return <Loading />;
   } else {
     return drones.length ? (
       <>
@@ -203,17 +214,43 @@ const Dashboard = () => {
       <>
         <Container
           fluid
-          className="bg-light"
-          style={{ ...styles.mainContent, marginTop: `${navbarHeight}px` }}
+          className=" "
+          style={{
+            ...styles.mainContent,
+            marginTop: `${navbarHeight}px`,
+            minHeight: "60vh",
+          }}
         >
           <Row>
             <Topbar user={user} />
           </Row>
-          <Row className="d-flex justify-content-center">
-            <h4 style={{ color: "#2a265f" }}>Flynovate</h4>
-            <p className="text-dark">
-              Please contact FLYNOVATE team for your DRONE requirements.
-            </p>
+          <Row
+            className="d-flex align-items-center "
+            style={{ height: "calc(65vh - 70px)" }}
+          >
+            <Col xs={15} md={8} lg={12} className="text-center">
+              <h4
+                style={{
+                  color: "#2a265f",
+                  fontSize: "36px",
+                  fontWeight: "bold",
+                  marginBottom: "24px",
+                }}
+              >
+                Please contact Flynovate team for your drone requirements
+              </h4>
+              <p className="text-dark" style={{ fontSize: "24px" }}>
+                Our experts will help you find the right drone for your needs.
+              </p>
+              <Button
+                variant="primary"
+                size="lg"
+                className="mt-4"
+                href="mailto:flynovate@gmail.com?subject=Drone Requirement"
+              >
+                Contact Us
+              </Button>
+            </Col>
           </Row>
         </Container>
       </>

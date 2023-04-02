@@ -55,6 +55,9 @@ exports.getImg = async (id) => {
   const all_files = [];
   try {
     const data = await s3.send(new ListObjectsV2Command(params));
+    if (!data || !data.Contents) {
+      return null;
+    }
     for (const item of data.Contents) {
       const key = item.Key;
       if (/\.(jpg|jpeg|png|gif)$/i.test(key)) {

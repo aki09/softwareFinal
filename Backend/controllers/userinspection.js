@@ -33,7 +33,6 @@ exports.inspectionReport = async (req, res, next) => {
 };
 
 exports.generatePDF = async (req, res, next) => {
-  const templatePath = path.join(__dirname, "../utils/inspection.docx");
   const token = req.body.cookieValue;
   if (!token) {
     return res.status(401).send("Authentication token missing");
@@ -43,6 +42,14 @@ exports.generatePDF = async (req, res, next) => {
   let user = await User.findOne({ _id: uid });
   var userid = user._id;
   var returnedData = await aws.getImg(userid);
+  if (!returnedData) {
+    var userReports = await aws.getPDF(uid);
+    if (!userReports) {
+      return res.status(200).send({ report: [], reportcount: 0 });
+    }
+    var numberOfFiles = userReports.length;
+    return res.status(200).send({ report: userReports, reportcount: numberOfFiles });
+  }
   var names = returnedData.map((data) => {
     const [_, arrayno, panelno] = data.name.split('/');
     return {
