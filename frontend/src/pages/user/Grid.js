@@ -145,6 +145,10 @@ const FormMap = () => {
   };
   const handlemarkerset = (id, event) => {
     event.preventDefault();
+    if (markers.length < 4) {
+      setError("Please Select all the 4 points");
+      return 0;
+    }
     if (arrayDist.length == 0) {
       console.log("helo");
       setError("Please Enter the distance between arrays");
@@ -436,9 +440,10 @@ const FormMap = () => {
                   </button>
                 </div>
               </div>
-              <div className="form-group form-row">
+              <div className="form-group form-row ">
                 <label
                   style={{
+                    marginLeft:"100px",
                     marginRight: "50px",
                     fontSize: "1.1rem",
                     justifyContent: "center",
@@ -457,16 +462,16 @@ const FormMap = () => {
                     value={arrayDist}
                     required
                   />
-                  {error && (
-                    <div className="medium text-danger text-3xl" role="alert">
+                </div>
+              </div>
+              {error && (
+                    <div className="medium d-flex text-danger justify-content-center text-3xl" role="alert">
                       {error}
                     </div>
                   )}
-                </div>
-              </div>
-              <div className="form-row-last">
+              <div className="form-row-last d-flex justify-content-center mt-3">
                 <button
-                  className="btn btn-outline-dark btn-md"
+                  className="btn btn-outline-dark btn-lg"
                   onClick={(event) => handlemarkerset(id, event)}
                 >
                   Proceed
