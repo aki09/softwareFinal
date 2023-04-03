@@ -29,6 +29,10 @@ const Register = () => {
     if (isLoggedIn) {
       navigate("/home");
     }
+    let isLoggedInAdmin = !!Cookies.get('admin-auth-token');
+    if(isLoggedInAdmin){
+      navigate("/pchiahome");
+    }
   });
 
   const handleTogglePassword = () => {

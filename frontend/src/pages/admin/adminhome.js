@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation, Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import Cookies from "js-cookie";
 import {
   Container,
   Navbar,
@@ -26,39 +27,57 @@ const AdminHome = () => {
   const [users, setusers] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const location = useLocation();
-  const cookieValue = location.state.cookieValue;
   const navigate = useNavigate();
+  let cookie = Cookies.get("admin-auth-token");
+  const isLoggedIn = !!Cookies.get("admin-auth-token");
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(process.env.REACT_APP_SERVER+"/adm/home", {
-          params: { cookieValue: cookieValue },
-        });
-        document.cookie = `access_token=${cookieValue}`;
-        const navbar = document.querySelector(".navbar");
-        setNavbarHeight(navbar.offsetHeight);
-        setAdmin(response.data.admin);
-        setDrones(response.data.drones);
-        setusers(response.data.users);
+    let isLoggedInUser = !!Cookies.get('auth-token');
+    if(isLoggedInUser){
+        navigate("/home");
+    }
+    if (cookie) {
+      const url =
+      process.env.REACT_APP_SERVER +
+      "/adm/home" +
+      "?cache-bust=" +
+      Date.now();
+      fetchData(url);
+    } else {
+      setTimeout(() => {
+        navigate("/pchia");
+      }, 0);
+    }
+  }, [cookie, navigate]);
 
-        setIsLoading(false);
-      } catch (err) {
-        setError(err);
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const fetchData = async (url) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(url, {
+        params: { cookieValue: cookie },
+      });
+      const navbar = document.querySelector(".navbar");
+      setNavbarHeight(navbar.offsetHeight);
+      setAdmin(response.data.admin);
+      setDrones(response.data.drones);
+      setusers(response.data.users);
+
+      setIsLoading(false);
+    } catch (err) {
+      setError(err);
+      setIsLoading(false);
+    }
+  };
 
   const handleSignout=(event)=>{
     event.preventDefault();
-    const url = process.env.REACT_APP_SERVER+"/adm/logout";
-    const res = axios.post(url);
-    document.cookie = 'access_token=';
-    navigate('/pchia', { replace: true });
+    const authToken = Cookies.get("admin-auth-token");
+    if (authToken) {
+      Cookies.remove("admin-auth-token");
+      if (!Cookies.get("admin-auth-token")) {
+        navigate("/pchia");
+      }
+    }
   }
   const cleaningDrones = drones.filter((drone) => drone.type === "cleaning");
   const inspectionDrones = drones.filter(

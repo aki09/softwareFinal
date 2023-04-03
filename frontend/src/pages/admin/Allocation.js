@@ -12,6 +12,7 @@ import {
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const styles = {
   mainContent: {
@@ -20,10 +21,16 @@ const styles = {
 };
 
 const Allocation = () => {
-  const location = useLocation();
-  const { id } = location.state;
   const navigate = useNavigate();
+  let cookie = Cookies.get("admin-auth-token");
   const [navbarHeight, setNavbarHeight] = useState(0);
+  const location = useLocation();
+  let id;
+  try {
+    id = location.state.id;
+  } catch {
+    navigate("/pchia");
+  }
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [drone, setDrone] = useState([]);
@@ -31,6 +38,7 @@ const Allocation = () => {
   const [selectedItem, setSelectedItem] = useState();
   const user = users.find((user) => user._id === selectedItem);
   const [showOverlay, setShowOverlay] = useState(false);
+  const isLoggedIn = !!Cookies.get("admin-auth-token");
 
   const handleSelect = (eventKey) => {
     setSelectedItem(eventKey);
@@ -42,24 +50,42 @@ const Allocation = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(process.env.REACT_APP_SERVER+"/adm/adduser", {
-          params: { cookieValue: cookieValue, droneid: id },
-        });
-        setUsers(response.data.users);
-        setDrone(response.data.drone);
-        setIsLoading(false);
-      } catch (err) {
-        setError(err);
-        setIsLoading(false);
+    let isLoggedInUser = !!Cookies.get('auth-token');
+    if(isLoggedInUser){
+        navigate("/home");
+    }
+    if (cookie) {
+      fetchData();
+    } else {
+      navigate("/login");
+    }
+  }, [cookie, navigate]);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const navbar = document.querySelector(".navbar");
+      setNavbarHeight(navbar.offsetHeight);
+      const response = await axios.get(process.env.REACT_APP_SERVER+"/adm/adduser", {
+        params: { cookieValue: cookie, droneid: id },
+      });
+      setUsers(response.data.users);
+      setDrone(response.data.drone);
+      setIsLoading(false);
+    } catch (err) {
+      if (
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status <= 500
+      ) {
+        setError(error.response.data.message);
+        navigate("/login");
+      } else {
+        setError("Something went wrong. Please try again later.");
       }
-    };
-    fetchData();
-    const navbar = document.querySelector(".navbar");
-    setNavbarHeight(navbar.offsetHeight);
-  }, []);
+    }
+    setIsLoading(false);
+  };
 
   const handleadduser = async (id, droneid, event) => {
     event.preventDefault();
@@ -68,23 +94,20 @@ const Allocation = () => {
       params: { userid: id, droneid: droneid },
     });
     if (res) {
-      navigate("/pchiahome", {
-        state: { cookieValue: cookieValue },
-      });
+      navigate("/pchiahome");
     }
   };
   
   const handleSignout=(event)=>{
     event.preventDefault();
-    const url = process.env.REACT_APP_SERVER+"/adm/logout";
-    const res = axios.post(url);
-    document.cookie = 'access_token=';
-    navigate('/pchia', { replace: true });
+    const authToken = Cookies.get("admin-auth-token");
+    if (authToken) {
+      Cookies.remove("admin-auth-token");
+      if (!Cookies.get("admin-auth-token")) {
+        navigate("/pchia");
+      }
+    }
   }
-  const cookieValue = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("access_token="))
-    ?.split("=")[1];
 
   return (
     <>

@@ -3,7 +3,7 @@ const { sign, verify } = require("jsonwebtoken");
 const createTokens = (admin) => {
   const accessToken = sign(
     { userName: admin.userName, id: admin.id },
-    "jwtsecretpls"
+    "jwtsecretplschangeAKIATLAOEO6AE3ZHGYX4"
   );
 
   return accessToken;

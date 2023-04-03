@@ -7,8 +7,6 @@ router.post('/login', adminController.postLogin);
 
 router.post('/signup', adminController.postSignup);
 
-router.post('/logout', adminController.postLogout);
-
 router.get('/home', adminController.getHome);
 
 router.get('/adduser', adminController.adduser);

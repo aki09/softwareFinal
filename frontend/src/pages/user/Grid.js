@@ -170,32 +170,6 @@ const FormMap = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const navbar = document.querySelector(".navbar");
-        setNavbarHeight(navbar.offsetHeight);
-        const response = await axios.get(
-          process.env.REACT_APP_SERVER + "/form",
-          {
-            params: { cookieValue: cookie, droneid: id },
-          }
-        );
-        setIsLoading(false);
-      } catch (error) {
-        if (
-          error.response &&
-          error.response.status >= 400 &&
-          error.response.status <= 500
-        ) {
-          setError(error.response.data.message);
-          navigate("/login");
-        } else {
-          setError("Something went wrong. Please try again later.");
-        }
-      }
-      setIsLoading(false);
-    };
     fetchlocation();
     if (cookie) {
       fetchData();
@@ -205,7 +179,34 @@ const FormMap = () => {
     const socket = io("http://localhost:3000", {
       transports: ["websocket", "polling", "flashsocket"],
     });
-  }, []);
+  }, [cookie, navigate]);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const navbar = document.querySelector(".navbar");
+      setNavbarHeight(navbar.offsetHeight);
+      const response = await axios.get(
+        process.env.REACT_APP_SERVER + "/form",
+        {
+          params: { cookieValue: cookie, droneid: id },
+        }
+      );
+      setIsLoading(false);
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status <= 500
+      ) {
+        setError(error.response.data.message);
+        navigate("/login");
+      } else {
+        setError("Something went wrong. Please try again later.");
+      }
+    }
+    setIsLoading(false);
+  };
 
   if (!isLoggedIn) {
     navigate("/login");
