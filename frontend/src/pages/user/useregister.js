@@ -29,8 +29,8 @@ const Register = () => {
     if (isLoggedIn) {
       navigate("/home");
     }
-    let isLoggedInAdmin = !!Cookies.get('admin-auth-token');
-    if(isLoggedInAdmin){
+    let isLoggedInAdmin = !!Cookies.get("admin-auth-token");
+    if (isLoggedInAdmin) {
       navigate("/pchiahome");
     }
   });
@@ -310,12 +310,16 @@ const Register = () => {
           height: "100vh",
         }}
       >
-        <div className="heading d-flex align-item-center text-light p-5">
+        <a
+          href="/"
+          className="heading d-flex align-item-center text-light p-5"
+          style={{ textDecoration: "none" }}
+        >
           <img src={logo} width="50" />
           <h3 className="fly m-2">
             Fly<span className="novate">novate</span>
           </h3>
-        </div>
+        </a>
         <div className="login-box">
           <h2>Sign Up</h2>
           <form>

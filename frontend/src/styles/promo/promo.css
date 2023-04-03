@@ -432,7 +432,7 @@ body {
 }
 
 .laptop-template {
-  width: 320px;
+  width: 450px;
   position: absolute;
   top: 10;
   margin-left: auto;
@@ -440,11 +440,11 @@ body {
 }
 
 .laptop-img {
-  width: 200px;
+  object-fit: cover;
+  width: 280px;
   position: absolute;
   margin-left: auto;
-  height: 140px;
-  margin-top: -0.6em;
+  margin-top: -3.5em;
 }
 
 .spinner-container {

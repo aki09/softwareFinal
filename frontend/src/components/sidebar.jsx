@@ -327,103 +327,140 @@ const Sidebar = ({
             </>
           ) : (
             <>
+              {windowWidth > 768 ? (
+                <div
+                  className="pt-2 bg-light"
+                  style={{
+                    position: "fixed",
+                    top: `${navbarHeight}px`,
+                    zIndex: 1,
+                    width: "20%",
+                    paddingLeft: "7vw",
+                    paddingBottom: "2vh",
+                  }}
+                >
+                  <BootstrapSwitchButton
+                    checked={showInspection}
+                    onlabel={<FaCamera />}
+                    offlabel={<FaBroom />}
+                    onChange={handleType}
+                    onstyle="outline-primary"
+                    offstyle="outline-primary"
+                    width={100}
+                  />
+                </div>
+              ) : (
+                <>
+                  <div
+                    className={` bg-light`}
+                    style={{
+                      position: "fixed",
+                      top: `${navbarHeight}px`,
+                      zIndex: 1,
+                      width: "100%",
+                      paddingLeft: "7vw",
+                      paddingBottom: "2vh",
+                    }}
+                  >
+                    <div className="ms-4">
+                      <h1>
+                        Greetings,{" "}
+                        <span style={{ color: "#2a265f" }}>{user.company}</span>
+                      </h1>
+                      <h6>Your Performance Report</h6>
+                      <BootstrapSwitchButton
+                        checked={showInspection}
+                        onlabel={<FaCamera />}
+                        offlabel={<FaBroom />}
+                        onChange={handleType}
+                        onstyle="outline-primary"
+                        offstyle="outline-primary"
+                        width={100}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
               <div
-                className="pt-2 bg-light"
-                style={{
-                  position: "fixed",
-                  top: `${navbarHeight}px`,
-                  zIndex: 1,
-                  width: "25vw",
-                  paddingLeft: "7vw",
-                  paddingBottom: "2vh",
-                }}
+                className="container"
+                style={{ marginTop: `${windowWidth > 768 ? "30%" : "30%"}` }}
               >
-                <BootstrapSwitchButton
-                  checked={showInspection}
-                  onlabel={<FaCamera />}
-                  offlabel={<FaBroom />}
-                  onChange={handleType}
-                  onstyle="outline-primary"
-                  offstyle="outline-primary"
-                  width={100}
-                />
-              </div>
-              <div className="pt-3">
                 {showInspection &&
                   inspectionDroneList.map((drone, i) => (
                     <div key={drone._id}>
-                      <ListGroup>
-                        <Card
-                          className="m-2 pt-3 pb-3"
-                          style={{ boxShadow: "0 0 10px #ccc" }}
-                          variant="light"
-                        >
-                          <Card.Body>
-                            <Card.Subtitle
-                              className="d-flex justify-content-start"
-                              style={{ color: "black" }}
-                            >
-                              <BsCircleFill
-                                className="me-2 mt-1"
-                                fontSize="11px"
-                                style={{ color: drone.color }}
-                              />
+                      <Card
+                        className="m-2 pt-3 pb-3"
+                        style={{
+                          boxShadow: "0 0 10px #ccc",
+                          width: `${windowWidth > 768 ? "95%" : "50%"}`,
+                        }}
+                        variant="light"
+                      >
+                        <Card.Body>
+                          <Card.Subtitle
+                            className="d-flex justify-content-start"
+                            style={{ color: "black" }}
+                          >
+                            <BsCircleFill
+                              className="me-2 mt-1"
+                              fontSize="11px"
+                              style={{ color: drone.color }}
+                            />
 
-                              {drone.name}
-                            </Card.Subtitle>
-                            <Card.Text className="battery-gauge d-flex justify-content-end">
-                              <BatteryGauge
-                                value={filteredDrones[i].battery}
-                                size={45}
-                              />
-                            </Card.Text>
-                            <div className="m-auto">
-                              {drone.takeOffStatus ? (
+                            {drone.name}
+                          </Card.Subtitle>
+                          <Card.Text className="battery-gauge d-flex justify-content-end">
+                            <BatteryGauge
+                              value={filteredDrones[i].battery}
+                              size={45}
+                            />
+                          </Card.Text>
+                          <div className="m-auto">
+                            {drone.takeOffStatus ? (
+                              <Button
+                                variant="outline-dark"
+                                size="sm"
+                                className="me-1 mb-0"
+                                onClick={() => handleTakeoffStatus(drone._id)}
+                                style={{ width: "90%" }}
+                              >
+                                Land
+                              </Button>
+                            ) : (
+                              <Link to="/grid" state={{ id: drone._id }}>
                                 <Button
                                   variant="outline-dark"
                                   size="sm"
                                   className="me-1 mb-0"
-                                  onClick={() => handleTakeoffStatus(drone._id)}
                                   style={{ width: "90%" }}
                                 >
-                                  Land
+                                  TakeOff
                                 </Button>
-                              ) : (
-                                <Link to="/grid" state={{ id: drone._id }}>
-                                  <Button
-                                    variant="outline-dark"
-                                    size="sm"
-                                    className="me-1 mb-0"
-                                    style={{ width: "90%" }}
-                                  >
-                                    TakeOff
-                                  </Button>
-                                </Link>
-                              )}
-                              {drone.takeOffStatus ? (
-                                <Button
-                                  variant="dark"
-                                  size="sm"
-                                  className="mt-1 mb-0"
-                                  style={{ width: "90%" }}
-                                  onClick={() => handleShowLiveFeed(drone._id)}
-                                >
-                                  Show Live Feed
-                                </Button>
-                              ) : (
-                                <Button
-                                  variant="dark"
-                                  size="sm"
-                                  className="mt-1 mb-0"
-                                  style={{ width: "90%" }}
-                                >
-                                  No Live Feed
-                                </Button>
-                              )}
-                            </div>
-                          </Card.Body>
-                        </Card>
-                      </ListGroup>
+                              </Link>
+                            )}
+                            {drone.takeOffStatus ? (
+                              <Button
+                                variant="dark"
+                                size="sm"
+                                className="mt-1 mb-0"
+                                style={{ width: "90%" }}
+                                onClick={() => handleShowLiveFeed(drone._id)}
+                              >
+                                Show Live Feed
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="dark"
+                                size="sm"
+                                className="mt-1 mb-0"
+                                style={{ width: "90%" }}
+                              >
+                                No Live Feed
+                              </Button>
+                            )}
+                          </div>
+                        </Card.Body>
+                      </Card>
                     </div>
                   ))}
               </div>
@@ -431,7 +468,10 @@ const Sidebar = ({
                 <>
                   <Card
                     className="m-2 pt-3 pb-3"
-                    style={{ boxShadow: "0 0 10px #ccc" }}
+                    style={{
+                      boxShadow: "0 0 10px #ccc",
+                      width: `${windowWidth > 768 ? "95%" : "50%"}`,
+                    }}
                     variant="light"
                   >
                     <Card.Body>

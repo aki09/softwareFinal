@@ -140,7 +140,14 @@ const Dashboard = () => {
                 zIndex: 99,
               }}
             >
-              <iframe width="832" height="468" src={videoUrl}></iframe>
+              <iframe
+                width="832"
+                height="468"
+                src={videoUrl}
+                style={{
+                  borderRadius: "10px",
+                }}
+              ></iframe>
               <button
                 style={{ position: "absolute", top: 0, right: 0 }}
                 onClick={handleCloseVideoFeed}

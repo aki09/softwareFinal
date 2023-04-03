@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/Auth/Login.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -15,18 +15,16 @@ const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  useEffect(()=>{
-  let isLoggedIn = !!Cookies.get('auth-token');
-    if(isLoggedIn){
+  useEffect(() => {
+    let isLoggedIn = !!Cookies.get("auth-token");
+    if (isLoggedIn) {
       navigate("/home");
     }
-    let isLoggedInAdmin = !!Cookies.get('admin-auth-token');
-    if(isLoggedInAdmin){
+    let isLoggedInAdmin = !!Cookies.get("admin-auth-token");
+    if (isLoggedInAdmin) {
       navigate("/pchiahome");
     }
-  })
-
-
+  });
 
   const handleChange = ({ currentTarget: input }) => {
     setuser({ ...user, [input.name]: input.value });
@@ -161,12 +159,16 @@ const Login = () => {
           height: "100vh",
         }}
       >
-        <div className="heading d-flex align-item-center text-light p-5">
+        <a
+          href="/"
+          className="heading d-flex align-item-center text-light p-5"
+          style={{ textDecoration: "none" }}
+        >
           <img src={logo} width="50" />
           <h3 className="fly m-2">
             Fly<span className="novate">novate</span>
           </h3>
-        </div>
+        </a>
         <div className="login-box">
           <h2>Login</h2>
           {error && (
@@ -205,7 +207,9 @@ const Login = () => {
               </button>
             </div>
 
-            <button  type="submit" className="submit-btn">Submit</button>
+            <button type="submit" className="submit-btn">
+              Submit
+            </button>
           </form>
 
           <div className="mt-5 text-light">
