@@ -227,9 +227,9 @@ const PromoPage = () => {
               <Nav.Link href="#services" className="nav-links text-white pt-3">
                 OUR SERVICES
               </Nav.Link>
-              <Nav.Link href="/news" className="nav-links text-white pt-3">
+              {/* <Nav.Link href="/news" className="nav-links text-white pt-3">
                 NEWS & ARTICLES
-              </Nav.Link>
+              </Nav.Link> */}
               <Nav.Link href="/login">
                 <div className="d-flex align-items-center">
                   <BsPersonFill size="42" className="iconButton" />
@@ -834,7 +834,7 @@ const PromoPage = () => {
             position: "relative",
           }}
         >
-          <div class="grid-wrapper">
+          <div className="grid-wrapper">
             <img src={grid1} alt="" className="grid-img" />
             <img src={grid2} alt="" className="grid-img" />
             <img src={grid3} alt="" className="grid-img" />
