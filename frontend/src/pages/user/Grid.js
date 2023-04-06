@@ -176,7 +176,7 @@ const FormMap = () => {
     } else {
       navigate("/login");
     }
-    const socket = io("http://localhost:3000", {
+    const socket = io(process.env.REACT_APP_SERVER, {
       transports: ["websocket", "polling", "flashsocket"],
     });
   }, [cookie, navigate]);
@@ -271,7 +271,7 @@ const FormMap = () => {
               >
                 <GoogleMapReact
                   bootstrapURLKeys={{
-                    key: process.env.react_google_maps_api,
+                    key: 'AIzaSyAgm8JfqqiGcpNCeKrx9po0hPQfNwUUgfk',
                     libraries: ["places", "geometry"],
                   }}
                   yesIWantToUseGoogleMapApiInternals

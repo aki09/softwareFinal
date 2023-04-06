@@ -28,15 +28,6 @@ const Topbar = ({ user }) => {
     };
   }, []);
 
-  const handleTake = (event) => {
-    event.preventDefault();
-    const url = "http://localhost:3000/set";
-    const res = axios.post(url, {
-      droneid: "63d9138e870ba132c5d20aa6",
-      userid: "6156272d93d079ba45eab3af",
-      eror: "fault",
-    });
-  };
   
   const handleSignout = (event) => {
     event.preventDefault();

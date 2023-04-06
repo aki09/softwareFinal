@@ -42,7 +42,7 @@ const ErrorList = ({ drones }) => {
   }).reverse();
 
   useEffect(() => {
-    const socket = io("http://localhost:3000", {
+    const socket = io(process.env.REACT_APP_SERVER, {
       transports: ["websocket", "polling", "flashsocket"],
     });
 

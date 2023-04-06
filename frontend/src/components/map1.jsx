@@ -24,7 +24,7 @@ function Maap1({ drones }) {
       }
     );
   };
-  const socket = io("http://localhost:3000", {
+  const socket = io(process.env.REACT_APP_SERVER, {
     transports: ["websocket", "polling", "flashsocket"],
   });
 
@@ -128,6 +128,7 @@ function Maap1({ drones }) {
       </Card>
       <GoogleMapReact
         bootstrapURLKeys={{
+          key: 'AIzaSyAgm8JfqqiGcpNCeKrx9po0hPQfNwUUgfk',
           libraries: ["places", "geometry"],
         }}
         yesIWantToUseGoogleMapApiInternals

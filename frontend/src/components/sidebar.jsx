@@ -41,7 +41,7 @@ const Sidebar = ({
     cleaningDroneList.length > 3 || inspectionDroneList.length > 3;
 
   useEffect(() => {
-    const socket = io("http://localhost:3000", {
+    const socket = io(process.env.REACT_APP_SERVER, {
       transports: ["websocket", "polling", "flashsocket"],
     });
 
@@ -94,7 +94,7 @@ const Sidebar = ({
   };
 
   const handleTakeoffStatus = async (id) => {
-    const url = "http://localhost:3000/settakeoff";
+    const url = process.env.REACT_APP_SERVER +"/settakeoff";
     const res = await axios.get(url, {
       params: { droneid: id },
     });
