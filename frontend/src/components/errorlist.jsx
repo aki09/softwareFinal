@@ -17,11 +17,19 @@ const ErrorList = ({ drones }) => {
   let droneidno = 0;
 
   const errorDiv = Droneno.map((droneno, index) => {
-    const tstamp = time[index];
-    const now = new Date().getTime();
-    const timeDiff = Math.floor((now - tstamp) / 1000);
-    const minutes = Math.floor(timeDiff / 60);
-    const seconds = timeDiff % 60;
+    let tstamp = time[index];
+    const now = new Date();
+    const timeDiff = Math.floor((now-tstamp) / 1000);
+    let minutes=0;
+    let seconds=0;
+    if(timeDiff==-1)
+    {
+      minutes = 0;
+      seconds = 0;
+    }else{
+      minutes = Math.floor(timeDiff / 60);
+      seconds = timeDiff % 60;
+    }
     return (
       <>
         <li style={{ listStyle: "disc", color: "#2a265f" }} key={index}>
@@ -55,7 +63,7 @@ const ErrorList = ({ drones }) => {
         }
         if (drones[i]._id == data.error.droneId) {
           setDroneno((prevdroneno) => [...prevdroneno, droneidno]);
-          const tstamp = new Date(data.error.timestamps).getTime();
+          const tstamp = new Date(data.error.timestamps);
           setTime((prevtime) => [...prevtime, tstamp]);
           setError((preverror) => [...preverror, error]);
           break;
