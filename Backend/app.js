@@ -63,7 +63,7 @@ mongoose.connect(MONGOURI, { useNewUrlParser: true, useUnifiedTopology: true }, 
   console.log('Connected to MongoDB');
 
   io.on('connection', (socket) => {
-    socket.handshake.headers.origin = 'http://localhost:8000';
+    socket.handshake.headers.origin = '*';
     socket.emit('connected', { message: 'Connected to server' });
 
   
