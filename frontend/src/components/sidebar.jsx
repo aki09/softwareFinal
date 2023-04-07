@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import { FaBroom, FaCamera } from "react-icons/fa";
+import { AiOutlineDustbin } from 'react-icons/ai';
 import { BsCircleFill } from "react-icons/bs";
 import { CgCircleci } from "react-icons/cg";
 import { Button, ListGroup, Card } from "react-bootstrap";
@@ -195,7 +196,7 @@ const Sidebar = ({
                   <BootstrapSwitchButton
                     checked={showInspection}
                     onlabel={<FaCamera />}
-                    offlabel={<FaBroom />}
+                    offlabel={<img width="35%" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEc0lEQVR4nNWZW4hVVRjHf9NlyHKsULqhaWQZUYgMZKQPMcykUvQShZAv9hDdILpg0ktED1FWRleNCInIsEmJCosKooLMLjTd7zQ6EeLo5EyGY9qOD/4bFqu911p7e86ZOX/4GGafdfvv9d03tB8uAd4HhoFtwNW0IaYBu4HMk9toM9xXQCLT7bQNTgXGSoj8SRvh8RISJhtoE8wBDgSI9NImeCFA4nfgaNoAFwKHA0TWuINnAf3AqGQzMI/JgdcCJEzmuyT2FAywZzMnlgOLIyS+dAf3BwZuYmLxQYTIKnfwaGDgPm/hy4EhYCewrMkkroiQOOxrTIiIH2h2Or/taCKJo4CBCJF3/UmbA4P7J4jIiggJk5X+pHkBYz/HG7tMZIzE0iaR6AR+jZD4Wwnk/zBThr1P0l9AolU4G9geIbKRSYQuoAdYLsM+0/t9EfAycKiAiDmdCcdxisajJXHhduBEL896WI7HxuwCjq2zsS20XrZxUH/X6XmdW/gkwZDHgCeAc725twKr65C4LOCe7XlfxfVWJZDIvFjxhs7RQU2cFYkxecCcXWHNE4DPKpLJJAOyp8qE1idu8HSFvMkwHXgxktFmAbHGwylViLjBLySDCWv1qDAy75RjqlRzbw0y35fFkSKMJy5qB4xhg8aaK10LnOH8thD4ogaZZ1OJ7Ehc8LeEtRYVxINPHfvqEKFrgfsT9z2oEiSKdYkLPhVYY5bz9u8E/vXmjgB3e2rSIRtK2fv6FCJzEr2WH5FzTFHMeEf5k+FiueA7vBvfD7wJ3OzMt+j9gF7ADyX7P0gi+nTYMhJlcaTTK1HfLqg2lxfcUAY8AhxfULcPF4y9hwqYLRc7KAcwKHUquwnzRq+XOIWN6hbmB12iMmK7bCaTDEu173KS1y6l949K9TY1sw10XkJBZLIVmOHNNdv4sGDskNSsdmSvgil6e/sruM/d0vElSt0NpwNbgH8Kxn+rbuNNwDXApY0k0CnPMVQjDrgyrnwqx0nKALpLir5Khh6qpxfq7RS1+OuKxZnHgAu8/ebrlvyWqXnAJEzTG+mVkd0rIx5p4OHLZAT4Gljg1TFzdabuKjbzcwsOHJO/gIfkRGrjlQYcZFy32VtSslaRvQqwbwEnVyFivv6jIyRxpfORJvRZoIpsqXMr5jm+q7HZmEPCPNDnDVS3xdSERfBfKmw04Oj0DH15DY3/GDhfkTqLiK11RDgtoUTdo6Bo3gWR+THBO+VNDEsQY0TcWFMbXUr+/I7fe8CNTgvH4swN8jihQ1nCeJXmLEiwoa00EMeoRdOttML+d9GX0CXMZbUTr2J2eKggUDYUpkYX6VBfVbCjNc7txb5IZY1IR0KYGvlIWaZO+ccZ+4D5fMKcbxy7ayp6tFnsQLucLoq1PF9KmHNAatwy2MFuUSOiSL+fcXpR00sKryK5rpUkfEIr1Iz+Sbqd1xr57aWm/GuZhJgre0rtLj7XqoqwKpaqfinrhrjypLzZpIelPBYIrQnxqvKwP9SVsTK2Fv4D4+uprmViiM0AAAAASUVORK5CYII=" />}
                     onChange={handleType}
                     onstyle="outline-primary"
                     offstyle="outline-primary"
