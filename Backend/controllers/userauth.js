@@ -102,10 +102,11 @@ exports.sendotp = async(req, res) => {
     if (userExists) {
       return res.status(400).json({ error: "Username already exists. Enter a new one" });
     }
-  const otp = otpGenerator.generate(6, {
-    upperCase: false,
-    specialChars: false,
-  });
+    let otpty = await Otp.findOne({ email:email });
+    if (otpty) {
+      await otpty.deleteOne();
+    }
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
   const mailOptions = {
     from: process.env.gmailuser,
     to: email,
@@ -121,8 +122,7 @@ exports.sendotp = async(req, res) => {
       email,
       otp,
       expiresAt: Date.now() + 5 * 60 * 1000, // 5 minutes
-    });
-
+    })
     try {
       await newOtp.save();
       res.json({ message: "OTP sent successfully" });
@@ -142,10 +142,7 @@ exports.resendotp = async (req, res) => {
     let otp = await Otp.findOne({ email:email });
   
     if (!otp) {
-      const newOtp = otpGenerator.generate(6, {
-        upperCase: false,
-        specialChars: false,
-      });
+      const newOtp =  Math.floor(100000 + Math.random() * 900000).toString();
       const newExpiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
       const newOtpObj = new Otp({ email, otp: newOtp, expiresAt: newExpiresAt });
       try {
@@ -169,10 +166,7 @@ exports.resendotp = async (req, res) => {
     }
     if (Date.now() > otp.expiresAt) {
       await otp.deleteOne();
-      const newOtp = otpGenerator.generate(6, {
-        upperCase: false,
-        specialChars: false,
-      });
+      const newOtp =  Math.floor(100000 + Math.random() * 900000).toString();
       const newExpiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
       const newOtpObj = new Otp({ email, otp: newOtp, expiresAt: newExpiresAt });
       try {

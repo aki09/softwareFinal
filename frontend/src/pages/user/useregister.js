@@ -393,7 +393,8 @@ const Register = () => {
               <form>
                 <div className="user-box">
                   <input
-                    type="string"
+                    type="number"
+                    length='6'
                     name="otp"
                     onChange={handleOTPChange}
                     value={OTP}
