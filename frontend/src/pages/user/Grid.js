@@ -164,8 +164,11 @@ const FormMap = () => {
         id: id,
         markers: markers,
         arrayDist: arrayDist,
+      }).then(() => {
+        setTimeout(() => {
+          navigate("/home");
+        }, 100); // wait for 30 seconds (30000 milliseconds)
       });
-      navigate("/home");
     }
   };
 
@@ -292,7 +295,7 @@ const FormMap = () => {
               </div>
             </div>
             <form className="form-detail">
-              <h2>CO_ORDINATES</h2>
+              <h2>COORDINATES</h2>
               <div className="form-group">
                 <div className="hello">
                   <label>POINT - 1</label>

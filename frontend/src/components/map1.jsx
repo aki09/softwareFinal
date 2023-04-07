@@ -137,7 +137,7 @@ function Maap1({ drones }) {
           renderMarkers(droneList);
         }}
         center={{ lat: currentLocation.lat, lng: currentLocation.lng }}
-        defaultZoom={1}
+        defaultZoom={15}
         options={{
           mapTypeId: "satellite",
         }}
