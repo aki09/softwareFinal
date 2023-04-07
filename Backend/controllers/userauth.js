@@ -8,7 +8,6 @@ const Otp = require("../models/otp");
 const dotenv = require("dotenv");
 const fs = require("fs");
 dotenv.config();
-const redis = require("redis");
 
 exports.postLogin = (req, res, next) => {
   const userName = req.body.username;
