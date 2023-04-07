@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import { FaBroom, FaCamera } from "react-icons/fa";
-import { AiOutlineDustbin } from 'react-icons/ai';
+import { AiOutlineDustbin } from "react-icons/ai";
 import { BsCircleFill } from "react-icons/bs";
 import { CgCircleci } from "react-icons/cg";
 import { Button, ListGroup, Card } from "react-bootstrap";
@@ -95,7 +95,7 @@ const Sidebar = ({
   };
 
   const handleTakeoffStatus = async (id) => {
-    const url = process.env.REACT_APP_SERVER +"/settakeoff";
+    const url = process.env.REACT_APP_SERVER + "/settakeoff";
     const res = await axios.get(url, {
       params: { droneid: id },
     });
@@ -196,7 +196,12 @@ const Sidebar = ({
                   <BootstrapSwitchButton
                     checked={showInspection}
                     onlabel={<FaCamera />}
-                    offlabel={<img width="35%" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEc0lEQVR4nNWZW4hVVRjHf9NlyHKsULqhaWQZUYgMZKQPMcykUvQShZAv9hDdILpg0ktED1FWRleNCInIsEmJCosKooLMLjTd7zQ6EeLo5EyGY9qOD/4bFqu911p7e86ZOX/4GGafdfvv9d03tB8uAd4HhoFtwNW0IaYBu4HMk9toM9xXQCLT7bQNTgXGSoj8SRvh8RISJhtoE8wBDgSI9NImeCFA4nfgaNoAFwKHA0TWuINnAf3AqGQzMI/JgdcCJEzmuyT2FAywZzMnlgOLIyS+dAf3BwZuYmLxQYTIKnfwaGDgPm/hy4EhYCewrMkkroiQOOxrTIiIH2h2Or/taCKJo4CBCJF3/UmbA4P7J4jIiggJk5X+pHkBYz/HG7tMZIzE0iaR6AR+jZD4Wwnk/zBThr1P0l9AolU4G9geIbKRSYQuoAdYLsM+0/t9EfAycKiAiDmdCcdxisajJXHhduBEL896WI7HxuwCjq2zsS20XrZxUH/X6XmdW/gkwZDHgCeAc725twKr65C4LOCe7XlfxfVWJZDIvFjxhs7RQU2cFYkxecCcXWHNE4DPKpLJJAOyp8qE1idu8HSFvMkwHXgxktFmAbHGwylViLjBLySDCWv1qDAy75RjqlRzbw0y35fFkSKMJy5qB4xhg8aaK10LnOH8thD4ogaZZ1OJ7Ehc8LeEtRYVxINPHfvqEKFrgfsT9z2oEiSKdYkLPhVYY5bz9u8E/vXmjgB3e2rSIRtK2fv6FCJzEr2WH5FzTFHMeEf5k+FiueA7vBvfD7wJ3OzMt+j9gF7ADyX7P0gi+nTYMhJlcaTTK1HfLqg2lxfcUAY8AhxfULcPF4y9hwqYLRc7KAcwKHUquwnzRq+XOIWN6hbmB12iMmK7bCaTDEu173KS1y6l949K9TY1sw10XkJBZLIVmOHNNdv4sGDskNSsdmSvgil6e/sruM/d0vElSt0NpwNbgH8Kxn+rbuNNwDXApY0k0CnPMVQjDrgyrnwqx0nKALpLir5Khh6qpxfq7RS1+OuKxZnHgAu8/ebrlvyWqXnAJEzTG+mVkd0rIx5p4OHLZAT4Gljg1TFzdabuKjbzcwsOHJO/gIfkRGrjlQYcZFy32VtSslaRvQqwbwEnVyFivv6jIyRxpfORJvRZoIpsqXMr5jm+q7HZmEPCPNDnDVS3xdSERfBfKmw04Oj0DH15DY3/GDhfkTqLiK11RDgtoUTdo6Bo3gWR+THBO+VNDEsQY0TcWFMbXUr+/I7fe8CNTgvH4swN8jihQ1nCeJXmLEiwoa00EMeoRdOttML+d9GX0CXMZbUTr2J2eKggUDYUpkYX6VBfVbCjNc7txb5IZY1IR0KYGvlIWaZO+ccZ+4D5fMKcbxy7ayp6tFnsQLucLoq1PF9KmHNAatwy2MFuUSOiSL+fcXpR00sKryK5rpUkfEIr1Iz+Sbqd1xr57aWm/GuZhJgre0rtLj7XqoqwKpaqfinrhrjypLzZpIelPBYIrQnxqvKwP9SVsTK2Fv4D4+uprmViiM0AAAAASUVORK5CYII=" />}
+                    offlabel={
+                      <img
+                        width="35%"
+                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAF7klEQVR4nNVZaYgcVRDu9cL7QPHCE68gigRBRQVF1iMo/gmju1M1rs6815tsFImKEf8s4g8xHhHjjUgQUYkbg6hEiYJEwahRTDTeisaIBDdZk5jdqepNntTr7t2Z2T4ns8cUNMPudL/p71XV91XVc5w2M418qUZao4AGFdBat0QFp93sDjCHK6R/NLJpuBY67WQa6MEIEEa847SLVbrMcQppZyQQpH+ddjEFtDQKhA+ElzntYL09I6cpoGocEF3yOp12MA38SiwI5L8KBbOvM9PNLdL5Cmh3bFgBPTJ28603D5+sgAc00A57Ib9Zhuo5zgwwjfR2gjdML9IFYyA00taJN9FWBbtOmk4QbokvTwKhkDeM3Ww9Ees2Xj6dQBTQx0lANPK9YzcHoRSDmLbXLuyCd70C3qyR/9RFb86kgih6NyR6A2h3XcSkAKkTGgtg/PtNkwWiv9/so4HXJ3oD6MO6hySxE0JrYDqAVIAwJaRMBem2uoeEneKSvbe7elYdkKI3JwCzyUXvuskAUSiYAzTwb8lJTsNSQE54WGJNEltywl7AA40gpsrcW0bOUEifJ+cHv+bMFCuXzWEKvas0UpcktlsaPqX2+0qRL9PIb2ik0UYgQjrOdFtPjzlQ1DiKZBTyBgV8l1swR9TWWRrpMSGegK22uK7ZP/cP24WAn5fcUEBsP5Gek/835QWgL9ISWUm5DvSUKlXPrn1WA9/pAt+XG4QL3jWx9Ay0o4Le1XnWEwFLA6EbtEIDvSvv4Timw2nGFI6cnqQxoWCWi8OnZl0T0RyikL/MA0aPbZzoCnXlBhSEU4YfoGez1k3yuaBkjtbIryZVtDrxojXz0BybHUi9+CVR4R9pawk7SWMk7BT+r69gDpXQVEjbmgD0Q6SORAMhyhjH1XQgvCzYzVGNtKTctevE8DsX+WIF/HUTofZiRiC8KeOiv6et5WvCBD1YN55fpsMCQgKF9FDGDWRpQVKBCMVmXPCZuDXkh8Ld18j3aKQ9Dfk1pIDvrw8T0yE5lOm3kd2M+pHOWo2KHNrCgjlINEMhfSD1k90c4EuEgt0i313rcQW0SwO9p5AX1LcM9LDdAOAfYxJ/sZPFgmTcHgciTkds4VfToiqg1Y3dplDpBA+hvfdx1zUHR/TtgxEe6XeymsSxUKywkxCAfEo4xXlC2EghvRNFClLsybQwfFFV8q6VNiIoEtfV3Dsooa2QF4XFqyi7lPcK6Qmfvnn5pI2B3O7qrNSGyH/RVW63Oab+ackN+iSC3jf7RWKTyp7HbD4gL7KxnpE+/WE0LRavSOluNwLMCQp4pULyIuj2OzttBO5TQDdVwLuyZQAkF4Q5gj4+r6jVJi359ZRvPT3mSKkAVJEvjG76ciR6Uj/tixgtjRnxNwtGxPLJMtJ5tb8ncyvrpYaRqTBg9rMI2ZGS1xkk2QM2iYGGWvfyMRfQkAb+tlyi2bV9TAVHzpR3kitzzijgXyb9hdMB/aeQHhUScZo1DbyiBeFCdiJS8jqjWtY8l0LaFgjs+/OL5qjMQITrNdKnewNCQ/XGsUOapGOBPICAV+b2imUO5O+b2L2dIQhhIA38VavCzQ36mtwmCq6Rf80e17w+jGkRPTl5TfHcZ71QPdcqNaZ5g9Y6e2N9Peb49BaVtoooCrv4IKqzFPJPyaBpKBxiBAWiSfRGjdY0bcEEZHVDCA0roI9c5PnhCEd0RpV4njBOCvA9Gqtz7dolmp2WQwpoldMq67/C7CcjGuFxKSvk74hqOXFKOL67/ljHPztPy0MabRTKlpoVqW6+SF5KA3+TnXn84zI7dU85kdKtKEeSTMr1lEPKmHDyD2fkAFMBv5wKGnljmHeTanZCgrwxgxe2hFMUGXlq5NczPFP1y5EpsuDFbpdBRFR8a+QXwlmUr00TG68YVitPGYhGQH6ByRs08M8S22GvMT7fylry0xJnpplUrZJPmaeLwC9NSUeY1+R0K+juYqYhddr0tLDZdL9zqvklT3WuDCEU8ltShymgv+20Briv2YX/B/Qwd88zVuwBAAAAAElFTkSuQmCC"
+                      />
+                    }
                     onChange={handleType}
                     onstyle="outline-primary"
                     offstyle="outline-primary"
@@ -221,11 +226,16 @@ const Sidebar = ({
                         Greetings,{" "}
                         <span style={{ color: "#2a265f" }}>{user.company}</span>
                       </h1>
-                      <h6>Your Performance Report</h6>
+
                       <BootstrapSwitchButton
                         checked={showInspection}
                         onlabel={<FaCamera />}
-                        offlabel={<FaBroom />}
+                        offlabel={
+                          <img
+                            width="35%"
+                            src="data:image/png;base64,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"
+                          />
+                        }
                         onChange={handleType}
                         onstyle="outline-primary"
                         offstyle="outline-primary"
