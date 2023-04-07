@@ -4,7 +4,7 @@ const {
   GetObjectCommand,
   PutObjectCommand,
   DeleteObjectsCommand,
-  DeleteObjectCommand
+  DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const dotenv = require("dotenv");
@@ -29,6 +29,15 @@ exports.getPDF = async (id) => {
       return null;
     }
     for (const item of data.Contents) {
+      const reportName = item.Key.split("/").pop();
+      const match = reportName.match(/\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}/);
+      let timestamp;
+      if (match && match.length > 0) {
+        timestamp = match[0].split("T")[0].split("-").reverse().join("-");
+        // rest of your code
+      } else {
+        timestamp="";
+      }
       const url = await getSignedUrl(
         s3,
         new GetObjectCommand({
@@ -37,7 +46,7 @@ exports.getPDF = async (id) => {
           Expires: 360000,
         })
       );
-      all_files.push(url);
+      all_files.push({ name: timestamp, url: url });
     }
     all_files.shift();
     return all_files;
@@ -61,9 +70,9 @@ exports.getImg = async (id) => {
     for (const item of data.Contents) {
       const key = item.Key;
       if (/\.(jpg|jpeg|png|gif)$/i.test(key)) {
-        const path = key.substring( 0,key.lastIndexOf("/") + 1);
+        const path = key.substring(0, key.lastIndexOf("/") + 1);
         const filename = key.substring(key.lastIndexOf("/") + 1);
-        const new_name = path+filename;
+        const new_name = path + filename;
         const url = await getSignedUrl(
           s3,
           new GetObjectCommand({
@@ -83,32 +92,47 @@ exports.getImg = async (id) => {
 };
 
 exports.uploadPDF = async (pdfBuffer, id) => {
-  const dateStr = new Date().toISOString().replace(/:/g, '-');
+  const date = new Date();
+  date.setHours(date.getHours() + 5); // Add 5 hours for IST
+  date.setMinutes(date.getMinutes() + 30); // Add 30 minutes for IST
+
+  const dateStr = date
+    .toISOString()
+    .replace(/:/g, "-")
+    .replace(/\.\d{3}/, ""); // Remove milliseconds
   const s3Key = `${id}/report-${dateStr}.pdf`;
 
   const params = {
-    Bucket: 'report-inspection',
+    Bucket: "report-inspection",
     Key: s3Key,
     Body: pdfBuffer,
-    ContentType: 'application/pdf',
+    ContentType: "application/pdf",
   };
 
   try {
-      await s3.send(new PutObjectCommand(params));
+    await s3.send(new PutObjectCommand(params));
   } catch (err) {
     console.error(`Failed to upload file to S3:`, err);
   }
-}
+};
 
-exports.deleteiamges=async(id)=>{
-  const bucketName = 'final-error-results';
+exports.deleteiamges = async (id) => {
+  const bucketName = "final-error-results";
   const folderName = `${id}/`;
-  const objects = await s3.send(new ListObjectsV2Command({ Bucket: bucketName, Prefix: folderName }));
+  const objects = await s3.send(
+    new ListObjectsV2Command({ Bucket: bucketName, Prefix: folderName })
+  );
   if (!objects.Contents.length) {
     return;
   }
   const objectKeys = objects.Contents.map(({ Key }) => ({ Key }));
-  await s3.send(new DeleteObjectsCommand({ Bucket: bucketName, Delete: { Objects: objectKeys } }));
-  await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: folderName }));
-}
-
+  await s3.send(
+    new DeleteObjectsCommand({
+      Bucket: bucketName,
+      Delete: { Objects: objectKeys },
+    })
+  );
+  await s3.send(
+    new DeleteObjectCommand({ Bucket: bucketName, Key: folderName })
+  );
+};

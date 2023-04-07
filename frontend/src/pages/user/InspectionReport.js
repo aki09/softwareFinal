@@ -55,7 +55,7 @@ const InspectionReport = () => {
       navigate("/login");
     }
   }, [navigate]);
-  
+
   const Loading = () => {
     return (
       <div className="loading">
@@ -107,7 +107,7 @@ const InspectionReport = () => {
     navigate("/login");
   } else if (isLoading) {
     return <Loading />;
-  }else {
+  } else {
     return (
       <>
         <Navbar expand="lg" fixed="top" className="navbar bg-light mt-3">
@@ -123,36 +123,36 @@ const InspectionReport = () => {
               className="justify-content-end"
             >
               <Nav className="mr-auto">
-              <div className="pt-1 pb-2">
-                <Link to="/home">
+                <div className="pt-1 pb-2">
+                  <Link to="/home">
+                    <Button
+                      variant="outline-secondary"
+                      size="md"
+                      className="ps-3 pe-3 me-1"
+                    >
+                      Dashboard
+                    </Button>
+                  </Link>
+                </div>
+                <div className="pt-1 pb-2">
                   <Button
                     variant="outline-secondary"
                     size="md"
+                    onClick={(event) => handleSignout(event)}
                     className="ps-3 pe-3 me-1"
                   >
-                    Dashboard
+                    Sign Out
                   </Button>
-                </Link>
-              </div>
-              <div className="pt-1 pb-2">
-                <Button
-                  variant="outline-secondary"
-                  size="md"
-                  onClick={(event) => handleSignout(event)}
-                  className="ps-3 pe-3 me-1"
-                >
-                  Sign Out
-                </Button>
-              </div>
+                </div>
 
-              <Nav.Link>
-                <RiAdminFill
-                  style={{ fontSize: "36px" }}
-                  className="ms-3"
-                  color="#2a265f"
-                />
-              </Nav.Link>
-            </Nav>
+                <Nav.Link>
+                  <RiAdminFill
+                    style={{ fontSize: "36px" }}
+                    className="ms-3"
+                    color="#2a265f"
+                  />
+                </Nav.Link>
+              </Nav>
             </Navbar.Collapse>
           </Container>
         </Navbar>
@@ -201,15 +201,18 @@ const InspectionReport = () => {
                   <Row>
                     {files.map((file, index) => (
                       <Col md={3} key={index} className="mt-4">
-                        <Card variant="light">
+                        <Card className="text-center" variant="light">
+                          <Card.Header className="bg-white text-#2a265f font-weight-bold">
+                            <h5 className="my-2">Report {index + 1}</h5>
+                          </Card.Header>
                           <Card.Body>
-                            <Button variant="outline-secondary" href={file}>
+                            <Button variant="outline-secondary" href={file.url}>
                               Download PDF
                             </Button>
                           </Card.Body>
                           <Card.Footer>
-                            <small className="text-muted">
-                              Report-{index + 1}
+                            <small className="text-muted center">
+                              <em>{file.name}</em>
                             </small>
                           </Card.Footer>
                         </Card>
