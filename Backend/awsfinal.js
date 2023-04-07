@@ -49,7 +49,7 @@ exports.getPDF = async (id) => {
 
 exports.getImg = async (id) => {
   const params = {
-    Bucket: "detection-results123",
+    Bucket: "final-error-results",
     Prefix: `${id}`,
   };
   const all_files = [];
@@ -67,7 +67,7 @@ exports.getImg = async (id) => {
         const url = await getSignedUrl(
           s3,
           new GetObjectCommand({
-            Bucket: "detection-results123",
+            Bucket: "final-error-results",
             Key: key,
             Expires: 3600,
           })
@@ -101,7 +101,7 @@ exports.uploadPDF = async (pdfBuffer, id) => {
 }
 
 exports.deleteiamges=async(id)=>{
-  const bucketName = 'detection-results123';
+  const bucketName = 'final-error-results';
   const folderName = `${id}/`;
   const objects = await s3.send(new ListObjectsV2Command({ Bucket: bucketName, Prefix: folderName }));
   if (!objects.Contents.length) {

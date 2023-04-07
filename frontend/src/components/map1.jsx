@@ -128,7 +128,7 @@ function Maap1({ drones }) {
       </Card>
       <GoogleMapReact
         bootstrapURLKeys={{
-          key: 'AIzaSyAgm8JfqqiGcpNCeKrx9po0hPQfNwUUgfk',
+          key: process.env.REACT_APP_GOOGLE_MAPS,
           libraries: ["places", "geometry"],
         }}
         yesIWantToUseGoogleMapApiInternals
