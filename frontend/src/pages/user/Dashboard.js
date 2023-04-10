@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { AiFillCloseSquare } from "react-icons/ai";
 import Cookies from "js-cookie";
 import { Button } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 
 const styles = {
   mainContent: {
@@ -87,8 +88,8 @@ const Dashboard = () => {
           c++;
         }
       }
-      setUser(response.data.user);
       setDrones(response.data.drones);
+      setUser(response.data.user);
       setIsLoading(false);
     } catch (error) {
       if (
@@ -124,9 +125,23 @@ const Dashboard = () => {
 
   if (!isLoggedIn) {
     navigate("/login");
-  } else if (isLoading) {
-    return <Loading />;
-  } else {
+  }else if(isLoading)
+  {
+    return <div
+    className="loading d-flex justify-content-center align-items-center"
+    style={{ marginTop: "25%" }}
+  >
+    <Spinner
+      as="span"
+      animation="grow"
+      size="lg"
+      role="status"
+      aria-hidden="true"
+    />
+    <h1>Loading...</h1>
+  </div>
+
+  }else {
     return drones.length ? (
       <>
         {showVideoFeed ? (

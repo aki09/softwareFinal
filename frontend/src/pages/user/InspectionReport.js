@@ -14,6 +14,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { BiRefresh } from "react-icons/bi";
 import Cookies from "js-cookie";
 import { RiAdminFill } from "react-icons/ri";
+import { Spinner } from "react-bootstrap";
 
 const styles = {
   mainContent: {
@@ -52,7 +53,7 @@ const InspectionReport = () => {
     if (cookie) {
       fetchData(url);
     } else {
-      navigate("/login");
+      navigate("/");
     }
   }, [navigate]);
 
@@ -105,141 +106,161 @@ const InspectionReport = () => {
 
   if (!isLoggedIn) {
     navigate("/login");
-  } else if (isLoading) {
-    return <Loading />;
   } else {
     return (
       <>
-        <Navbar expand="lg" fixed="top" className="navbar bg-light mt-3">
-          <Container>
-            <Navbar.Brand>
-              <Link to="/home">
-                <img src={logo} alt="" height="50" width="160" />
-              </Link>
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse
-              id="basic-navbar-nav"
-              className="justify-content-end"
-            >
-              <Nav className="mr-auto">
-                <div className="pt-1 pb-2">
-                  <Link to="/home">
-                    <Button
-                      variant="outline-secondary"
-                      size="md"
-                      className="ps-3 pe-3 me-1"
-                    >
-                      Dashboard
-                    </Button>
-                  </Link>
-                </div>
-                <div className="pt-1 pb-2">
-                  <Button
-                    variant="outline-secondary"
-                    size="md"
-                    onClick={(event) => handleSignout(event)}
-                    className="ps-3 pe-3 me-1"
-                  >
-                    Sign Out
-                  </Button>
-                </div>
-
-                <Nav.Link>
-                  <RiAdminFill
-                    style={{ fontSize: "36px" }}
-                    className="ms-3"
-                    color="#2a265f"
-                  />
-                </Nav.Link>
-              </Nav>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
-        <Container fluid className="bg-light">
+        {isLoading ? (
           <div
-            style={{
-              ...styles.mainContent,
-              marginTop: `${navbarHeight}px`,
-              height: "100vh",
-            }}
-            className="pt-5"
+            className="loading d-flex justify-content-center align-items-center"
+            style={{ marginTop: "25%" }}
           >
-            <div className="ms-5 me-5">
-              <div className="ms-5 me-5 d-flex flex-column justify-content-center align-items-center">
-                <h1 className="ms-5 pb-2" style={{ color: "#2a265f" }}>
-                  POST INSPECTION REPORT
-                </h1>
-                <h5 className="ms-5" style={{ color: "#333" }}>
-                  Detailed result of Thermal inspection and solar panel cleaning
-                </h5>
-              </div>
-              <Container>
-                <div
-                  className="d-flex justify-content-between container"
-                  style={{ borderBottom: "1px solid #ccc" }}
-                >
-                  <h2 className="ms-1 mt-5 me-5">All Reports</h2>
-                  <a
-                    className="mb-0 pb-0 mt-5"
-                    style={{
-                      cursor: "pointer",
-                      fontSize: "28px",
-                      color: "#2a265f",
-                      textDecoration: "none",
-                    }}
-                    onClick={handlereport}
-                  >
-                    {isLoadingreport ? (
-                      "Loading..."
-                    ) : (
-                      <BiRefresh className="mb-0 pb-0 mt-5" />
-                    )}
-                  </a>
-                </div>
-                {files.length ? (
-                  <Row>
-                    {files.map((file, index) => (
-                      <Col md={3} key={index} className="mt-4">
-                        <Card className="text-center" variant="light">
-                          <Card.Header className="bg-white text-#2a265f font-weight-bold">
-                            <h5 className="my-2">Report {index + 1}</h5>
-                          </Card.Header>
-                          <Card.Body>
-                            <Button variant="outline-secondary" href={file.url}>
-                              Download PDF
-                            </Button>
-                          </Card.Body>
-                          <Card.Footer>
-                            <small className="text-muted center">
-                              <em>{file.name}</em>
-                            </small>
-                          </Card.Footer>
-                        </Card>
-                      </Col>
-                    ))}
-                  </Row>
-                ) : (
-                  <div
-                    className="d-flex justify-content-center align-items-center"
-                    style={{ height: "50vh" }}
-                  >
-                    <h4
-                      style={{
-                        color: "#2a265f",
-                        fontSize: "36px",
-                        fontWeight: "700",
-                      }}
-                    >
-                      No Reports generated yet. Get your first inspection Drone
-                      quickly.
-                    </h4>
-                  </div>
-                )}
-              </Container>
-            </div>
+            <Spinner
+              as="span"
+              animation="grow"
+              size="lg"
+              role="status"
+              aria-hidden="true"
+            />
+            <h1>Loading...</h1>
           </div>
-        </Container>
+        ) : (
+          <>
+            <Navbar expand="lg" fixed="top" className="navbar bg-light mt-3">
+              <Container>
+                <Navbar.Brand>
+                  <Link to="/home">
+                    <img src={logo} alt="" height="50" width="160" />
+                  </Link>
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse
+                  id="basic-navbar-nav"
+                  className="justify-content-end"
+                >
+                  <Nav className="mr-auto">
+                    <div className="pt-1 pb-2">
+                      <Link to="/home">
+                        <Button
+                          variant="outline-secondary"
+                          size="md"
+                          className="ps-3 pe-3 me-1"
+                        >
+                          Dashboard
+                        </Button>
+                      </Link>
+                    </div>
+                    <div className="pt-1 pb-2">
+                      <Button
+                        variant="outline-secondary"
+                        size="md"
+                        onClick={(event) => handleSignout(event)}
+                        className="ps-3 pe-3 me-1"
+                      >
+                        Sign Out
+                      </Button>
+                    </div>
+
+                    <Nav.Link>
+                      <RiAdminFill
+                        style={{ fontSize: "36px" }}
+                        className="ms-3"
+                        color="#2a265f"
+                      />
+                    </Nav.Link>
+                  </Nav>
+                </Navbar.Collapse>
+              </Container>
+            </Navbar>
+            <Container fluid className="bg-light">
+              <div
+                style={{
+                  ...styles.mainContent,
+                  marginTop: `${navbarHeight}px`,
+                  height: "100vh",
+                }}
+                className="pt-5"
+              >
+                <div className="ms-5 me-5">
+                  <div className="ms-5 me-5 d-flex flex-column justify-content-center align-items-center">
+                    <h1 className="ms-5 pb-2" style={{ color: "#2a265f" }}>
+                      POST INSPECTION REPORT
+                    </h1>
+                    <h5 className="ms-5" style={{ color: "#333" }}>
+                      Detailed result of Thermal inspection and solar panel
+                      cleaning
+                    </h5>
+                  </div>
+                  <Container>
+                    <div
+                      className="d-flex justify-content-between container"
+                      style={{ borderBottom: "1px solid #ccc" }}
+                    >
+                      <h2 className="ms-1 mt-5 me-5">All Reports</h2>
+                      <a
+                        className="mb-0 pb-0 mt-5"
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "28px",
+                          color: "#2a265f",
+                          textDecoration: "none",
+                        }}
+                        onClick={handlereport}
+                      >
+                        {isLoadingreport ? (
+                          "Loading..."
+                        ) : (
+                          <BiRefresh className="mb-0 pb-0 mt-5" />
+                        )}
+                      </a>
+                    </div>
+                    {files.length ? (
+                      <Row>
+                        {files.map((file, index) => (
+                          <Col md={3} key={index} className="mt-4">
+                            <Card className="text-center" variant="light">
+                              <Card.Header className="bg-white text-#2a265f font-weight-bold">
+                                <h5 className="my-2">Report {index + 1}</h5>
+                              </Card.Header>
+                              <Card.Body>
+                                <Button
+                                  variant="outline-secondary"
+                                  href={file.url}
+                                >
+                                  Download PDF
+                                </Button>
+                              </Card.Body>
+                              <Card.Footer>
+                                <small className="text-muted center">
+                                  <em>{file.name}</em>
+                                </small>
+                              </Card.Footer>
+                            </Card>
+                          </Col>
+                        ))}
+                      </Row>
+                    ) : (
+                      <div
+                        className="d-flex justify-content-center align-items-center"
+                        style={{ height: "50vh" }}
+                      >
+                        <h4
+                          style={{
+                            color: "#2a265f",
+                            fontSize: "36px",
+                            fontWeight: "700",
+                          }}
+                        >
+                          No Reports generated yet. Get your first inspection
+                          Drone quickly.
+                        </h4>
+                      </div>
+                    )}
+                  </Container>
+                </div>
+              </div>
+            </Container>
+          </>
+        )}
       </>
     );
   }

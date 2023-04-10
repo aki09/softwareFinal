@@ -55,7 +55,7 @@ const Topbar = ({ user }) => {
               <div className="ms-4">
                 <h1>
                   Greetings,{" "}
-                  <span style={{ color: "#2a265f" }}>{user.company}</span>
+                  <span style={{ color: "#2a265f", textTransform: "capitalize" }}>{user.company}</span>
                 </h1>
               </div>
             </Navbar.Text>
