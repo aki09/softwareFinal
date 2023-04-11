@@ -499,12 +499,11 @@ body {
 
 .center-circle {
   position: absolute;
-  width: 10%;
-  height: auto;
+  width: 150px;
   border-radius: 50%;
   background: hsla(243, 100%, 19%, 1);
   z-index: 1;
-  margin-bottom: 10%;
+  margin-bottom: 13%;
   box-shadow: 0 0 0 5px #0c61cf, 0 0 0 12px #87cefa, 0 0 0 21px #c2d5ef,
     -1.6em -0.4em 1.2em #333;
 }
@@ -512,8 +511,8 @@ body {
 .center-circle:hover {
   box-shadow: 0 0 0 5px #0c61cf, 0 0 0 12px #87cefa, 0 0 0 21px #c2d5ef,
     -1.6em -0.4em 1.2em black;
-  width: 12%;
-  height: auto;
+  
+  transform: scale(1.1);
   padding: 0.5rem;
 }
 
@@ -525,7 +524,7 @@ body {
 
 .small-circle {
   position: absolute;
-  width: 7.8%;
+  width: 100px;
   padding: 0.4rem;
   height: auto;
   border-radius: 50%;

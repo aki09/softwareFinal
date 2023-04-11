@@ -712,7 +712,7 @@ const PromoPage = () => {
                   )}
                 </motion.a>
               </div>
-              <div className="small-circle" style={{ top: "55%", left: "5%" }}>
+              <div className="small-circle" style={{ top: "55%", left: "8%" }}>
                 {service === 1 ? (
                   <a
                     onClick={() => handleService(0)}
@@ -729,7 +729,7 @@ const PromoPage = () => {
                   </a>
                 )}
               </div>
-              <div className="small-circle" style={{ top: "34%", left: "17%" }}>
+              <div className="small-circle" style={{ top: "34%", left: "20%" }}>
                 {service === 2 ? (
                   <a
                     onClick={() => handleService(0)}
@@ -748,7 +748,7 @@ const PromoPage = () => {
               </div>
               <div
                 className={`small-circle`}
-                style={{ top: "20%", left: "30%" }}
+                style={{ top: "20%", left: "33%" }}
               >
                 {service === 3 ? (
                   <a
@@ -768,7 +768,7 @@ const PromoPage = () => {
               </div>
               <div
                 className={`small-circle`}
-                style={{ top: "20%", right: "30%" }}
+                style={{ top: "20%", right: "33%" }}
               >
                 {service === 4 ? (
                   <a
@@ -788,7 +788,7 @@ const PromoPage = () => {
               </div>
               <div
                 className={`small-circle`}
-                style={{ top: "34%", right: "17%" }}
+                style={{ top: "34%", right: "20%" }}
               >
                 {service === 5 ? (
                   <a
@@ -806,7 +806,7 @@ const PromoPage = () => {
                   </a>
                 )}
               </div>
-              <div className="small-circle" style={{ top: "55%", right: "5%" }}>
+              <div className="small-circle" style={{ top: "55%", right: "8%" }}>
                 {service === 6 ? (
                   <a
                     onClick={() => handleService(0)}
@@ -953,7 +953,7 @@ const PromoPage = () => {
                   <a>Twitter</a>
                 </li> */}
                 <li>
-                  <a href="https://www.instagram.com/_flynovate_/" style={{ color: "inherit", textDecoration: "none" }}>Instagram</a>
+                  <a href="https://www.instagram.com/flynovate/" style={{ color: "inherit", textDecoration: "none" }}>Instagram</a>
                 </li>
               </ul>
             </div>
