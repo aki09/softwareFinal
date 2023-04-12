@@ -1,5 +1,14 @@
 add video listener to videosream status
-remove redundant packages
+done    remove redundant packages
 remove .env from github
-aws error
+done    aws error
 UI login/register page
+
+
+sort inspection reports(new reports first)
+save array distance in user database and access it from there in future.(don't ask everytimes)
+add changePass and editProfile
+registration/login form validation testing
+Error callback on wrong password (no special character) in register page
+add loading in registration form(otp send and submission)
+show password option in admin page
