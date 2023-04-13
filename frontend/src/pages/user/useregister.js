@@ -152,6 +152,23 @@ const Register = () => {
     } else {
       setError("");
     }
+    let value=user.password;
+
+    if (value.length < 8) {
+      setError("Password must contain at least 8 characters");
+    }
+    if (!/[A-Z]/.test(value)) {
+      setError("Password must contain at least one uppercase letter");
+    }
+    if (!/[a-z]/.test(value)) {
+      setError("Password must contain at least one lowercase letter");
+    }
+    if (!/[0-9]/.test(value)) {
+      setError("Password must contain at least one digit");
+    }
+    if (!/[\W_]/.test(value)) {
+      setError("Password must contain at least one special character");
+    }
 
     if (
       user.username === "" ||

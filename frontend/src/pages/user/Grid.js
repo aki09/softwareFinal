@@ -9,6 +9,8 @@ import { MdOutlineClear } from "react-icons/md";
 import Cookies from "js-cookie";
 import io from "socket.io-client";
 import { RiAdminFill } from "react-icons/ri";
+import { Autocomplete,useLoadScript} from "@react-google-maps/api";
+import { FaTimes } from "react-icons/fa";
 
 
 const styles = {
@@ -28,7 +30,6 @@ const FormMap = () => {
   } catch {
     navigate("/login");
   }
-  const [currentLocation, setCurrentLocation] = useState({});
   const [markers, setMarkers] = useState([]);
   const mapRef = useRef(null);
   const [error, setError] = useState("");
@@ -37,6 +38,8 @@ const FormMap = () => {
   const [arrayDist, setarrayDist] = useState("");
   const [polygon, setPolygon] = useState(null);
   const isLoggedIn = !!Cookies.get("auth-token");
+  const [searchQuery, setSearchQuery] = useState("");
+  const autocompleteRef = useRef(null);
 
   const handleMapClick = (event) => {
     if (markers.length < 4) {
@@ -129,20 +132,17 @@ const FormMap = () => {
     }
   };
 
-  const fetchlocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setCurrentLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      },
-      () => {
-        console.error("Geolocation is not supported by this browser.");
-        alert("Geolocation is not supported by this browser.");
-      }
-    );
+  const defaultLocation = {
+    lat: 30.3515225,
+    lng: 76.3623213,
   };
+
+  const resetLocation = () => {
+    setSearchQuery("");
+    mapRef.current.panTo(defaultLocation);
+    mapRef.current.setZoom(19);
+  };
+
   const handlemarkerset = (id, event) => {
     event.preventDefault();
     if (markers.length < 4) {
@@ -160,20 +160,21 @@ const FormMap = () => {
     }
     if ((markers.length == 4) & (arrayDist != "")) {
       const url = process.env.REACT_APP_SERVER + "/form";
-      const res = axios.post(url, {
-        id: id,
-        markers: markers,
-        arrayDist: arrayDist,
-      }).then(() => {
-        setTimeout(() => {
-          navigate("/home");
-        }, 100); // wait for 30 seconds (30000 milliseconds)
-      });
+      const res = axios
+        .post(url, {
+          id: id,
+          markers: markers,
+          arrayDist: arrayDist,
+        })
+        .then(() => {
+          setTimeout(() => {
+            navigate("/home");
+          }, 100);
+        });
     }
   };
 
   useEffect(() => {
-    fetchlocation();
     if (cookie) {
       fetchData();
     } else {
@@ -184,17 +185,23 @@ const FormMap = () => {
     });
   }, [cookie, navigate]);
 
+  const handlePlaceSelect = () => {
+    const addressObject = autocompleteRef.current.getPlace();
+    const lat = addressObject.geometry.location.lat();
+    const lng = addressObject.geometry.location.lng();
+    const center = { lat, lng };
+    mapRef.current.panTo(center);
+    mapRef.current.setZoom(19);
+  };
+
   const fetchData = async () => {
     setIsLoading(true);
     try {
       const navbar = document.querySelector(".navbar");
       setNavbarHeight(navbar.offsetHeight);
-      const response = await axios.get(
-        process.env.REACT_APP_SERVER + "/form",
-        {
-          params: { cookieValue: cookie, droneid: id },
-        }
-      );
+      const response = await axios.get(process.env.REACT_APP_SERVER + "/form", {
+        params: { cookieValue: cookie, droneid: id },
+      });    
       setIsLoading(false);
     } catch (error) {
       if (
@@ -229,49 +236,87 @@ const FormMap = () => {
               className="justify-content-end"
             >
               <Nav className="mr-auto">
-              <div className="pt-1 pb-2">
-                <Link to="/home">
+                <div className="pt-1 pb-2">
+                  <Link to="/home">
+                    <Button
+                      variant="outline-secondary"
+                      size="md"
+                      className="ps-3 pe-3 me-1"
+                    >
+                      Dashboard
+                    </Button>
+                  </Link>
+                </div>
+                <div className="pt-1 pb-2">
                   <Button
                     variant="outline-secondary"
                     size="md"
+                    onClick={(event) => handleSignout(event)}
                     className="ps-3 pe-3 me-1"
                   >
-                    Dashboard
+                    Sign Out
                   </Button>
-                </Link>
-              </div>
-              <div className="pt-1 pb-2">
-                <Button
-                  variant="outline-secondary"
-                  size="md"
-                  onClick={(event) => handleSignout(event)}
-                  className="ps-3 pe-3 me-1"
-                >
-                  Sign Out
-                </Button>
-              </div>
+                </div>
 
-              <Nav.Link>
-                <RiAdminFill
-                  style={{ fontSize: "36px" }}
-                  className="ms-3"
-                  color="#2a265f"
-                />
-              </Nav.Link>
-            </Nav>
+                <Nav.Link>
+                  <RiAdminFill
+                    style={{ fontSize: "36px" }}
+                    className="ms-3"
+                    color="#2a265f"
+                  />
+                </Nav.Link>
+              </Nav>
             </Navbar.Collapse>
           </Container>
         </Navbar>
+
         <div
           className="page-content"
-          style={{ ...styles.mainContent, marginTop: `${navbarHeight + 30}px` }}
+          style={{ ...styles.mainContent, marginTop: `${navbarHeight + 10}px` }}
         >
           <div className="form-v4-content">
             <div className="form-detail">
               <div
-                style={{ width: "100%", marginTop: "5%", height: "90%" }}
+                style={{ width: "100%", marginTop: "0%", height: "90%" }}
                 className="pt-4"
               >
+                <div className="form-auto">
+                    <Autocomplete
+                      onLoad={(autocomplete) => {
+                        autocompleteRef.current = autocomplete;
+                      }}
+                      onPlaceChanged={() => handlePlaceSelect()}
+                      options={{
+                        componentRestrictions: { country: "in" },
+                        fields: [
+                          "address_components",
+                          "geometry",
+                          "icon",
+                          "name",
+                        ],
+                      }}
+                    >
+                      <div className="autocomplete-input-container">
+                        <input
+                          type="text"
+                          placeholder="Enter your location"
+                          value={searchQuery}
+                          onChange={(event) =>
+                            setSearchQuery(event.target.value)
+                          }
+                          className="autocomplete-input"
+                        />
+                        {searchQuery && (
+                          <button
+                            className="reset-location-button"
+                            onClick={() => resetLocation()}
+                          >
+                            <FaTimes />
+                          </button>
+                        )}
+                      </div>
+                    </Autocomplete>
+                </div>
                 <GoogleMapReact
                   bootstrapURLKeys={{
                     key: process.env.REACT_APP_GOOGLE_MAPS,
@@ -279,13 +324,14 @@ const FormMap = () => {
                   }}
                   yesIWantToUseGoogleMapApiInternals
                   onGoogleApiLoaded={({ map, maps }) => {
+                    const geocoder = new maps.Geocoder();
                     mapRef.current = map;
                     renderMarkers(markers);
                   }}
                   onClick={handleMapClick}
                   center={{
-                    lat: currentLocation.lat,
-                    lng: currentLocation.lng,
+                    lat: 30.3515225,
+                    lng: 76.3623213,
                   }}
                   defaultZoom={18}
                   options={{
@@ -294,8 +340,8 @@ const FormMap = () => {
                 ></GoogleMapReact>
               </div>
             </div>
+
             <form className="form-detail">
-              <h2>COORDINATES</h2>
               <div className="form-group">
                 <div className="hello">
                   <label>POINT - 1</label>
@@ -447,10 +493,11 @@ const FormMap = () => {
               <div className="form-group form-row ">
                 <label
                   style={{
-                    marginLeft:"100px",
+                    marginLeft: "100px",
                     marginRight: "50px",
                     fontSize: "1.1rem",
                     justifyContent: "center",
+                    marginTop: "5px",
                   }}
                 >
                   Distance between Arrays in metres
@@ -469,10 +516,13 @@ const FormMap = () => {
                 </div>
               </div>
               {error && (
-                    <div className="medium d-flex text-danger justify-content-center text-3xl" role="alert">
-                      {error}
-                    </div>
-                  )}
+                <div
+                  className="medium d-flex text-danger justify-content-center text-3xl"
+                  role="alert"
+                >
+                  {error}
+                </div>
+              )}
               <div className="form-row-last d-flex justify-content-center mt-3">
                 <button
                   className="btn btn-outline-dark btn-lg"

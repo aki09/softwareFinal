@@ -133,7 +133,7 @@ const Dashboard = () => {
   >
     <Spinner
       as="span"
-      animation="grow"
+      animation="border"
       size="lg"
       role="status"
       aria-hidden="true"

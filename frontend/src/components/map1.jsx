@@ -10,20 +10,6 @@ function Maap1({ drones }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [markerObjs, setMarkerObjs] = useState([]);
   let c = 0;
-  const fetchlocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setCurrentLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      },
-      () => {
-        console.error("Geolocation is not supported by this browser.");
-        alert("Geolocation is not supported by this browser.");
-      }
-    );
-  };
   const socket = io(process.env.REACT_APP_SERVER, {
     transports: ["websocket", "polling", "flashsocket"],
   });
@@ -43,13 +29,14 @@ function Maap1({ drones }) {
     handleLocationLon(id, location);
     renderMarkers(droneList);
   });
-
   useEffect(() => {
-    fetchlocation();
-
     function handleResize() {
       setWindowWidth(window.innerWidth);
     }
+    setCurrentLocation({
+      lat:30.3515225 ,
+      lng:76.3623213 ,
+    });
 
     window.addEventListener("resize", handleResize);
     return () => {
@@ -137,7 +124,7 @@ function Maap1({ drones }) {
           renderMarkers(droneList);
         }}
         center={{ lat: currentLocation.lat, lng: currentLocation.lng }}
-        defaultZoom={15}
+        defaultZoom={17}
         options={{
           mapTypeId: "satellite",
         }}
