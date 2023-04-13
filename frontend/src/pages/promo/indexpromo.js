@@ -149,10 +149,10 @@ const PromoPage = () => {
 
     emailjs
       .sendForm(
-        "service_n6rdebg",
-        "template_xzmyg2g",
+        "service_8ba3qoq",
+        "template_4nrmwaq",
         form.current,
-        "-0X-MEoHgmltSbWlt"
+        "c-JzOyVQIMPpnQVRe"
       )
       .then(
         (result) => {
