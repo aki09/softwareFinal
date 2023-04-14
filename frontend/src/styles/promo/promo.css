@@ -4,7 +4,7 @@ body {
 
 /* Navbar */
 
-.navbar {
+.navbar1 {
   background: rgba(5, 0, 73, 0.8);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(13.5px);
@@ -147,7 +147,7 @@ body {
 .about-us {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 90vh;
 }
 
 .aboutus-container {
@@ -357,7 +357,7 @@ body {
     justify-content: space-between;
     max-width: 960px;
     margin: 0 auto;
-    min-height: 90vh;
+    min-height: 65vh;
     margin-bottom: 30px;
   }
 

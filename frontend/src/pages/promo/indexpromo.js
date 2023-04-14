@@ -210,9 +210,9 @@ const PromoPage = () => {
 
   return (
     <motion.div>
-      <Navbar expand="lg" className="navbar" variant="dark" fixed="top">
+      <Navbar expand="lg" className="navbar1" variant="dark" fixed="top">
         <Container>
-          <Navbar.Brand href="#">
+          <Navbar.Brand>
             <img src={logo} height="50px" />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -1070,7 +1070,7 @@ const PromoPage = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="#">Career</a>
+                  <a>Career</a>
                 </li>
               </ul>
             </div>
@@ -1079,10 +1079,10 @@ const PromoPage = () => {
               <h3>LEGAL</h3>
               <ul>
                 <li>
-                  <a href="#">Terms and Conditions</a>
+                  <a>Terms and Conditions</a>
                 </li>
                 <li>
-                  <a href="#">Privacy Policy</a>
+                  <a>Privacy Policy</a>
                 </li>
               </ul>
             </div>
