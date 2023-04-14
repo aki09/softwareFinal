@@ -191,7 +191,7 @@ const Adminlogin = () => {
             </div>
             <div className="user-box">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 required
                 onChange={handleChange}

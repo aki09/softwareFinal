@@ -12,7 +12,7 @@ import AdminHome from "./pages/admin/adminhome";
 import Allocation from "./pages/admin/Allocation";
 import NotFound from "./pages/404";
 import Cookies from "js-cookie";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate} from "react-router-dom";
 import PromoPage from "./pages/promo/indexpromo";
 import News from "./pages/promo/news";
 
@@ -33,7 +33,7 @@ function App() {
         <Route exact path="/pchia" element={<Adminlogin />} />
         <Route exact path="/pchiahome" element={<AdminHome />} />
         <Route exact path="/pchiaallocation" element={<Allocation />} />
-        <Route path="*" element={<Dashboard />} />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
   );

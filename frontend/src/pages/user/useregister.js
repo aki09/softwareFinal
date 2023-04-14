@@ -139,36 +139,46 @@ const Register = () => {
   const validateForm = () => {
     let isValid = true;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (user.username === "" || user.username.length < 5) {
       isValid = false;
       setError("Username must be at least 5 characters long.");
+      return isValid;
     } else {
       setError("");
     }
-
     if (user.email === "" || !emailRegex.test(user.email)) {
       isValid = false;
       setError("Please enter a valid email address.");
+      return isValid;
     } else {
       setError("");
     }
     let value=user.password;
 
-    if (value.length < 8) {
-      setError("Password must contain at least 8 characters");
-    }
     if (!/[A-Z]/.test(value)) {
+      isValid = false;
       setError("Password must contain at least one uppercase letter");
+      return isValid;
     }
     if (!/[a-z]/.test(value)) {
+      isValid = false;
       setError("Password must contain at least one lowercase letter");
+      return isValid;
     }
     if (!/[0-9]/.test(value)) {
+      isValid = false;
       setError("Password must contain at least one digit");
+      return isValid;
     }
     if (!/[\W_]/.test(value)) {
+      isValid = false;
       setError("Password must contain at least one special character");
+      return isValid;
+    }
+    if (value.length < 8) {
+      isValid = false;
+      setError("Password must contain at least 8 characters");
+      return isValid;
     }
 
     if (
@@ -180,12 +190,14 @@ const Register = () => {
     ) {
       isValid = false;
       setError("All fields are required.");
+      return isValid;
     } else {
       setError("");
     }
     if (user.password !== user.confirmPassword) {
       isValid = false;
       setError("Passwords do not match.");
+      return isValid;
     } else {
       setError("");
     }
@@ -207,6 +219,8 @@ const Register = () => {
       } catch (error) {
         setError(error.response.data.error);
       }
+    }else{
+      return;
     }
   };
 
