@@ -4,11 +4,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { loadFull } from "tsparticles";
 import Particles from "react-tsparticles";
-import logo from "../../assets/logo2.png";
+import logo from "../../assets/logo3.png";
 import Cookies from "js-cookie";
 import Alert from "react-bootstrap/Alert";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-//
+import { Nav, Container, Navbar } from "react-bootstrap";
+
 const Login = () => {
   const [error, setError] = useState("");
   const [user, setuser] = useState({ username: "", password: "" });
@@ -153,22 +154,33 @@ const Login = () => {
           },
         }}
       />
+
       <div
         style={{
           background: "linear-gradient(#141e30, #243b55)",
           height: "100vh",
         }}
       >
-        <a
-          href="/"
-          className="heading d-flex align-item-center text-light p-5"
-          style={{ textDecoration: "none" }}
-        >
-          <img src={logo} width="50" />
-          <h3 className="fly m-2">
-            Fly<span className="novate">novate</span>
-          </h3>
-        </a>
+        <Navbar style={{ backgroundColor: "transparent" }}>
+          <Container className="d-flex flex-col">
+            <Navbar.Brand href="/">
+              <img
+                alt=""
+                src={logo}
+                height="50px"
+                className="d-inline-block align-top me-5"
+              />{" "}
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse className="justify-content-end align-items-center">
+              <Nav>
+                <Nav.Link href="/" className="nav-links text-white pt-3">
+                  HOME PAGE
+                </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
         <div className="login-box">
           <h2>Login</h2>
           {error && (

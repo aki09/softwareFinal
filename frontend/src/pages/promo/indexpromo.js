@@ -3,10 +3,10 @@ import "swiper/css";
 import "swiper/css/effect-cards";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { Container, Navbar, Nav, Alert } from "react-bootstrap";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCards } from "swiper";
+import { EffectCards, Autoplay } from "swiper";
 import emailjs from "@emailjs/browser";
 
 import { BsPersonFill } from "react-icons/bs";
@@ -17,18 +17,18 @@ import { GiClick, GiDeliveryDrone } from "react-icons/gi";
 
 import logo from "../../assets/logo3.png";
 import logo1 from "../../assets/logo1.png";
-import hexagon from "../../assets/hexagons.png";
+import hexagon from "../../assets/hexagons.jpeg";
 
-import drone1 from "../../assets/drone1.png";
-import drone2 from "../../assets/drone2.png";
-import drone3 from "../../assets/drone3.png";
-import drone4 from "../../assets/drone4.png";
-import drone5 from "../../assets/drone5.png";
+import drone1 from "../../assets/drone1.jpeg";
+import drone2 from "../../assets/drone2.jpeg";
+import drone3 from "../../assets/drone3.jpeg";
+import drone4 from "../../assets/drone4.jpeg";
+import drone5 from "../../assets/drone5.jpeg";
 
-import process1 from "../../assets/1.png";
-import process2 from "../../assets/2.png";
-import process3 from "../../assets/3.png";
-import process4 from "../../assets/4.png";
+import process1 from "../../assets/1.jpeg";
+import process2 from "../../assets/2.jpeg";
+import process3 from "../../assets/3.jpeg";
+import process4 from "../../assets/4.jpeg";
 
 import pic1 from "../../assets/pic1.png";
 import pic2 from "../../assets/pic2.png";
@@ -50,16 +50,16 @@ import laptop5 from "../../assets/laptop5.png";
 import laptop6 from "../../assets/laptop6.png";
 import laptop7 from "../../assets/laptop7.png";
 
-import grid1 from "../../assets/grid1.png";
-import grid2 from "../../assets/grid2.png";
-import grid3 from "../../assets/grid3.png";
-import grid4 from "../../assets/grid4.png";
-import grid5 from "../../assets/grid5.png";
-import grid6 from "../../assets/grid6.png";
-import grid7 from "../../assets/grid7.png";
-import grid8 from "../../assets/grid8.png";
-import grid9 from "../../assets/grid9.png";
-import grid10 from "../../assets/grid10.png";
+import grid1 from "../../assets/grid1.jpeg";
+import grid2 from "../../assets/grid2.jpeg";
+import grid3 from "../../assets/grid3.jpeg";
+import grid4 from "../../assets/grid4.jpeg";
+import grid5 from "../../assets/grid5.jpeg";
+import grid6 from "../../assets/grid6.jpeg";
+import grid7 from "../../assets/grid7.jpeg";
+import grid8 from "../../assets/grid8.jpeg";
+import grid9 from "../../assets/grid9.jpeg";
+import grid10 from "../../assets/grid10.jpeg";
 
 const imagesHeader = [drone1, drone2, drone3, drone4, drone5];
 
@@ -108,13 +108,21 @@ const services = [
   },
 ];
 
-const ProcessIcon = ({ src, title, desc, index }) => {
+const ProcessIcon = ({ src, title, desc }) => {
   const [showDesc, setShowDesc] = useState(false);
   return (
-    <div
+    <motion.div
       className="process-icon-container"
       onMouseEnter={() => setShowDesc(true)}
       onMouseLeave={() => setShowDesc(false)}
+      variants={{
+        visible: { y: -50 },
+        hidden: { y: 0 },
+        transition: { duration: 1.5, delay: 1 },
+      }}
+      initial="hidden"
+      whileInView="visible"
+      transition="transition"
     >
       <img src={src} className="process-icon" />
       {showDesc && (
@@ -123,7 +131,7 @@ const ProcessIcon = ({ src, title, desc, index }) => {
           <span>{desc}</span>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
@@ -179,6 +187,11 @@ const PromoPage = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleService = (index) => {
+    setService(index);
+    setIsRotated(!isRotated);
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setCurrentSlideIndex((currentSlideIndex + 1) % imagesHeader.length);
@@ -195,19 +208,9 @@ const PromoPage = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleService = (index) => {
-    setService(index);
-    setIsRotated(!isRotated);
-  };
-
   return (
     <motion.div>
-      <Navbar
-        expand="lg"
-        style={{ backgroundColor: "#050049" }}
-        variant="dark"
-        fixed="top"
-      >
+      <Navbar expand="lg" className="navbar" variant="dark" fixed="top">
         <Container>
           <Navbar.Brand href="#">
             <img src={logo} height="50px" />
@@ -270,12 +273,13 @@ const PromoPage = () => {
                 Cleaning Technology for Solar Panels.
               </h3>
               <div className="d-flex align-items-center mt-4">
-                <BsPersonFill size="50" className="iconButton" />
+                {/* <BsFillTelephoneFill size="55" className="iconButton" /> */}
                 <a
-                  className="text-white pe-4 py-2 rounded-pill ps-5 spanButton"
+                  className="text-white pe-4 py-2 rounded-pill spanButton"
                   href="#contact"
+                  style={{ paddingLeft: "20px" }}
                 >
-                    CONTACT US
+                  CONTACT US
                 </a>
               </div>
             </div>
@@ -285,7 +289,17 @@ const PromoPage = () => {
 
       <div className="main-content">
         <div id="aboutUs" className="container d-flex about-us">
-          <div className="aboutus-container">
+          <motion.div
+            className="aboutus-container"
+            initial="hidden"
+            whileInView="visible"
+            transition="transition"
+            variants={{
+              hidden: { x: -50 },
+              visible: { x: 0 },
+              transition: { duration: 1.5 },
+            }}
+          >
             <div className="about-card justify-content-center align-items-center">
               <p>
                 Flynovate is a next-gen company in the field of robotics and
@@ -295,13 +309,29 @@ const PromoPage = () => {
                 hile maintaining the highest level of service quality.
               </p>
             </div>
-          </div>
-          <div className="swiper-container">
+          </motion.div>
+          <motion.div
+            className="swiper-container"
+            initial="hidden"
+            whileInView="visible"
+            transition="transition"
+            variants={{
+              hidden: { x: 50 },
+              visible: { x: 0 },
+              transition: { duration: 1.5 },
+            }}
+          >
             <Swiper
               effect={"cards"}
               grabCursor={true}
-              modules={[EffectCards]}
               className="mySwiper"
+              modules={[EffectCards, Autoplay]}
+              autoplay={{
+                delay: 2500,
+                disableOnInteraction: true,
+              }}
+              loop={true}
+              pagination={{ clickable: true }}
             >
               <SwiperSlide>
                 <img src={pic1} alt="" />
@@ -334,37 +364,33 @@ const PromoPage = () => {
                 <img src={pic10} alt="" />
               </SwiperSlide>
             </Swiper>
-          </div>
+          </motion.div>
         </div>
 
-        <div
-          id="process"
-          className="process-container d-flex justify-content-center align-items-center"
-          // style={{ marginTop: `${navbarHeight}px` }}
-        >
+        <div id="process" className="process-container">
           <ProcessIcon
             src={process1}
             title="The Deployment"
             desc="Drone Deployment based on size and work speed required"
-            index={0}
+            // index={0}
           />
           <ProcessIcon
             src={process2}
             title="Drone Launch"
             desc="Scheduled or manual launch options based on user preferences"
-            index={1}
+            // index={1}
           />
           <ProcessIcon
             src={process3}
             title="Navigation & Communication"
             desc="Drone will send live data and video feed to ground station"
-            index={2}
+            // index={3}
           />
           <ProcessIcon
             src={process4}
             title="Form Efficiency & Feedback"
             desc="Detailed farm statistics post O&M processes"
-            index={3}
+            // index={2}
           />
         </div>
 
@@ -376,12 +402,19 @@ const PromoPage = () => {
             position: "relative",
           }}
         >
-          <div
+          <motion.div
             className="laptop-container"
             style={{ height: "37%", float: "top" }}
+            variants={{
+              hidden: { scale: 0 },
+              visible: { scale: 1 },
+              transition: { duration: 1.5 },
+            }}
+            initial="hidden"
+            whileInView="visible"
+            transition="transition"
           >
             <img className="laptop-template" src={laptop} alt="" />
-
             {service === 1 && (
               <motion.img
                 initial={{ opacity: 0 }}
@@ -445,10 +478,20 @@ const PromoPage = () => {
                 src={services[6].img_url}
               />
             )}
-          </div>
+          </motion.div>
           {windowWidth < 992 ? (
             <>
-              <div className="service-container--m">
+              <motion.div
+                className="service-container--m"
+                variants={{
+                  hidden: { scale: 0 },
+                  visible: { scale: 1 },
+                  transition: { duration: 1.5 },
+                }}
+                initial="hidden"
+                whileInView="visible"
+                transition="transition"
+              >
                 <div className="semi-circle--m">
                   <div className="circle--m">
                     <a
@@ -607,12 +650,20 @@ const PromoPage = () => {
                     </motion.h2>
                   )}
                 </div>
-              </div>
+              </motion.div>
             </>
           ) : (
-            <div
+            <motion.div
               className="spinner-container"
               style={{ height: "63%", float: "bottom", position: "relative" }}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1 },
+                transition: { duration: 1.5 },
+              }}
+              initial="hidden"
+              whileInView="visible"
+              transition="transition"
             >
               <div className="main-circle">
                 {service == 0 && (
@@ -823,7 +874,7 @@ const PromoPage = () => {
                   </a>
                 )}
               </div>
-            </div>
+            </motion.div>
           )}
         </div>
 
@@ -834,7 +885,17 @@ const PromoPage = () => {
             position: "relative",
           }}
         >
-          <div className="grid-wrapper">
+          <motion.div
+            className="grid-wrapper"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 },
+              transition: { duration: 1 },
+            }}
+            initial="hidden"
+            whileInView="visible"
+            transition="transition"
+          >
             <img src={grid1} alt="" className="grid-img" />
             <img src={grid2} alt="" className="grid-img" />
             <img src={grid3} alt="" className="grid-img" />
@@ -845,11 +906,22 @@ const PromoPage = () => {
             <img src={grid8} alt="" className="grid-img" />
             <img src={grid9} alt="" className="grid-img" />
             <img src={grid10} alt="" className="grid-img" />
-          </div>
+          </motion.div>
         </div>
 
         <div className="contact-container">
-          <div className="contact-form container text-white" id="contact">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            transition="transition"
+            variants={{
+              hidden: { x: -50 },
+              visible: { x: 0 },
+              transition: { duration: 1.5 },
+            }}
+            className="contact-form container text-white"
+            id="contact"
+          >
             <div className="px-5 contact-form-container">
               <div className="contact-line"></div>
               <h1>CONTACT US</h1>
@@ -930,7 +1002,7 @@ const PromoPage = () => {
                 </div>
               </form>
             </div>
-          </div>
+          </motion.div>
           <div
             className="bg-image"
             style={{ backgroundImage: `url(${hexagon})` }}
@@ -938,7 +1010,17 @@ const PromoPage = () => {
         </div>
 
         <footer>
-          <div className="footer-container">
+          <motion.div
+            className="footer-container"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 },
+              transition: { duration: 1.5 },
+            }}
+            initial="hidden"
+            whileInView="visible"
+            transition="transition"
+          >
             <div className="column">
               <img src={logo1} alt="" />
             </div>
@@ -947,13 +1029,23 @@ const PromoPage = () => {
               <h3>SOCIAL</h3>
               <ul>
                 <li>
-                  <a href="https://www.linkedin.com/company/flynovate/" style={{ color: "inherit", textDecoration: "none" }}>LinkedIn</a>
+                  <a
+                    href="https://www.linkedin.com/company/flynovate/"
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    LinkedIn
+                  </a>
                 </li>
                 {/* <li>
                   <a>Twitter</a>
                 </li> */}
                 <li>
-                  <a href="https://www.instagram.com/flynovate/" style={{ color: "inherit", textDecoration: "none" }}>Instagram</a>
+                  <a
+                    href="https://www.instagram.com/_flynovate_/"
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    Instagram
+                  </a>
                 </li>
               </ul>
             </div>
@@ -962,13 +1054,23 @@ const PromoPage = () => {
               <h3>FLYNOVATE</h3>
               <ul>
                 <li>
-                  <a href="#aboutUs" style={{ color: "inherit", textDecoration: "none" }}>About Us</a>
+                  <a
+                    href="#aboutUs"
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    About Us
+                  </a>
                 </li>
                 <li>
-                  <a href="/news" style={{ color: "inherit", textDecoration: "none" }}>News & Articles</a>
+                  <a
+                    href="/news"
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    News & Articles
+                  </a>
                 </li>
                 <li>
-                  <a>Career</a>
+                  <a href="#">Career</a>
                 </li>
               </ul>
             </div>
@@ -977,14 +1079,14 @@ const PromoPage = () => {
               <h3>LEGAL</h3>
               <ul>
                 <li>
-                  <a>Terms and Conditions</a>
+                  <a href="#">Terms and Conditions</a>
                 </li>
                 <li>
-                  <a>Privacy Policy</a>
+                  <a href="#">Privacy Policy</a>
                 </li>
               </ul>
             </div>
-          </div>
+          </motion.div>
         </footer>
       </div>
     </motion.div>

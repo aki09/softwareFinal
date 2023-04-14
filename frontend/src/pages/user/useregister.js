@@ -4,9 +4,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
-import logo from "../../assets/logo2.png";
+import logo from "../../assets/logo3.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Cookies from "js-cookie";
+import { Nav, Container, Navbar } from "react-bootstrap";
 
 const Register = () => {
   const [user, setuser] = useState({
@@ -327,16 +328,26 @@ const Register = () => {
           height: "100vh",
         }}
       >
-        <a
-          href="/"
-          className="heading d-flex align-item-center text-light p-5"
-          style={{ textDecoration: "none" }}
-        >
-          <img src={logo} width="50" />
-          <h3 className="fly m-2">
-            Fly<span className="novate">novate</span>
-          </h3>
-        </a>
+        <Navbar style={{ backgroundColor: "transparent" }}>
+          <Container className="d-flex flex-col">
+            <Navbar.Brand href="/">
+              <img
+                alt=""
+                src={logo}
+                height="50px"
+                className="d-inline-block align-top me-5"
+              />{" "}
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse className="justify-content-end align-items-center">
+              <Nav>
+                <Nav.Link href="/" className="nav-links text-white pt-3">
+                  HOME PAGE
+                </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
         <div className="login-box">
           <h2>Sign Up</h2>
           <form>
@@ -411,7 +422,7 @@ const Register = () => {
                 <div className="user-box">
                   <input
                     type="number"
-                    length='6'
+                    length="6"
                     name="otp"
                     onChange={handleOTPChange}
                     value={OTP}
