@@ -281,6 +281,7 @@ const FormMap = () => {
                 className="pt-4"
               >
                 <div className="form-auto">
+                {typeof window !== 'undefined' && window.google && (
                     <Autocomplete
                       onLoad={(autocomplete) => {
                         autocompleteRef.current = autocomplete;
@@ -316,6 +317,7 @@ const FormMap = () => {
                         )}
                       </div>
                     </Autocomplete>
+                    )}
                 </div>
                 <GoogleMapReact
                   bootstrapURLKeys={{
@@ -324,7 +326,7 @@ const FormMap = () => {
                   }}
                   yesIWantToUseGoogleMapApiInternals
                   onGoogleApiLoaded={({ map, maps }) => {
-                    const geocoder = new maps.Geocoder();
+                  
                     mapRef.current = map;
                     renderMarkers(markers);
                   }}
