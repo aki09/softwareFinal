@@ -161,7 +161,7 @@ const Login = () => {
           height: "100vh",
         }}
       >
-        <Navbar style={{ backgroundColor: "transparent" }}>
+        <Navbar style={{ backgroundColor: "transparent" }} className="navbar1">
           <Container className="d-flex flex-col">
             <Navbar.Brand href="/">
               <img
