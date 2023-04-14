@@ -22,6 +22,10 @@ const errorSchema = new Schema({
         // createdAt: 'created_at',
         // updatedAt: 'updated_at'
     },
+    number_of_errors:{
+        type: Number,
+        required: true
+    },
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',

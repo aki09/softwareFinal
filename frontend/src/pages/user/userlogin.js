@@ -8,7 +8,7 @@ import logo from "../../assets/logo2.png";
 import Cookies from "js-cookie";
 import Alert from "react-bootstrap/Alert";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-
+//
 const Login = () => {
   const [error, setError] = useState("");
   const [user, setuser] = useState({ username: "", password: "" });

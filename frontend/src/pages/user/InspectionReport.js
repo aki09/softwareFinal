@@ -57,13 +57,7 @@ const InspectionReport = () => {
     }
   }, [navigate]);
 
-  const Loading = () => {
-    return (
-      <div className="loading">
-        <div className="loading-spinner"></div>
-      </div>
-    );
-  };
+
 
   const fetchData = async (url) => {
     setIsLoading(true);
@@ -116,7 +110,7 @@ const InspectionReport = () => {
           >
             <Spinner
               as="span"
-              animation="grow"
+              animation="border"
               size="lg"
               role="status"
               aria-hidden="true"
@@ -215,11 +209,11 @@ const InspectionReport = () => {
                     </div>
                     {files.length ? (
                       <Row>
-                        {files.map((file, index) => (
+                        {files.slice().reverse().map((file, index) => (
                           <Col md={3} key={index} className="mt-4">
                             <Card className="text-center" variant="light">
                               <Card.Header className="bg-white text-#2a265f font-weight-bold">
-                                <h5 className="my-2">Report {index + 1}</h5>
+                                <h5 className="my-2">Report {files.length - index}</h5>
                               </Card.Header>
                               <Card.Body>
                                 <Button
