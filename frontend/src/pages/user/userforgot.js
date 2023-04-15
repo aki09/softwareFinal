@@ -20,6 +20,9 @@ const Forgot = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingotp,setisSubmittingotp]=useState(false);
+  const [isSubmittingpass,setisSubmittingpass]=useState(false);
 
   useEffect(() => {
     let isLoggedIn = !!Cookies.get("auth-token");
@@ -56,11 +59,13 @@ const Forgot = () => {
     e.preventDefault();
 
     try {
+      setIsSubmitting(true);
       const url = process.env.REACT_APP_SERVER + "/forgot";
       const res = await axios.post(url, {
         userName: userName,
       });
       if (res.data.message === "OTP sent successfully") {
+        setIsSubmitting(false);
         setOtpSent(true);
         setError("");
       }
@@ -70,6 +75,7 @@ const Forgot = () => {
         error.response.status >= 400 &&
         error.response.status <= 500
       ) {
+        setIsSubmitting(false);
         setError(error.response.data.message);
       } else {
         setError("Something went wrong. Please try again later.");
@@ -81,14 +87,16 @@ const Forgot = () => {
     e.preventDefault();
 
     try {
+      setisSubmittingotp(true);
       const url = process.env.REACT_APP_SERVER + "/reset";
       const res = await axios.post(url, {
         userName: userName,
         otp: otp,
       });
       if (res.data.message === "OTP is verified successfully") {
-        setMessage(res.data.message);
+        setisSubmittingotp(false);
         setError("");
+        setShowPassword(true);
       }
     } catch (error) {
       if (
@@ -96,6 +104,72 @@ const Forgot = () => {
         error.response.status >= 400 &&
         error.response.status <= 500
       ) {
+        setisSubmittingotp(false);
+        setError(error.response.data.message);
+      } else {
+        setError("Something went wrong. Please try again later.");
+      }
+    }
+  };
+
+  const handlepasschange = async (e) => {
+    e.preventDefault();
+    if(password===""){
+      setError("Please input new Password");
+      return;
+    }
+    let value=password;
+    if (!/[A-Z]/.test(value)) {
+      setError("Password must contain at least one uppercase letter");
+      return;
+    }
+    if (!/[a-z]/.test(value)) {
+      setError("Password must contain at least one lowercase letter");
+      return;
+    }
+    if (!/[0-9]/.test(value)) {
+      setError("Password must contain at least one digit");
+      return;
+    }
+    if (!/[\W_]/.test(value)) {
+      setError("Password must contain at least one special character");
+      return;
+    }
+    if (value.length < 8) {
+      setError("Password must contain at least 8 characters");
+      return;
+    }
+    if(confirmPassword===""){
+      setError("Please confirm new Password");
+      return;
+    }
+    if(password!==confirmPassword){
+      setError("Passwords do not match");
+      return;
+    }
+    try {
+      setError("")
+      setisSubmittingpass(true);
+      const url = process.env.REACT_APP_SERVER + "/passchange";
+      const res = await axios.post(url, {
+        userName: userName,
+        password: password,
+      });
+      if (res.data.message === "Password changed successfully") {
+        setisSubmittingpass(false);
+        setMessage(res.data.message);
+        setError("");
+        setTimeout(() => {
+          navigate('/login')
+        }, 2000);
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status <= 500
+      ) {
+        setisSubmittingpass(false);
         setError(error.response.data.message);
       } else {
         setError("Something went wrong. Please try again later.");
@@ -229,7 +303,49 @@ const Forgot = () => {
             </Navbar.Collapse>
           </Container>
         </Navbar>
-        <div className="login-box">
+        {showPassword?(
+          <div className="login-box">
+          <h2>Reset Password</h2>
+          <h5>Please Enter New Password</h5>
+          <h6>Password must be of atleast 8 letters and must contain a capital letter, small letter ,digits and special character </h6>
+          <br/>
+          <form>
+            <div className="user-box">
+              <input
+                type="password"
+                required
+                onChange={handlePasswordChange}
+                value={password}
+              />
+              <label>Password</label>
+            </div>
+            <div className="user-box">
+              <input
+                type="password"
+                required
+                onChange={handleConfirmPasswordChange}
+                value={confirmPassword}
+              />
+              <label>Confirm Password</label>
+            </div>
+            <button onClick={handlepasschange} className="submit-btn" disabled={isSubmittingpass}>
+                  {isSubmittingpass ? "Loading..." : "Submit"}
+            </button>
+          </form>
+        
+          {message && (
+                  <div className="alert alert-success" role="alert">
+                    {message}
+                  </div>
+                )}
+            {error && (
+              <div className="my-4 pb-3">
+                <Alert variant="danger">{error}</Alert>
+              </div>
+            )}
+          </div>
+        ):(
+          <div className="login-box">
           <h2>Reset Password</h2>
           <h5>We will send you OTP on your Email</h5>
           <h5>Please Enter your User Name</h5>
@@ -257,8 +373,8 @@ const Forgot = () => {
                   <label>Enter OTP</label>
                 </div>
                 <div className="d-flex justify-content-center">
-                <button onClick={handleOTPSubmit} className="submit-btn">
-                  Submit OTP
+                <button onClick={handleOTPSubmit} className="submit-btn" disabled={isSubmittingotp}>
+                  {isSubmittingotp ? "Loading..." : "Submit OTP"}
                 </button>
                 </div>
                 <br />
@@ -266,8 +382,8 @@ const Forgot = () => {
               </form>
             ) : (
               <div className="d-flex justify-content-center">
-                <button type="submit" className="submit-btn">
-                  Submit
+                <button type="submit" className="submit-btn" disabled={isSubmitting}>
+                  {isSubmitting ? "Loading..." : "Submit"}
                 </button>
               </div>
             )}
@@ -283,6 +399,7 @@ const Forgot = () => {
             )}
           </form>
         </div>
+        )}
       </div>
     </>
   );

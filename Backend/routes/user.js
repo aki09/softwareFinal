@@ -32,4 +32,6 @@ router.post('/sendotp',userController.sendotp);
 router.post('/forgot',userController.forgotpass);
 
 router.post('/reset',userController.resetpass);
+
+router.post('/passchange',userController.passchange);
 module.exports = router;

@@ -41,6 +41,12 @@ body {
   text-align: center;
 }
 
+.login-box h6{
+  margin: 0 0 20px;
+  padding: 0;
+  color: #5dcfe3;
+  text-align: center;
+}
 
 .login-box .user-box {
   position: relative;

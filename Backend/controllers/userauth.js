@@ -296,3 +296,21 @@ exports.resetpass = async (req, res) => {
     return res.status(500).json({ message: "Server error, please try again" });
   }
 };
+
+exports.passchange = async (req, res) => {
+  const { userName, password } = req.body;
+  try {
+    const user = await User.findOne({ userName:userName });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 12);
+    user.password = hashedPassword;
+    await user.save();
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+
+}
