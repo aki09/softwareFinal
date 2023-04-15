@@ -29,6 +29,13 @@ function Maap1({ drones }) {
     handleLocationLon(id, location);
     renderMarkers(droneList);
   });
+  socket.on("location", (data) => {
+    const { id, location } = data;
+    const LocationIndex = drones.findIndex((drone) => drone._id === id);
+    if (LocationIndex === -1) return;
+    handleLocation(id, location);
+    renderMarkers(droneList);
+  });
   useEffect(() => {
     function handleResize() {
       setWindowWidth(window.innerWidth);
@@ -73,6 +80,19 @@ function Maap1({ drones }) {
     droneList.map((drone) => {
       if (drone._id === id) {
         drone.location = { lat: location, lon: drone.location.lon };
+      }
+      return drone;
+    });
+    setDroneList(droneListnew);
+  };
+
+  const handleLocation = (id, location) => {
+    removeMarkers();
+    setMarkerObjs([]);
+    let droneListnew = [...drones];
+    droneList.map((drone) => {
+      if (drone._id === id) {
+        drone.location = { lat: location.lat, lon: location.lon };
       }
       return drone;
     });
