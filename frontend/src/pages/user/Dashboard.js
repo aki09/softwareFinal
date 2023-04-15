@@ -106,14 +106,6 @@ const Dashboard = () => {
     setIsLoading(false);
   };
 
-  const Loading = () => {
-    return (
-      <div className="loading">
-        <div className="loading-spinner"></div>
-      </div>
-    );
-  };
-
   function updateVideoUrl(url) {
     setVideoUrl(url);
   }

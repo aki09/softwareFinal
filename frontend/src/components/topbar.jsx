@@ -90,7 +90,7 @@ const Topbar = ({ user }) => {
                 </Button>
               </div>
 
-              <Nav.Link>
+              <Nav.Link href="/profile">
                 <RiAdminFill
                   style={{ fontSize: "36px" }}
                   className="ms-3"

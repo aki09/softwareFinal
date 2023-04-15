@@ -542,13 +542,13 @@ const PromoPage = () => {
                     </a>
                   </div>
                   <div className="circle--m">
-                    <a
-                      onClick={() => handleService(4)}
+                  <a
+                      onClick={() => handleService(6)}
                       style={{ cursor: "pointer" }}
                     >
-                      <BiError
+                      <MdCleaningServices
                         className={`circle-icon--m ${
-                          service === 4 ? "active--m" : ""
+                          service === 6 ? "active--m" : ""
                         }`}
                       />
                     </a>
@@ -566,13 +566,13 @@ const PromoPage = () => {
                     </a>
                   </div>
                   <div className="circle--m">
-                    <a
-                      onClick={() => handleService(6)}
+                  <a
+                      onClick={() => handleService(4)}
                       style={{ cursor: "pointer" }}
                     >
-                      <MdCleaningServices
+                      <BiError
                         className={`circle-icon--m ${
-                          service === 6 ? "active--m" : ""
+                          service === 4 ? "active--m" : ""
                         }`}
                       />
                     </a>
@@ -821,7 +821,7 @@ const PromoPage = () => {
                 className={`small-circle`}
                 style={{ top: "20%", right: "33%" }}
               >
-                {service === 4 ? (
+                {service === 6 ? (
                   <a
                     onClick={() => handleService(0)}
                     style={{ cursor: "pointer" }}
@@ -830,10 +830,10 @@ const PromoPage = () => {
                   </a>
                 ) : (
                   <a
-                    onClick={() => handleService(4)}
+                    onClick={() => handleService(6)}
                     style={{ cursor: "pointer" }}
                   >
-                    <BiError className="small-circle--icon" />
+                    <MdCleaningServices className="small-circle--icon" />
                   </a>
                 )}
               </div>
@@ -858,7 +858,7 @@ const PromoPage = () => {
                 )}
               </div>
               <div className="small-circle" style={{ top: "55%", right: "8%" }}>
-                {service === 6 ? (
+              {service === 4 ? (
                   <a
                     onClick={() => handleService(0)}
                     style={{ cursor: "pointer" }}
@@ -867,10 +867,10 @@ const PromoPage = () => {
                   </a>
                 ) : (
                   <a
-                    onClick={() => handleService(6)}
+                    onClick={() => handleService(4)}
                     style={{ cursor: "pointer" }}
                   >
-                    <MdCleaningServices className="small-circle--icon" />
+                    <BiError className="small-circle--icon" />
                   </a>
                 )}
               </div>

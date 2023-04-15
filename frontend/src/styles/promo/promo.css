@@ -5,10 +5,10 @@ body {
 /* Navbar */
 
 .navbar1 {
-  background: rgba(5, 0, 73, 0.8);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  background: rgba(5, 0, 73);
+  /* box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(13.5px);
-  -webkit-backdrop-filter: blur(13.5px);
+  -webkit-backdrop-filter: blur(13.5px); */
 }
 
 .iconButton {
@@ -139,7 +139,7 @@ body {
 
 .main-content {
   margin-top: 100vh;
-  background-color: #f2efeb;
+  background-color: #f4f6fc;
 }
 
 /* About Us */
@@ -160,9 +160,9 @@ body {
   background-color: #fff;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
-  border-radius: 20px;
+  /* border-radius: 20px; */
   text-align: start;
-  padding: 10px;
+  padding: 30px;
   flex: 1;
   width: 50%;
   float: left;
@@ -516,11 +516,11 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 2;
-  box-shadow: -1.4em -0.8em 1.8em #777;
+  /* box-shadow: -1.4em -0.8em 1.8em #777; */
 }
 
 .small-circle:hover {
-  box-shadow: -1.4em -0.8em 2em #333;
+  /* box-shadow: -1.4em -0.8em 2em #333; */
   width: 105px;
   height: 105px;
 }
@@ -663,7 +663,7 @@ body {
   background: linear-gradient(
     180deg,
     rgba(5, 0, 73, 1) 0%,
-    rgba(71, 63, 143, 1) 100%
+    rgba(0, 51, 124, 1) 100%
   );
   height: 100vh;
 }
@@ -752,7 +752,7 @@ body {
 /* Footer */
 
 footer {
-  background: #473f8f;
+  background: #00337c;
   padding: 30px;
   text-align: center;
 }

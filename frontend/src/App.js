@@ -7,6 +7,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Login from "./pages/user/userlogin";
 import Register from "./pages/user/useregister";
 import FormMap from "./pages/user/Grid";
+import UserProfile from "./pages/user/profile";
 import Adminlogin from "./pages/admin/adminlogin";
 import AdminHome from "./pages/admin/adminhome";
 import Allocation from "./pages/admin/Allocation";
@@ -31,6 +32,7 @@ function App() {
         <Route exact path="/home" element={<Dashboard />} />
         <Route exact path="/grid" element={<FormMap />} />
         <Route exact path="/report" element={<InspectionReport />} />
+        <Route exact path="/profile" element={<UserProfile />} />
 
         <Route exact path="/pchia" element={<Adminlogin />} />
         <Route exact path="/pchiahome" element={<AdminHome />} />
