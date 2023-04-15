@@ -10,11 +10,16 @@ import Alert from "react-bootstrap/Alert";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Nav, Container, Navbar } from "react-bootstrap";
 
-const Login = () => {
+const Forgot = () => {
   const [error, setError] = useState("");
-  const [user, setuser] = useState({ username: "", password: "" });
+  const [userName, setuserName] = useState("");
+  const [otp, setOTP] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     let isLoggedIn = !!Cookies.get("auth-token");
@@ -28,20 +33,63 @@ const Login = () => {
   });
 
   const handleChange = ({ currentTarget: input }) => {
-    setuser({ ...user, [input.name]: input.value });
+    setuserName(input.value);
   };
-  const handleTogglePassword = () => {
+
+  const handleOtpChange = ({ currentTarget: input }) => {
+    setOTP(input.value);
+  };
+
+  const handlePasswordChange = ({ currentTarget: input }) => {
+    setPassword(input.value);
+  };
+
+  const handleConfirmPasswordChange = ({ currentTarget: input }) => {
+    setConfirmPassword(input.value);
+  };
+
+  const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const url = process.env.REACT_APP_SERVER + "/login";
-      const res = await axios.post(url, user);
-      const cookie = res.data.access;
-      Cookies.set("auth-token", cookie);
-      navigate("/home");
+      const url = process.env.REACT_APP_SERVER + "/forgot";
+      const res = await axios.post(url, {
+        userName: userName,
+      });
+      if (res.data.message === "OTP sent successfully") {
+        setOtpSent(true);
+        setError("");
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status <= 500
+      ) {
+        setError(error.response.data.message);
+      } else {
+        setError("Something went wrong. Please try again later.");
+      }
+    }
+  };
+
+  const handleOTPSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const url = process.env.REACT_APP_SERVER + "/reset";
+      const res = await axios.post(url, {
+        userName: userName,
+        otp: otp,
+      });
+      if (res.data.message === "OTP is verified successfully") {
+        setMessage(res.data.message);
+        setError("");
+      }
     } catch (error) {
       if (
         error.response &&
@@ -182,65 +230,62 @@ const Login = () => {
           </Container>
         </Navbar>
         <div className="login-box">
-          <h2>Login</h2>
-          {error && (
-            <div className="my-4 pb-3">
-              <Alert variant="danger">{error}</Alert>
-            </div>
-          )}
-
+          <h2>Reset Password</h2>
+          <h5>We will send you OTP on your Email</h5>
+          <h5>Please Enter your User Name</h5>
+          <br/>
           <form onSubmit={handleSubmit}>
             <div className="user-box">
               <input
                 type="text"
-                name="username"
                 required
                 onChange={handleChange}
-                value={user.username}
+                value={userName}
               />
-              <label>Username</label>
+              <label>User Name</label>
             </div>
-            <div className="user-box">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                required
-                onChange={handleChange}
-                value={user.password}
-                autoComplete="on"
-              />
-              <label>Password</label>
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={handleTogglePassword}
-              >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
-            </div>
-
-            <button type="submit" className="submit-btn">
-              Submit
-            </button>
+            {otpSent ? (
+              <form>
+                <div className="user-box">
+                  <input
+                    type="number"
+                    length="6"
+                    name="otp"
+                    onChange={handleOtpChange}
+                    value={otp}
+                  />
+                  <label>Enter OTP</label>
+                </div>
+                <div className="d-flex justify-content-center">
+                <button onClick={handleOTPSubmit} className="submit-btn">
+                  Submit OTP
+                </button>
+                </div>
+                <br />
+                <br />
+              </form>
+            ) : (
+              <div className="d-flex justify-content-center">
+                <button type="submit" className="submit-btn">
+                  Submit
+                </button>
+              </div>
+            )}
+            {message && (
+                  <div className="alert alert-success" role="alert">
+                    {message}
+                  </div>
+                )}
+            {error && (
+              <div className="my-4 pb-3">
+                <Alert variant="danger">{error}</Alert>
+              </div>
+            )}
           </form>
-
-          <div className="mt-5 text-light">
-            New here?
-            <span className="p-2">
-              <a href="/signup" className="signup p-2">
-                Sign Up
-              </a>
-            </span>
-            <div>
-            <a href="/forgot" className="signup ">
-              Forgot Password?
-              </a>
-            </div>
-          </div>
         </div>
       </div>
     </>
   );
 };
 
-export default Login;
+export default Forgot;

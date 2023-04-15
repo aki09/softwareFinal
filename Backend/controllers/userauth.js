@@ -5,6 +5,7 @@ const Drone = require("../models/drone");
 const otpGenerator = require("otp-generator");
 const createTokens = require("../middleware/usercreatetoken");
 const Otp = require("../models/otp");
+const forgotOtp=require("../models/forgototp")
 const dotenv = require("dotenv");
 const fs = require("fs");
 dotenv.config();
@@ -102,10 +103,7 @@ exports.sendotp = async(req, res) => {
     if (userExists) {
       return res.status(400).json({ error: "Username already exists. Enter a new one" });
     }
-    let otpty = await Otp.findOne({ email:email });
-    if (otpty) {
-      await otpty.deleteOne();
-    }
+    await Otp.deleteMany({ email: email });
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   const mailOptions = {
     from: process.env.gmailuser,
@@ -230,5 +228,71 @@ exports.verifyotp = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Server error, please try again" });
+  }
+};
+
+exports.forgotpass= async (req, res) => {
+  const userName=req.body.userName;
+  try {
+    const user = await User.findOne({ userName:userName });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    const email=user.email;
+    await forgotOtp.deleteMany({ userName: userName });
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const mailOptions = {
+      from: process.env.gmailuser,
+      to: email,
+      subject: `Password Reset OTP`,
+      text: `Your OTP for resetting your password is ${otp}.Please do not share it with anyone`,
+    };
+    transporter.sendMail(mailOptions, async (error, info) => {
+      if (error) {
+        return res.status(500).json({ message: "Error sending OTP" });
+      }
+
+      const newOtp = new forgotOtp({
+        userName:userName,
+        otp:otp,
+        expiresAt: Date.now() + 5 * 60 * 1000, 
+      })
+      try {
+        await newOtp.save();
+        res.json({ message: "OTP sent successfully" });
+      } catch (err) {
+        console.log(err);
+        return res.status(500).json({ meesage: "Error sending OTP" });
+      }
+    });
+  }catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+
+exports.resetpass = async (req, res) => {
+  const { userName, otp } = req.body;
+  try {
+    const otpDoc = await forgotOtp.findOne({ userName:userName });
+    if (!otpDoc) {
+      return res.status(400).json({ message: "No OTP sent to this email" });
+    }
+    if (Date.now() > otpDoc.expiresAt) {
+      return res
+        .status(400)
+        .json({ message: "OTP expired, please request a new one" });
+    }
+
+    if (otpDoc.otp !== otp) {
+      return res.status(400).json({ message: "OTP is invalid" });
+    }else{
+      await otpDoc.remove();
+      res.status(200).json({ message: "OTP is verified successfully" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server error, please try again" });
   }
 };

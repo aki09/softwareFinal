@@ -15,6 +15,7 @@ import Cookies from "js-cookie";
 import { Navigate, useNavigate} from "react-router-dom";
 import PromoPage from "./pages/promo/indexpromo";
 import News from "./pages/promo/news";
+import Forgot from "./pages/user/userforgot"
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
 
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/signup" element={<Register />} />
+        <Route exact path="/forgot" element={<Forgot />} />
 
         <Route exact path="/home" element={<Dashboard />} />
         <Route exact path="/grid" element={<FormMap />} />

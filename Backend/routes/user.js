@@ -29,4 +29,7 @@ router.post('/resendotp',userController.resendotp);
 
 router.post('/sendotp',userController.sendotp);
 
+router.post('/forgot',userController.forgotpass);
+
+router.post('/reset',userController.resetpass);
 module.exports = router;
