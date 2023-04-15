@@ -24,6 +24,8 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [OTP, setOTP] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingotp, setIsSubmittingotp] = useState(false);
 
   useEffect(() => {
     let isLoggedIn = !!Cookies.get("auth-token");
@@ -51,6 +53,7 @@ const Register = () => {
       setError(null);
       setMessage(null);
       try {
+        setIsSubmittingotp(true);
         const url = process.env.REACT_APP_SERVER + "/verifyotp";
         const response = await axios.post(url, { email: user.email, otp: OTP });
         if (response.status === 200) {
@@ -62,6 +65,7 @@ const Register = () => {
               email: user.email,
               password: user.password,
             });
+            setIsSubmittingotp(false);
             if (res.status === 200) {
               setMessage(res.data.message);
               navigate("/login");
@@ -73,6 +77,7 @@ const Register = () => {
               error.response.status <= 500
             ) {
               setError(error.response.data.error);
+              setIsSubmittingotp(false);
             }
           }
         }
@@ -83,6 +88,7 @@ const Register = () => {
           error.response.status <= 500
         ) {
           setError(error.response.data.error);
+          setIsSubmittingotp(false);
         }
       }
     } else {
@@ -208,11 +214,13 @@ const Register = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
+        setIsSubmitting(true);
         const url = process.env.REACT_APP_SERVER + "/sendotp";
         const response = await axios.post(url, {
           email: user.email,
           username: user.username,
         });
+        setIsSubmitting(false);
         setShowOTP(true);
         setMessage(response.data.message);
         setError(null);
@@ -444,10 +452,10 @@ const Register = () => {
                   <label>Enter OTP</label>
                 </div>
                 <button onClick={handleResendOtp} className="submit-btn">
-                  Resend OTP
+                  Resend
                 </button>
-                <button onClick={handleOTPSubmit} className="submit-btn">
-                  Submit
+                <button onClick={handleOTPSubmit} className="submit-btn" disabled={isSubmittingotp}>
+                {isSubmittingotp ? "Loading..." : "Submit"}
                 </button>
                 <br />
                 <br />
@@ -458,13 +466,17 @@ const Register = () => {
                 )}
               </form>
             ) : (
+              <div className="d-flex justify-content-center">
               <button
                 type="submit"
                 className="submit-btn"
                 onClick={handleSubmit}
+                disabled={isSubmitting} 
               >
-                Submit
+               {isSubmitting ? "Loading..." : "Submit"}
               </button>
+              {isSubmitting && <div className="loader" />} 
+              </div>
             )}
             {error && (
               <div className="medium text-danger mt-3" role="alert">
