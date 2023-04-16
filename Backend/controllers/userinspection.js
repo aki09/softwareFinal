@@ -78,20 +78,11 @@ exports.generatePDF = async (req, res, next) => {
   const defects = getDefects(returnedData);
   var urls = returnedData.map((data) => data.url);
   var errorsByDrone = [];
-  for (var key in names) {
-    await Drone.find({ userId: uid }).then(async (drones) => {
-      for (var i in drones) {
-        await ERRORS.find({
-          userId: userid,
-          folder: key,
-        }).then((errors) => {
-          errorsByDrone.push({
-            droneId: drones[i]._id.toString(),
-            count: errors.length,
-          });
-        });
-      }
-    });
+  for (var key in names) {  
+    var err = await ERRORS.findOne({ folder: names[key].name,userId:userid });
+    if (err) {
+      errorsByDrone.push({arrayno:names[key].arrayno,panelno:names[key].panelno,noer:err.number_of_errors});
+    }
   }
   pdfData = {
     companyName: user.company.toUpperCase(),
@@ -157,16 +148,16 @@ exports.generatePDF = async (req, res, next) => {
     myimg = { width: 4, height: 4, data: response.data, extension: '.jpg' };
     imgs.push(myimg);
     const dataUri = `data:image/jpeg;base64,${response.data.toString('base64')}`;
-    htmlString += `<div style="position: relative; font-family: Arial, Helvetica, sans-serif; padding: 1rem 2rem; width: 30%; margin: 0 auto"><h4 style="display: block; font-size: 1.5rem; color: #050049; text-align: left">DEFECT DETAILS</h4><div style="display: flex; flex-direction: column; align-items: center">`;
+    htmlString += `<div style="position: relative; font-family: Arial, Helvetica, sans-serif; padding: 1rem 2rem; width: 30%; margin: 0 auto"><h4 style="display: block; font-size: 1.5rem; color: #050049; text-align: left">DEFECT DETAILS</h4><div style="display: flex; flex-direction: column; align-items: center ">`;
     htmlString += `<img src="${dataUri}" alt="Image ${j}" style="display:block; margin: 10px; width:700px;height:480px;margin-bottom: 1rem"/>`;
-    htmlString += `<div style="padding: 2rem 3rem; border: 2px solid #050049; border-radius: 30px; width: 150px; text-align: center">`;
-    htmlString += `Array No: ${names[j].arrayno}<br />`;
+    htmlString += `<div style="padding: 2rem 3rem; border: 2px solid #050049; border-radius: 30px; width: 150px; text-align: center;">`;
+    htmlString += `Array No: ${errorsByDrone[j].arrayno}<br />`;
     htmlString += `</div>`;
     htmlString += `<div style="padding: 2rem 3rem; border: 2px solid #050049; border-radius: 30px; width: 150px; margin-top: 1rem; text-align: center">`;
-    htmlString += `Panel No: ${names[j].panelno}<br />`;
+    htmlString += `Panel No: ${errorsByDrone[j].panelno}<br />`;
     htmlString += `</div>`;
     htmlString += `<div style="padding: 2rem 3rem; border: 2px solid #050049; border-radius: 30px; width: 150px; margin-top: 1rem; text-align: center">`;
-    htmlString += `No. of Errors: ${names[j].panelno}<br />`;
+    htmlString += `No. of Errors: ${errorsByDrone[j].noer}<br />`;
     htmlString += `</div>`;
     htmlString += `</div></div>`;
     htmlString += `<div style="display: flex; justify-content: space-between; margin-top: 9rem; color: #050049; font-size: 1.30em;">`;
@@ -190,6 +181,7 @@ exports.generatePDF = async (req, res, next) => {
   }
   await aws.uploadPDF(pdfBuffer,uid);
   await aws.deleteiamges(uid);
+  await ERRORS.deleteMany({userId:userid});
   var userReports = await aws.getPDF(uid);
   var numberOfFiles = userReports.length;
   await browser.close();
