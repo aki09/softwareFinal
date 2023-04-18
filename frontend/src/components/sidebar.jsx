@@ -167,17 +167,16 @@ const Sidebar = ({
       <div
         style={{
           ...styles.mainContent,
-          marginTop: `${windowWidth > 768 ? "25%" : "55%"}`,
-          overflowY: showScrollbar ? "scroll" : "hidden",
-          width: `${windowWidth > 768 ? "" : "80vw"}`,
+          marginTop: `${windowWidth > 768 ? "25%" : "90px"}`,
+          height: `${windowWidth > 768 ? "75%" : ""}`,
         }}
         className={`${
           windowWidth > 768 ? "pt-2" : ""
-        } d-flex justify-content-center sidebar `}
+        } d-flex justify-content-center sidebar`}
       >
         <div
-          className="bg-light "
-          style={{ width: `${windowWidth > 768 ? "" : "100vw"}` }}
+          className="bg-light"
+          style={{ width: `${windowWidth > 768 ? "" : "80vw"}` }}
         >
           {cleaningDroneList.length !== 0 ? (
             <>
@@ -213,8 +212,6 @@ const Sidebar = ({
                   <div
                     className={` bg-light`}
                     style={{
-                      position: "fixed",
-                      top: `${navbarHeight}px`,
                       zIndex: 1,
                       width: "100%",
                       paddingLeft: "7vw",
@@ -237,8 +234,8 @@ const Sidebar = ({
                           />
                         }
                         onChange={handleType}
-                        onstyle="outline-primary"
-                        offstyle="outline-primary"
+                        onstyle="light"
+                        offstyle="light"
                         width={100}
                       />
                     </div>
@@ -246,7 +243,7 @@ const Sidebar = ({
                 </>
               )}
               <div
-                style={{ marginTop: `${windowWidth > 768 ? "30%" : "30%"}` }}
+                style={{ marginTop: `${windowWidth > 768 ? "30%" : ""}` }}
                 className="container"
               >
                 {filteredDrones.map((drone, i) => (
@@ -381,7 +378,14 @@ const Sidebar = ({
                     <div className="ms-4">
                       <h1>
                         Greetings,{" "}
-                        <span style={{ color: "#2a265f", textTransform: "capitalize" }}>{user.company}</span>
+                        <span
+                          style={{
+                            color: "#2a265f",
+                            textTransform: "capitalize",
+                          }}
+                        >
+                          {user.company}
+                        </span>
                       </h1>
                       <h6>Your Performance Report</h6>
                       <BootstrapSwitchButton

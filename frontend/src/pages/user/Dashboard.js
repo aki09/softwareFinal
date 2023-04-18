@@ -171,7 +171,7 @@ const Dashboard = () => {
                 <Row>
                   <Col md={3} className="justify-content-center">
                     <div
-                      style={{ height: "100vh", overflowY: "scroll" }}
+                      style={{ height: "100vh" }}
                       className="sidebarScroll"
                     >
                       <Sidebar
@@ -199,7 +199,7 @@ const Dashboard = () => {
                 <Topbar user={user} />
               </Row>
               <Row>
-                <Col md={11} lg={3} className="order-1 order-lg-1">
+                <Col lg={3} className="order-1 order-lg-1">
                   <div
                     style={{ height: "100vh", overflowY: "scroll" }}
                     className="sidebarScroll"

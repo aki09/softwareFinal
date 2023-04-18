@@ -3,7 +3,7 @@ import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import { motion } from "framer-motion";
 import { Navbar, Container, Nav } from "react-bootstrap";
-import logo from "../../assets/logo1.png";
+import logo from "../../assets/logo3.png";
 import {
   MdKeyboardArrowRight,
   MdWorkspacesOutline,

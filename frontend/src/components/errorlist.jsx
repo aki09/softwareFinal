@@ -86,7 +86,7 @@ const ErrorList = ({ drones }) => {
     <div
       style={{
         ...styles.mainContent,
-        marginTop: `${windowWidth > 768 ? "28%" : "55%"}`,
+        marginTop: `${windowWidth > 768 ? "28%" : "60%"}`,
         marginBottom: `${windowWidth > 768 ? "25%" : "15%"}`,
       }}
       className="d-flex justify-content-center"

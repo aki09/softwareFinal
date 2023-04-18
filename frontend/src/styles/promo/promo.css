@@ -139,7 +139,12 @@ body {
 
 .main-content {
   margin-top: 100vh;
-  background-color: #f4f6fc;
+  /* background-color: #f4f6fc; */
+  background-image: url(https://images.unsplash.com/photo-1516541196182-6bdb0516ed27?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGJhY2tncm91bmQlMjB3aGl0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 /* About Us */

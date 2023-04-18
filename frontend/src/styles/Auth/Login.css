@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
-@import url('https://fonts.cdnfonts.com/css/samarkan');
+@import url("https://fonts.googleapis.com/css2?family=Handlee&display=swap");
+@import url("https://fonts.cdnfonts.com/css/samarkan");
 
 html {
   height: 100%;
@@ -27,21 +27,21 @@ body {
   border-radius: 10px;
 }
 
-.login-box h2{
+.login-box h2 {
   margin: 0 0 20px;
   padding: 0;
   color: #fff;
   text-align: center;
 }
 
-.login-box h5{
+.login-box h5 {
   margin: 0 0 20px;
   padding: 0;
   color: #fff;
   text-align: center;
 }
 
-.login-box h6{
+.login-box h6 {
   margin: 0 0 20px;
   padding: 0;
   color: #5dcfe3;
@@ -97,7 +97,7 @@ body {
   font-size: 20px;
 }
 
-.login-box form .submit-btn{
+.login-box form .submit-btn {
   position: relative;
   display: inline-block;
   padding: 10px 20px;
@@ -147,6 +147,14 @@ body {
   background-color: transparent;
   box-shadow: none;
   border-radius: none;
+}
+
+.forgot-password {
+  color: #eee;
+}
+
+.forgot-password:hover {
+  color: #03e9f4;
 }
 
 @keyframes btn-anim1 {

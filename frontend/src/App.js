@@ -23,7 +23,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<PromoPage />} />
-        {/* <Route exact path="/news" element={<News />} /> */}
+        <Route exact path="/news" element={<News />} />
 
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/signup" element={<Register />} />

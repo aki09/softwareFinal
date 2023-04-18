@@ -119,7 +119,7 @@ const InspectionReport = () => {
           </div>
         ) : (
           <>
-            <Navbar expand="lg" fixed="top" className="navbar bg-light mt-3">
+            <Navbar expand="lg" fixed="top" className="navbar bg-light">
               <Container>
                 <Navbar.Brand>
                   <Link to="/home">

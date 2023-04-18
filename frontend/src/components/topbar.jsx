@@ -45,7 +45,7 @@ const Topbar = ({ user }) => {
       <Navbar bg="light" expand="lg" fixed="top" className="navbar">
         <Container>
           <Navbar.Brand>
-            <Link to="/home">
+            <Link to="/">
               <img src={logo} alt="" height="50" width="160" />
             </Link>
           </Navbar.Brand>
@@ -90,7 +90,8 @@ const Topbar = ({ user }) => {
                 </Button>
               </div>
 
-              <Nav.Link href="/profile">
+              {/* <Nav.Link href="/profile"> */}
+              <Nav.Link>
                 <RiAdminFill
                   style={{ fontSize: "36px" }}
                   className="ms-3"

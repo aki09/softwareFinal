@@ -219,6 +219,16 @@ const Login = () => {
               </button>
             </div>
 
+            <div className="d-flex justify-content-end">
+              <a
+                href="/forgot"
+                className="forgot-password"
+                style={{ textDecoration: "none", textAlign: "right" }}
+              >
+                Forgot Password?
+              </a>
+            </div>
+
             <button type="submit" className="submit-btn">
               Submit
             </button>
@@ -226,16 +236,9 @@ const Login = () => {
 
           <div className="mt-5 text-light">
             New here?
-            <span className="p-2">
-              <a href="/signup" className="signup p-2">
-                Sign Up
-              </a>
-            </span>
-            <div>
-            <a href="/forgot" className="signup ">
-              Forgot Password?
-              </a>
-            </div>
+            <a href="/signup" className="signup p-2">
+              Sign Up
+            </a>
           </div>
         </div>
       </div>
