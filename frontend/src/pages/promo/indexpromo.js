@@ -306,7 +306,7 @@ const PromoPage = () => {
                 artificial intelligence that addresses significant issues faced
                 by individuals working in the unorganized sector. We strive to
                 create solutions that are highly adaptable and user-friendly
-                hile maintaining the highest level of service quality.
+                while maintaining the highest level of service quality.
               </p>
             </div>
           </motion.div>
