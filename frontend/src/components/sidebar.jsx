@@ -28,6 +28,10 @@ const Sidebar = ({
   const [showCleaning, setShowCleaning] = useState(false);
   const [showInspection, setShowInspection] = useState(true);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [currentLocation, setCurrentLocation] = useState({
+    lat:30.3515225,
+    lng:76.3623213,
+  });
   // const [showVideoFeed, setShowVideoFeed] = useState(false);
 
   const cleaningDroneList = droneList.filter(
@@ -42,6 +46,7 @@ const Sidebar = ({
     cleaningDroneList.length > 3 || inspectionDroneList.length > 3;
 
   useEffect(() => {
+
     const socket = io(process.env.REACT_APP_SERVER, {
       transports: ["websocket", "polling", "flashsocket"],
     });
@@ -145,7 +150,7 @@ const Sidebar = ({
   const handleShowLiveFeed = (serialID) => {
     const semiurl = process.env.REACT_APP_DRONEURL;
     const videourl = semiurl + "/" + serialID;
-    const url = "https://www.youtube.com/embed/UTMh-_wh1xE";
+    const url = "https://www.youtube-nocookie.com/embed/v4ZbT9yP3IM?autoplay=1&amp;start=30&amp;controls=0&amp;modestbranding=1&amp;showinfo=0&amp;loop=1&amp;fs=0";
     setShowVideoFeed(true);
     updateVideoUrl(url);
 

@@ -34,9 +34,8 @@ exports.getPDF = async (id) => {
       let timestamp;
       if (match && match.length > 0) {
         timestamp = match[0].split("T")[0].split("-").reverse().join("-");
-        // rest of your code
       } else {
-        timestamp="";
+        continue;
       }
       const url = await getSignedUrl(
         s3,
@@ -48,7 +47,6 @@ exports.getPDF = async (id) => {
       );
       all_files.push({ name: timestamp, url: url });
     }
-    all_files.shift();
     return all_files;
   } catch (err) {
     console.log(err);

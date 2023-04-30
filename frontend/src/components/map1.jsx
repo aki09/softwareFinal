@@ -4,10 +4,14 @@ import { Card } from "react-bootstrap";
 import io from "socket.io-client";
 
 function Maap1({ drones }) {
-  const [currentLocation, setCurrentLocation] = useState({});
+  const [currentLocation, setCurrentLocation] = useState({
+    lat:30.3515225,
+    lng:76.3623213,
+  });
   const [droneList, setDroneList] = useState(drones);
   const mapRef = useRef(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
   const [markerObjs, setMarkerObjs] = useState([]);
   let c = 0;
   const socket = io(process.env.REACT_APP_SERVER, {
@@ -37,19 +41,27 @@ function Maap1({ drones }) {
     renderMarkers(droneList);
   });
   useEffect(() => {
+    const airborneDrone = droneList.find((drone) => drone.takeOffStatus === true);
+    if (airborneDrone) {
+      setCurrentLocation({
+        lat: airborneDrone.area[0].lat,
+        lng: airborneDrone.area[0].lon,
+      });
+    } else {
+      setCurrentLocation({
+        lat: 30.3515225,
+        lng: 76.3623213,
+      });
+    }
     function handleResize() {
       setWindowWidth(window.innerWidth);
     }
-    setCurrentLocation({
-      lat:30.3515225 ,
-      lng:76.3623213 ,
-    });
 
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [droneList]);
 
   const renderMarkers = (markers) => {
     const newMarkerObjs = markers.map((marker) => {
