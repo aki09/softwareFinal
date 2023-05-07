@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const user = require("./routes/user");
 const admin = require("./routes/admin");
+const https=require("https")
+const fs = require("fs");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const session = require("express-session");
@@ -10,8 +12,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const app = express();
-
-const PORT = process.env.PORT || 3000;
 const cookieParser = require("cookie-parser");
 
 app.use(express.json());
@@ -30,7 +30,6 @@ const corsOptions = {
   },
 };
 
-// Enable CORS for all IPs
 app.use(cors(corsOptions));
 
 app.use(
@@ -58,6 +57,19 @@ const io = require("socket.io")(server);
 
 // // Socket and Connection
 
+const httpserver=https
+  .createServer(
+    {
+      key: fs.readFileSync("key.pem"),
+      cert: fs.readFileSync("cert.pem"),
+    },
+    app
+  )
+  .listen(4000, () => {
+    console.log("Https server is runing at port 4000");
+  });
+const httpsio = require("socket.io")(httpserver);
+
 mongoose.connect(
   MONGOURI,
   { useNewUrlParser: true, useUnifiedTopology: true },
@@ -74,6 +86,16 @@ mongoose.connect(
       socket.on("disconnect", () => {});
     });
     io.on("error", (err) => {
+      console.log("socket.io error:", err);
+    });
+    httpsio.on("connection", (socket) => {
+      socket.handshake.headers.origin = "*";
+      socket.emit("connected", { message: "Connected to server" });
+
+      // Listen for socket disconnections
+      socket.on("disconnect", () => {});
+    });
+    httpsio.on("error", (err) => {
       console.log("socket.io error:", err);
     });
     const droneCollection = mongoose.connection.collection("drones");
