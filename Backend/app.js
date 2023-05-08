@@ -60,8 +60,8 @@ const io = require("socket.io")(server);
 const httpserver=https
   .createServer(
     {
-      key: fs.readFileSync("key.pem"),
-      cert: fs.readFileSync("cert.pem"),
+      cert: fs.readFileSync("certificate.crt"),
+      key: fs.readFileSync("private.key"),
     },
     app
   )
