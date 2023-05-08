@@ -88,16 +88,6 @@ mongoose.connect(
     io.on("error", (err) => {
       console.log("socket.io error:", err);
     });
-    httpsio.on("connection", (socket) => {
-      socket.handshake.headers.origin = "*";
-      socket.emit("connected", { message: "Connected to server" });
-
-      // Listen for socket disconnections
-      socket.on("disconnect", () => {});
-    });
-    httpsio.on("error", (err) => {
-      console.log("socket.io error:", err);
-    });
     const droneCollection = mongoose.connection.collection("drones");
     const ChangeStream = droneCollection.watch();
 
