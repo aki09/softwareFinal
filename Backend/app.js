@@ -59,10 +59,10 @@ const io = require("socket.io")(server);
 
 const httpserver=https
   .createServer(
-    {
-      cert: fs.readFileSync("certificate.crt"),
-      key: fs.readFileSync("private.key"),
-    },
+    // {
+    //   cert: fs.readFileSync("certificate.crt"),
+    //   key: fs.readFileSync("private.key"),
+    // },
     app
   )
   .listen(4000, () => {
