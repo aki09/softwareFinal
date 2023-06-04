@@ -43,9 +43,8 @@ app.use(
 app.get("/", (req, res) => {
   res.json({ message: "Welcome" });
 });
-app.get("/.well-known/pki-validation/810E1A224770A016A0A0CFFC19F54D77.txt", (req, res) => {
-  res.sendFile(__dirname+"/810E1A224770A016A0A0CFFC19F54D77.txt");
-});
+
+
 app.use(cookieParser());
 app.use(user);
 app.use("/adm", admin);
@@ -62,10 +61,10 @@ const io = require("socket.io")(server);
 
 const httpserver=https
   .createServer(
-    // {
-    //   cert: fs.readFileSync("certificate.crt"),
-    //   key: fs.readFileSync("private.key"),
-    // },
+    {
+      cert: fs.readFileSync("certificate.crt"),
+      key: fs.readFileSync("private.key"),
+    },
     app
   )
   .listen(4000, () => {
