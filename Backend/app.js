@@ -90,6 +90,18 @@ mongoose.connect(
     io.on("error", (err) => {
       console.log("socket.io error:", err);
     });
+
+    httpsio.on("connection", (socket) => {
+      socket.handshake.headers.origin = "*";
+      socket.emit("connected", { message: "Connected to server" });
+
+      // Listen for socket disconnections
+      socket.on("disconnect", () => {});
+    });
+    httpsio.on("error", (err) => {
+      console.log("socket.io error:", err);
+    });
+
     const droneCollection = mongoose.connection.collection("drones");
     const ChangeStream = droneCollection.watch();
 
@@ -102,10 +114,12 @@ mongoose.connect(
       const droneId = String(id);
       if (update.takeOffStatus != undefined) {
         io.emit("takeoff", { takeoff: update.takeOffStatus, id: droneId });
+        httpsio.emit("takeoff", { takeoff: update.takeOffStatus, id: droneId });
       }
 
       if (update.battery != undefined) {
         io.emit("battery", { battery: update.battery, id: droneId });
+        httpsio.emit("battery", { battery: update.battery, id: droneId });
       }
 
       // if (update.videoStreamStatus != undefined) {
@@ -114,23 +128,28 @@ mongoose.connect(
       if (update["location.lat"] != undefined) {
         const lat = update["location.lat"];
         io.emit("locationlat", { location: lat, id: droneId });
+        httpsio.emit("locationlat", { location: lat, id: droneId });
       }
 
       if (update["location.lon"] != undefined) {
         const lon = update["location.lon"];
         io.emit("locationlon", { location: lon, id: droneId });
+        httpsio.emit("locationlon", { location: lon, id: droneId });
       }
 
       if (update.location != undefined) {
         io.emit("location", { location: update.location, id: droneId });
+        httpsio.emit("location", { location: update.location, id: droneId });
       }
 
       if (update.error != undefined) {
         io.emit("error", { error: update.error, id: droneId });
+        httpsio.emit("error", { error: update.error, id: droneId });
       }
     });
     newStream.on("change", (change) => {
       io.emit("errorlist", { error: change.fullDocument });
+      httpsio.emit("errorlist", { error: change.fullDocument });
     });
 
     // Start the server
