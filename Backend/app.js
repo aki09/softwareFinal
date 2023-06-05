@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "/public")));
 
-const allowedOrigins = ["http://localhost:8000", "*"];
+const allowedOrigins = ["http://localhost:8000", "https://flynovate.in"];
 const corsOptions = {
   origin: function (origin, callback) {
     if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes("*")) {
